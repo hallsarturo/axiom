@@ -1,9 +1,12 @@
+import { SelectPostType } from '@/components/feed/select-post-type';
+
 export default function Feed() {
     return (
         <main className="flex min-h-screen justify-center items-center mt-6">
-            <h1>FEED</h1>
-            <div className="fixed top-1/3 left-20 border-2 p-4 rounded-2xl">
-            <p>Toggle mode</p>    
+            <div className="fixed top-1/3 left-20">
+                <div className="flex flex-col justify-center">
+                    <SelectPostType className="flex justify-center"></SelectPostType>
+                </div>
             </div>
         </main>
     );

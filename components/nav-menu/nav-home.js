@@ -75,7 +75,7 @@ export function NavigationMenuHome() {
                                         className="flex-row items-center gap-2"
                                     >
                                         <CircleHelpIcon />
-                                        Backlog
+                                        About
                                     </Link>
                                 </NavigationMenuLink>
                                 <NavigationMenuLink asChild>
@@ -84,7 +84,7 @@ export function NavigationMenuHome() {
                                         className="flex-row items-center gap-2"
                                     >
                                         <CircleIcon />
-                                        To Do
+                                        Legal
                                     </Link>
                                 </NavigationMenuLink>
                                 <NavigationMenuLink asChild>
@@ -93,7 +93,7 @@ export function NavigationMenuHome() {
                                         className="flex-row items-center gap-2"
                                     >
                                         <CircleCheckIcon />
-                                        Done
+                                        Terms & Conditions
                                     </Link>
                                 </NavigationMenuLink>
                             </li>
@@ -105,7 +105,7 @@ export function NavigationMenuHome() {
                         asChild
                         className={navigationMenuTriggerStyle()}
                     >
-                        <Link href="/">SingUp</Link>
+                        <Link href="/sign-up">SingUp</Link>
                     </NavigationMenuLink>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
@@ -113,7 +113,7 @@ export function NavigationMenuHome() {
                         asChild
                         className={navigationMenuTriggerStyle()}
                     >
-                        <Link href="/">SingIn</Link>
+                        <Link href="#">SingIn</Link>
                     </NavigationMenuLink>
                 </NavigationMenuItem>
             </NavigationMenuList>

@@ -24,22 +24,11 @@ export default function Home() {
                             <Link href="/sign-up">Sign Up</Link>
                         </Button>
                         <Button className="bg-transparent" variant="outline">
-                            <Link href="/about">Learn more</Link>
+                            <Link href="#about">Learn more</Link>
                         </Button>
                     </div>
                 </div>
             </main>
-            <footer className="flex flex-row justify-center items-center min-h-35 bg-gradient-to-br  from-slate-950 to-slate-900">
-                <div className="mr-25">
-                    {/* remember to Link to my website */}
-                    <p>Arturo Proal Walls © </p>
-                </div>
-                <div>
-                    <Button className="bg-transparent" variant="outline">
-                        <Link href="/">Buy me a cofee</Link>
-                    </Button>
-                </div>
-            </footer>
         </div>
     );
 }
