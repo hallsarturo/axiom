@@ -113,7 +113,7 @@ export function NavigationMenuHome() {
                         asChild
                         className={navigationMenuTriggerStyle()}
                     >
-                        <Link href="#">SingIn</Link>
+                        <Link href="/sign-in">SingIn</Link>
                     </NavigationMenuLink>
                 </NavigationMenuItem>
             </NavigationMenuList>

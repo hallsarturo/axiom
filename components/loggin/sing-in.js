@@ -1,3 +1,5 @@
+'use client'
+
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import {
@@ -9,19 +11,37 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import {fetchLogin, State} from '@/lib/auth/actions'
+import {useState} from 'react'
 
-export function SingUp({ className, ...props }) {
-    return (
+export function SingIn({ className, ...props }) {
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
+    const [message, setMessage] = useState()
+    
+        const handleSubmit = async (event) => {
+         event.preventDefault();
+        const result = await fetchLogin({ username, password });
+        setMessage(result.message);
+        if (result.success) {
+          // Handle successful login, e.g., redirect or update UI
+          console.log('User data:', result.user);
+        }
+    }
+  
+        return (
         <div className={cn('flex flex-col gap-6', className)} {...props}>
             <Card>
                 <CardHeader className="text-center">
-                    <CardTitle className="text-xl">Sing up, it's free!</CardTitle>
+                    <CardTitle className="text-xl">
+                        Sing up, it's free!
+                    </CardTitle>
                     <CardDescription>
                         Login with your Apple or Google account
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <form>
+                    <form action={handleSubmit}>
                         <div className="grid gap-6">
                             <div className="flex flex-col gap-4">
                                 <Button variant="outline" className="w-full">
@@ -56,11 +76,22 @@ export function SingUp({ className, ...props }) {
                             </div>
                             <div className="grid gap-6">
                                 <div className="grid gap-3">
-                                    <Label htmlFor="email">Email</Label>
+                                    <Label htmlFor="">Email</Label>
                                     <Input
                                         id="email"
                                         type="email"
                                         placeholder="m@example.com"
+                                        
+                                    />
+                                </div>
+                                <div className="grid gap-3">
+                                    <Label htmlFor="email">Username</Label>
+                                    <Input
+                                        id="username"
+                                        type="text"
+                                        placeholder="username"
+                                        value={username}
+                                        onChange={(e) => setUsername(e.target.value)}
                                         required
                                     />
                                 </div>
@@ -79,9 +110,12 @@ export function SingUp({ className, ...props }) {
                                     <Input
                                         id="password"
                                         type="password"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value) }
                                         required
                                     />
                                 </div>
+                                {message && <p>{message}</p>}
                                 <Button type="submit" className="w-full">
                                     Login
                                 </Button>
