@@ -3,7 +3,6 @@
 import * as React from 'react';
 import Link from 'next/link';
 import { CircleCheckIcon, CircleHelpIcon, CircleIcon } from 'lucide-react';
-
 import {
     NavigationMenu,
     NavigationMenuContent,
@@ -13,6 +12,9 @@ import {
     NavigationMenuTrigger,
     navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu';
+import { Button } from '@/components/ui/button';
+import { useRouter } from 'next/navigation';
+import { logoutUser } from '@/lib/auth/actions';
 
 const components = [
     {
@@ -53,6 +55,15 @@ const components = [
 ];
 
 export function NavigationConnected() {
+    const router = useRouter();
+    const handleLogout = async () => {
+        localStorage.removeItem('token');
+        const result = await logoutUser();
+        if (result.success) {
+            router.push('/sign-in');
+        }
+    };
+
     return (
         <NavigationMenu viewport={false}>
             <NavigationMenuList>
@@ -76,8 +87,9 @@ export function NavigationConnected() {
                     <NavigationMenuLink
                         asChild
                         className={navigationMenuTriggerStyle()}
+                        onClick={handleLogout}
                     >
-                        <Link href="#sign-out">SingOut</Link>
+                        <Button variant="ghost">SingOut</Button>
                     </NavigationMenuLink>
                 </NavigationMenuItem>
                 <NavigationMenuItem>User Avatar</NavigationMenuItem>

@@ -1,5 +1,5 @@
 import { GalleryVerticalEnd } from 'lucide-react';
-import { SingIn } from '@/components/loggin/sing-in';
+import { LoginForm } from '@/components/loggin/login-form';
 
 export default function SignInPage() {
     return (
@@ -14,7 +14,7 @@ export default function SignInPage() {
                     </div>
                     Acme Inc.
                 </a>
-                <SingIn />
+                <LoginForm />
             </div>
         </div>
     );
