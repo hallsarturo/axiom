@@ -23,17 +23,28 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { useState } from 'react';
+import Link from 'next/link';
 import { loginUser } from '@/lib/auth/actions';
 import { useRouter } from 'next/navigation';
 
 const formSchema = z.object({
     username: z
         .string()
-        .min(2, {
-            message: 'username must be at least 2 characters',
+        .min(6, {
+            message: 'username must be at least 6 characters',
         })
-        .max(50),
-    password: z.string().min(2).max(50),
+        .max(50, {
+            message: 'Password must be at most 50 characters',
+        })
+        .refine((val) => val === val.toLowerCase(), {
+            message: 'Username must be lowercase',
+        }),
+    password: z
+        .string()
+        .min(6, { message: 'Password must be at least 6 character' })
+        .max(50, {
+            message: 'Password must be at most 50 characters',
+        }),
 });
 
 export function LoginForm({ className, ...props }) {
@@ -172,12 +183,12 @@ export function LoginForm({ className, ...props }) {
                                 </div>
                                 <div className="text-center text-sm">
                                     Don&apos;t have an account?{' '}
-                                    <a
-                                        href="#"
+                                    <Link
+                                        href="/sign-up"
                                         className="underline underline-offset-4"
                                     >
                                         Sign up
-                                    </a>
+                                    </Link>
                                 </div>
                             </div>
                         </form>
