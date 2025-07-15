@@ -48,7 +48,7 @@ export function SignupForm({ className, ...props }) {
 
         if (result.success) {
             localStorage.setItem('token', result.data.token);
-            router.push('feed');
+            router.push('dashboard');
         } else {
             setMessage(`Signup failed: ${result.error}`);
         }
