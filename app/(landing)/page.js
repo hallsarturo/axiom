@@ -12,7 +12,7 @@ export default function Home() {
                     <h1 className="text-[180px] font-extrabold tracking-wide drop-shadow-lg">
                         AXIOM{' '}
                         <span className="absolute bottom-7 text-4xl font-light tracking-normal">
-                            beta*
+                            aplha <span className="text-sm">0.1.0</span>
                         </span>
                     </h1>
                     <h3 className="text-4xl leading-relaxed drop-shadow-md">

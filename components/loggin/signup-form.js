@@ -23,7 +23,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 import Link from 'next/link';
-// import {createUser} from '@/lib/auth/actions'
+import { createUser } from '@/lib/actions/actions';
 import { useRouter } from 'next/navigation';
 import { signupFormSchema } from '@/lib/schemas/auth';
 
@@ -39,11 +39,19 @@ export function SignupForm({ className, ...props }) {
             password: '',
             confirmPassword: '',
         },
-        mode: 'onBlur'
+        mode: 'onBlur',
     });
 
     async function onSubmit(values) {
         console.log(values);
+        const result = await createUser(values);
+
+        if (result.success) {
+            localStorage.setItem('token', result.data.token);
+            router.push('feed');
+        } else {
+            setMessage(`Signup failed: ${result.error}`);
+        }
     }
 
     return (
