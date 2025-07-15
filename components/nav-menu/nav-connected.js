@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/navigation-menu';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
-import { logoutUser } from '@/lib/auth/actions';
+import { logoutUser } from '@/lib/actions/actions';
 
 const components = [
     {
@@ -89,7 +89,7 @@ export function NavigationConnected() {
                         className={navigationMenuTriggerStyle()}
                         onClick={handleLogout}
                     >
-                        <Button variant="ghost">SingOut</Button>
+                        <Button variant="ghost">SignOut</Button>
                     </NavigationMenuLink>
                 </NavigationMenuItem>
                 <NavigationMenuItem>User Avatar</NavigationMenuItem>

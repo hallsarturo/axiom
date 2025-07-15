@@ -10,6 +10,7 @@ import {
     CardTitle,
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
     Form,
     FormControl,
@@ -22,39 +23,38 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 import Link from 'next/link';
+// import {createUser} from '@/lib/auth/actions'
 import { useRouter } from 'next/navigation';
-import { loginFormSchema } from '@/lib/schemas/auth';
-import { loginUser } from '@/lib/actions/actions';
+import { signupFormSchema } from '@/lib/schemas/auth';
 
-export function LoginForm({ className, ...props }) {
+export function SignupForm({ className, ...props }) {
     const router = useRouter();
     const [message, setMessage] = useState('');
     const form = useForm({
-        resolver: zodResolver(loginFormSchema),
+        resolver: zodResolver(signupFormSchema),
         defaultValues: {
+            email: '',
+            mobilePhone: '',
             username: '',
             password: '',
+            confirmPassword: '',
         },
+        mode: 'onBlur'
     });
 
     async function onSubmit(values) {
-        const result = await loginUser(values);
-
-        if (result.success) {
-            localStorage.setItem('token', result.data.token);
-            router.push('/feed');
-        } else {
-            setMessage(`Loggin failed: ${result.error}`);
-        }
+        console.log(values);
     }
 
     return (
         <div className={cn('flex flex-col gap-6', className)} {...props}>
             <Card>
                 <CardHeader className="text-center">
-                    <CardTitle className="text-xl">Sign in</CardTitle>
+                    <CardTitle className="text-xl">
+                        Sign up, it&apos;s free!
+                    </CardTitle>
                     <CardDescription>
-                        Login with your Apple or Google account
+                        Join with your Apple or Google account
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -75,7 +75,7 @@ export function LoginForm({ className, ...props }) {
                                                 fill="currentColor"
                                             />
                                         </svg>
-                                        Login with Apple
+                                        Join with Apple
                                     </Button>
                                     <Button
                                         variant="outline"
@@ -90,28 +90,71 @@ export function LoginForm({ className, ...props }) {
                                                 fill="currentColor"
                                             />
                                         </svg>
-                                        Login with Google
+                                        Join with Google
                                     </Button>
                                 </div>
                                 <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
                                     <span className="bg-card text-muted-foreground relative z-10 px-2">
-                                        Or continue with
+                                        Or create an account with
                                     </span>
                                 </div>
                                 <div className="grid gap-6">
                                     <FormField
                                         control={form.control}
-                                        name="username"
+                                        name="email"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel>Username</FormLabel>
+                                                <FormLabel>Email*</FormLabel>
                                                 <FormControl>
                                                     <Input
-                                                        placeholder=""
+                                                        id="email"
+                                                        type="email"
+                                                        placeholder="m@example.com"
                                                         {...field}
                                                     />
                                                 </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                        className="grid gap-3"
+                                    ></FormField>
 
+                                    <FormField
+                                        control={form.control}
+                                        name="mobilePhone"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>
+                                                    Mobile Phone*
+                                                </FormLabel>
+                                                <FormControl>
+                                                    <Input
+                                                        id="mobilePhone"
+                                                        type="text"
+                                                        placeholder="12133734253"
+                                                        {...field}
+                                                    ></Input>
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                        className="grid gap-3"
+                                    ></FormField>
+
+                                    <FormField
+                                        control={form.control}
+                                        name="username"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Username*</FormLabel>
+                                                <FormControl>
+                                                    <Input
+                                                        id="username"
+                                                        type="text"
+                                                        placeholder=""
+                                                        {...field}
+                                                    ></Input>
+                                                </FormControl>
                                                 <FormMessage />
                                             </FormItem>
                                         )}
@@ -123,20 +166,32 @@ export function LoginForm({ className, ...props }) {
                                         name="password"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel>
-                                                    Password{' '}
-                                                    <a
-                                                        href="#"
-                                                        className="ml-auto text-sm underline-offset-4 hover:underline"
-                                                    >
-                                                        Forgot your password?
-                                                    </a>
-                                                </FormLabel>
-                                                {''}
-
+                                                <FormLabel>Password*</FormLabel>
                                                 <FormControl>
                                                     <Input
-                                                        placeholder=""
+                                                        id="password"
+                                                        type="password"
+                                                        {...field}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                        className="grid gap-3"
+                                    ></FormField>
+
+                                    <FormField
+                                        control={form.control}
+                                        name="confirmPassword"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>
+                                                    Confirm Password*
+                                                </FormLabel>
+                                                <FormControl>
+                                                    <Input
+                                                        id="confirmPassword"
+                                                        type="password"
                                                         {...field}
                                                     />
                                                 </FormControl>
@@ -152,16 +207,16 @@ export function LoginForm({ className, ...props }) {
                                     )}
 
                                     <Button type="submit" className="w-full">
-                                        Login
+                                        Create account
                                     </Button>
                                 </div>
                                 <div className="text-center text-sm">
-                                    Don&apos;t have an account?{' '}
+                                    Already have an account?{' '}
                                     <Link
-                                        href="/sign-up"
+                                        href="/sign-in"
                                         className="underline underline-offset-4"
                                     >
-                                        Sign up
+                                        Sign in
                                     </Link>
                                 </div>
                             </div>
