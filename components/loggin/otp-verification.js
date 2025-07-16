@@ -5,9 +5,9 @@ import {
     InputOTPSlot,
 } from '@/components/ui/input-otp';
 
-export function OtpVerification() {
+export function OtpVerification({ value, onChange, ...props }) {
     return (
-        <InputOTP maxLength={6}>
+        <InputOTP maxLength={6} value={value} onChange={onChange} {...props}>
             <InputOTPGroup>
                 <InputOTPSlot index={0} />
                 <InputOTPSlot index={1} />

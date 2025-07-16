@@ -41,8 +41,7 @@ export function LoginForm({ className, ...props }) {
         const result = await loginUser(values);
 
         if (result.success) {
-            localStorage.setItem('token', result.data.token);
-            router.push('/feed');
+            router.push('/sign-up/sms-verification');
         } else {
             setMessage(`Loggin failed: ${result.error}`);
         }

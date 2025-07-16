@@ -44,11 +44,12 @@ export function SignupForm({ className, ...props }) {
 
     async function onSubmit(values) {
         console.log(values);
+        
         const result = await createUser(values);
 
         if (result.success) {
             // localStorage.setItem('token', result.data.token);
-            router.push('sms-verification');
+            router.push('sign-up/sms-verification');
         } else {
             setMessage(`Signup failed: ${result.error}`);
         }
