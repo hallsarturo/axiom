@@ -1,5 +1,5 @@
 import { GalleryVerticalEnd } from 'lucide-react';
-import { OtpVerification } from '@/components/loggin/otp-verification';
+import { OtpForm } from '@/components/loggin/otp-form';
 
 export default function SignUpVerification() {
     return (
@@ -15,7 +15,8 @@ export default function SignUpVerification() {
                     Acme Inc.
                 </a>
             </div>
-            <OtpVerification></OtpVerification>
+            <p>Please input your SMS verification code:</p>
+            <OtpForm></OtpForm>
         </div>
     );
 }

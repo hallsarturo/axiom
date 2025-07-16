@@ -47,8 +47,8 @@ export function SignupForm({ className, ...props }) {
         const result = await createUser(values);
 
         if (result.success) {
-            localStorage.setItem('token', result.data.token);
-            router.push('dashboard');
+            // localStorage.setItem('token', result.data.token);
+            router.push('sms-verification');
         } else {
             setMessage(`Signup failed: ${result.error}`);
         }
