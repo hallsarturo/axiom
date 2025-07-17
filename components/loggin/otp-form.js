@@ -29,12 +29,12 @@ export function OtpForm() {
     });
 
     async function onSubmit(values) {
-        console.log('values: ', values);
-        const result = await sendOtpCode(values);
-        
+        const provisionalToken = localStorage.getItem('provisionalToken');
+        const result = await sendOtpCode(values, provisionalToken);
+
         if (result.success) {
             localStorage.setItem('token', result.data.token);
-            router.push('/feed');
+            router.push('/dashboard');
         } else {
             setMessage(`Loggin failed: ${result.error}`);
         }
@@ -70,6 +70,11 @@ export function OtpForm() {
                             </FormItem>
                         )}
                     ></FormField>
+                    {message && (
+                        <div className="text-sm text-center py-2 text-red-500">
+                            {message}
+                        </div>
+                    )}
                     <Button type="submit" className="gap-4">
                         Submit code
                     </Button>

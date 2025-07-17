@@ -27,6 +27,7 @@ import { createUser } from '@/lib/actions/actions';
 import { useRouter } from 'next/navigation';
 import { signupFormSchema } from '@/lib/schemas/auth';
 
+
 export function SignupForm({ className, ...props }) {
     const router = useRouter();
     const [message, setMessage] = useState('');
@@ -48,7 +49,7 @@ export function SignupForm({ className, ...props }) {
         const result = await createUser(values);
 
         if (result.success) {
-            // localStorage.setItem('token', result.data.token);
+            localStorage.setItem('provisionalToken', result.data.provisionalToken);
             router.push('sign-up/sms-verification');
         } else {
             setMessage(`Signup failed: ${result.error}`);
