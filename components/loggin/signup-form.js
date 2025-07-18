@@ -49,10 +49,8 @@ export function SignupForm({ className, ...props }) {
         const result = await createUser(values);
 
         if (result.success) {
-            localStorage.setItem(
-                'provisionalToken',
-                result.data.provisionalToken
-            );
+            document.cookie = `provisionalToken=${result.data.provisionalToken}; path=/; secure; samesite=strict`;
+
             router.push('sign-up/sms-verification');
         } else {
             setMessage(`Signup failed: ${result.error}`);

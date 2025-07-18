@@ -28,12 +28,19 @@ export function OtpForm() {
         mode: 'onBlur',
     });
 
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+        return null;
+    }
+
     async function onSubmit(values) {
-        const provisionalToken = localStorage.getItem('provisionalToken');
+        const provisionalToken = getCookie('provisionalToken');
         const result = await sendOtpCode(values, provisionalToken);
 
         if (result.success) {
-            localStorage.setItem('token', result.data.token);
+            document.cookie = `token=${result.data.token}; path=/; secure; samesite=strict`;
             router.push('/dashboard');
         } else {
             setMessage(`Loggin failed: ${result.error}`);

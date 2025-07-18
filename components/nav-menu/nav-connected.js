@@ -13,6 +13,7 @@ import {
     navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu';
 import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useRouter } from 'next/navigation';
 import { logoutUser } from '@/lib/actions/actions';
 
@@ -57,7 +58,9 @@ const components = [
 export function NavigationConnected() {
     const router = useRouter();
     const handleLogout = async () => {
-        localStorage.removeItem('token');
+        // Remove token cookie by setting it to expire in the past
+        document.cookie =
+            'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; secure; samesite=strict';
         const result = await logoutUser();
         if (result.success) {
             router.push('/sign-in');
@@ -72,7 +75,7 @@ export function NavigationConnected() {
                         asChild
                         className={navigationMenuTriggerStyle()}
                     >
-                        <Link href="#dashboard">Dashboard</Link>
+                        <Link href="/dashboard">Dashboard</Link>
                     </NavigationMenuLink>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
@@ -83,16 +86,29 @@ export function NavigationConnected() {
                         <Link href="/feed">Feed Home</Link>
                     </NavigationMenuLink>
                 </NavigationMenuItem>
+
                 <NavigationMenuItem>
-                    <NavigationMenuLink
-                        asChild
-                        className={navigationMenuTriggerStyle()}
-                        onClick={handleLogout}
-                    >
-                        <Button variant="ghost">SignOut</Button>
-                    </NavigationMenuLink>
+                    <NavigationMenuTrigger>
+                        <Avatar>
+                            <AvatarImage src="https://github.com/shadcn.png" />
+                            <AvatarFallback>CN</AvatarFallback>
+                        </Avatar>
+                    </NavigationMenuTrigger>
+                    <NavigationMenuContent>
+                        <NavigationMenuLink
+                            asChild
+                            className="flex flex-col justify-center items-center w-[150px]"
+                        >
+                            <Button
+                                variant="link"
+                                className="w-32 mx-auto"
+                                onClick={handleLogout}
+                            >
+                                Sign Out
+                            </Button>
+                        </NavigationMenuLink>
+                    </NavigationMenuContent>
                 </NavigationMenuItem>
-                <NavigationMenuItem>User Avatar</NavigationMenuItem>
             </NavigationMenuList>
         </NavigationMenu>
     );

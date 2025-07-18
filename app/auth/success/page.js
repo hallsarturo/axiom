@@ -11,7 +11,7 @@ export default function AuthSuccess() {
 
     useEffect(() => {
         if (token) {
-            localStorage.setItem('token', token);
+            document.cookie = `token=${token}; path=/; secure; samesite=strict`;
             router.push('/dashboard');
         } else {
             setError(true);
