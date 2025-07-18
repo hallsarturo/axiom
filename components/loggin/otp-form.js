@@ -36,11 +36,10 @@ export function OtpForm() {
     }
 
     async function onSubmit(values) {
-        const provisionalToken = getCookie('provisionalToken');
-        const result = await sendOtpCode(values, provisionalToken);
+        const token = getCookie('token');
+        const result = await sendOtpCode(values, token);
 
         if (result.success) {
-            document.cookie = `token=${result.data.token}; path=/; secure; samesite=strict`;
             router.push('/dashboard');
         } else {
             setMessage(`Loggin failed: ${result.error}`);

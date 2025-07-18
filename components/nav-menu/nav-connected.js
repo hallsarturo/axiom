@@ -59,8 +59,8 @@ export function NavigationConnected() {
     const router = useRouter();
     const handleLogout = async () => {
         // Remove token cookie by setting it to expire in the past
-        document.cookie =
-            'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; secure; samesite=strict';
+        // document.cookie =
+        //     'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; secure; samesite=strict';
         const result = await logoutUser();
         if (result.success) {
             router.push('/sign-in');
