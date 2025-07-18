@@ -12,9 +12,14 @@ export function PaperPost() {
     return (
         <Card className="w-2xl">
             <CardHeader>
-                <CardTitle>Magazine Card</CardTitle>
+                <CardTitle>Journal Card</CardTitle>
                 <CardDescription>metadata</CardDescription>
-                <CardAction>...</CardAction>
+                <CardAction>
+                    <div className="flex gap-2 items-center">
+                        <div>...</div>
+                        <div>x</div>
+                    </div>
+                </CardAction>
             </CardHeader>
             <CardContent>
                 <p>Abstract</p>
