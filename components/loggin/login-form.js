@@ -76,7 +76,8 @@ export function LoginForm({ className, ...props }) {
                                 variant="outline"
                                 className="w-full"
                                 onClick={() => {
-                                    window.open(process.env.NEXT_PUBLIC_GOOGLE_AUTH_URL);
+                                    window.location.href =
+                                        process.env.NEXT_PUBLIC_GOOGLE_AUTH_URL;
                                 }}
                             >
                                 <svg
