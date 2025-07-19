@@ -1,29 +1,16 @@
 'use client';
 
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { useUser } from '@/components/context/UserProfileContext';
 
 export default function AuthSuccess() {
     const router = useRouter();
-    const searchParams = useSearchParams();
-    const token = searchParams.get('token');
     const [error, setError] = useState(false);
 
     useEffect(() => {
-        if (token) {
-            router.push('/dashboard');
-        } else {
-            setError(true);
+        router.push('/dashboard');
+    }, [router]);
 
-            router.push('/sign-in');
-        }
-    }, [token, router]);
-
-    return (
-        <div>
-            {error
-                ? 'No token found. Please log in again.'
-                : 'Signing you in...'}
-        </div>
-    );
+    return <></>;
 }

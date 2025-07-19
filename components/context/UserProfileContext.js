@@ -1,14 +1,19 @@
 'use client'
 
-import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { createContext, useContext, useState } from 'react';
 
-const UserProfileContext = createContext()
+const UserContext = createContext();
 
-export const UserProfileProvider = ({children}) => {
-    const [user, setUser] = useState(null)
-    const [loading, setLoading] = useState(true)
+export function UserProvider({ children }) {
+    const [user, setUser] = useState(null);
 
-    useEffect(() => {
-        const fetchUser = async()
-    })
+    return (
+        <UserContext.Provider value={{ user, setUser }}>
+            {children}
+        </UserContext.Provider>
+    );
+}
+
+export function useUser() {
+    return useContext(UserContext);
 }
