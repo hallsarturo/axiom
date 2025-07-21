@@ -11,7 +11,7 @@ export default function Feed() {
                 <h1 className="text-5xl">Dahsboard</h1>
                 <h2>
                     {user
-                        ? `Wellcome user ${user.username}!`
+                        ? `Wellcome ${user.username}!`
                         : 'Loading user...'}
                 </h2>
             </main>

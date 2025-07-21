@@ -42,6 +42,10 @@ export function LoginForm({ className, ...props }) {
         const result = await loginUser(values);
 
         if (result.success) {
+            // DEV: Save token in localStorage
+            if (process.env.NODE_ENV === 'development' && result.data.token) {
+                localStorage.setItem('token', result.data.token);
+            }
             router.push('/feed');
         } else {
             setMessage(`Loggin failed: ${result.error}`);
