@@ -42,7 +42,7 @@ export function LoginForm({ className, ...props }) {
         const result = await loginUser(values);
 
         if (result.success) {
-            router.push('/sign-up/sms-verification');
+            router.push('/feed');
         } else {
             setMessage(`Loggin failed: ${result.error}`);
         }
