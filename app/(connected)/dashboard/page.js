@@ -2,12 +2,26 @@
 
 import { useUser } from '@/components/context/UserProfileContext';
 import { ProtectedRoute } from '@/components/auth/protected-route';
-import { StuddiesPicker } from '@/components/dashboard/studdies-picker';
-import { InterestsPicker } from '@/components/dashboard/interests-picker';
+import { CardPicker } from '@/components/dashboard/card-picker';
+import { useEffect, useState } from 'react';
+import { getDashboardData } from '@/lib/actions/actions';
 
 export default function Dashboard() {
     const { user } = useUser();
-    console.log(`context useUser: ${user}`);
+    const [dashboardData, setDashboardData] = useState(null);
+    //console.log(`context useUser: ${user}`);
+
+    useEffect(() => {
+        async function fetchData() {
+            const result = await getDashboardData();
+            if (result.success) {
+                console.log('reuslt:  ', result)
+                setDashboardData(result.data);
+            }
+        }
+        fetchData();
+    }, []);
+
     return (
         // <ProtectedRoute>
         <div className="flex min-h-[calc(100vh-80px)] justify-center items-start mt-6">
@@ -18,34 +32,39 @@ export default function Dashboard() {
                 <h1 className="text-2xl text-center mb-10">
                     Configure your feed
                 </h1>
-                <section className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <section className="grid grid-cols-1 md:grid-cols-4 gap-8">
                     {/* Left column */}
                     <div className="flex flex-col gap-8 md:col-span-1">
                         {/* First row: You are */}
                         <div className="flex flex-col h-full">
-                            <h2 className="text-xl mb-2">You are:</h2>
-                           
+                            <h2 className="text-xl text-right mb-2">
+                                You are:
+                            </h2>
                         </div>
                         {/* Second row: Interested in */}
                         <div className="flex flex-col h-full">
-                            <h2 className="text-xl mb-2">Interested in:</h2>
-                           
+                            <h2 className="text-xl text-right mb-2">
+                                Interested in:
+                            </h2>
                         </div>
                     </div>
                     {/* Right column */}
-                    <div className="flex flex-col gap-8 md:col-span-2">
+                    <div className="flex flex-col gap-8 md:col-span-3">
                         {/* Cards for "You are" */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                             {/* Replace with dynamic cards for "You are" */}
                             <div className="flex gap-4">
-                                <StuddiesPicker className=""></StuddiesPicker>
+                                {dashboardData?.degreeLevels &&
+                                    dashboardData.degreeLevels.map((degree) => (
+                                        <CardPicker
+                                            key={degree.id}
+                                            title={degree.name}
+                                            imgSrc={degree.imgSrc}
+                                            imgAlt={degree.imgAlt}
+                                        />
+                                    ))}
+                             
                             </div>
-                            {/* <div className="bg-white rounded-lg shadow p-6">
-                                <StuddiesPicker></StuddiesPicker>
-                            </div>
-                            <div className="bg-white rounded-lg shadow p-6">
-                                <StuddiesPicker></StuddiesPicker>
-                            </div> */}
                         </div>
                         {/* Cards for "Interested in" */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
