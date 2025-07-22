@@ -1,16 +1,19 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { useUser } from '@/components/context/UserProfileContext';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect } from 'react';
 
 export default function AuthSuccess() {
     const router = useRouter();
-    const [error, setError] = useState(false);
+    const searchParams = useSearchParams();
 
     useEffect(() => {
+        const token = searchParams.get('token');
+        if (token && process.env.NODE_ENV === 'development') {
+            localStorage.setItem('token', token);
+        }
         router.push('/dashboard');
-    }, [router]);
+    }, [router, searchParams]);
 
-    return <></>;
+    return null;
 }

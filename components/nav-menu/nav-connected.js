@@ -16,6 +16,7 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useRouter } from 'next/navigation';
 import { logoutUser } from '@/lib/actions/actions';
+import { useUser } from '@/components/context/UserProfileContext';
 
 const components = [
     {
@@ -60,10 +61,12 @@ export function NavigationConnected() {
     const handleLogout = async () => {
         const result = await logoutUser();
         if (result.success) {
+            localStorage.removeItem('token')
             router.push('/sign-in');
         }
     };
 
+    const { user } = useUser();
     return (
         <NavigationMenu viewport={false}>
             <NavigationMenuList>
@@ -87,7 +90,9 @@ export function NavigationConnected() {
                 <NavigationMenuItem>
                     <NavigationMenuTrigger>
                         <Avatar>
-                            <AvatarImage src="https://github.com/shadcn.png" />
+                            <AvatarImage
+                                src={user ? user.profileImageUrl : null}
+                            />
                             <AvatarFallback>CN</AvatarFallback>
                         </Avatar>
                     </NavigationMenuTrigger>

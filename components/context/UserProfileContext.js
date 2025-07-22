@@ -18,7 +18,8 @@ export function UserProvider({ children }) {
                 token = null;
             }
             const userData = await getUserProfile(token);
-            setUser(userData);
+            console.log('context userData: ', userData)
+            setUser(userData?.user || null);
         }
         fetchUser();
     }, []);
