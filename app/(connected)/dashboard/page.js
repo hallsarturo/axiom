@@ -15,7 +15,7 @@ export default function Dashboard() {
         async function fetchData() {
             const result = await getDashboardData();
             if (result.success) {
-                console.log('reuslt:  ', result)
+                console.log('reuslt:  ', result);
                 setDashboardData(result.data);
             }
         }
@@ -63,23 +63,21 @@ export default function Dashboard() {
                                             imgAlt={degree.imgAlt}
                                         />
                                     ))}
-                             
                             </div>
                         </div>
                         {/* Cards for "Interested in" */}
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                             {/* Replace with dynamic cards for "Interested in" */}
-                            <div className="bg-white rounded-lg shadow p-6">
-                                Card A
-                            </div>
-                            <div className="bg-white rounded-lg shadow p-6">
-                                Card B
-                            </div>
-                            <div className="bg-white rounded-lg shadow p-6">
-                                Card C
-                            </div>
-                            <div className="bg-white rounded-lg shadow p-6">
-                                Card D
+                            <div className="flex gap-4">
+                                {dashboardData?.degreeLevels &&
+                                    dashboardData.subjects.map((degree) => (
+                                        <CardPicker
+                                            key={degree.id}
+                                            title={degree.name}
+                                            imgSrc={degree.imgSrc}
+                                            imgAlt={degree.imgAlt}
+                                        />
+                                    ))}
                             </div>
                         </div>
                     </div>
