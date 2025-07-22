@@ -1,17 +1,72 @@
 'use client';
 
 import { useUser } from '@/components/context/UserProfileContext';
+import { ProtectedRoute } from '@/components/auth/protected-route';
+import { StuddiesPicker } from '@/components/dashboard/studdies-picker';
+import { InterestsPicker } from '@/components/dashboard/interests-picker';
 
-export default function Feed() {
+export default function Dashboard() {
     const { user } = useUser();
     console.log(`context useUser: ${user}`);
     return (
-        <div className="flex min-h-[calc(100vh-80px)] justify-center items-center mt-6">
-            <main>
-                <h2>
-                    {user ? `Wellcome ${user.username}!` : 'Loading user...'}
-                </h2>
+        // <ProtectedRoute>
+        <div className="flex min-h-[calc(100vh-80px)] justify-center items-start mt-6">
+            <main className="w-full max-w-6xl mx-auto">
+                <h3 className="text-xl text-right font-medium mb-4">
+                    {user ? `Wellcome ${user.username}` : 'Loading user...'}
+                </h3>
+                <h1 className="text-2xl text-center mb-10">
+                    Configure your feed
+                </h1>
+                <section className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    {/* Left column */}
+                    <div className="flex flex-col gap-8 md:col-span-1">
+                        {/* First row: You are */}
+                        <div className="flex flex-col h-full">
+                            <h2 className="text-xl mb-2">You are:</h2>
+                           
+                        </div>
+                        {/* Second row: Interested in */}
+                        <div className="flex flex-col h-full">
+                            <h2 className="text-xl mb-2">Interested in:</h2>
+                           
+                        </div>
+                    </div>
+                    {/* Right column */}
+                    <div className="flex flex-col gap-8 md:col-span-2">
+                        {/* Cards for "You are" */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {/* Replace with dynamic cards for "You are" */}
+                            <div className="flex gap-4">
+                                <StuddiesPicker className=""></StuddiesPicker>
+                            </div>
+                            {/* <div className="bg-white rounded-lg shadow p-6">
+                                <StuddiesPicker></StuddiesPicker>
+                            </div>
+                            <div className="bg-white rounded-lg shadow p-6">
+                                <StuddiesPicker></StuddiesPicker>
+                            </div> */}
+                        </div>
+                        {/* Cards for "Interested in" */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {/* Replace with dynamic cards for "Interested in" */}
+                            <div className="bg-white rounded-lg shadow p-6">
+                                Card A
+                            </div>
+                            <div className="bg-white rounded-lg shadow p-6">
+                                Card B
+                            </div>
+                            <div className="bg-white rounded-lg shadow p-6">
+                                Card C
+                            </div>
+                            <div className="bg-white rounded-lg shadow p-6">
+                                Card D
+                            </div>
+                        </div>
+                    </div>
+                </section>
             </main>
         </div>
+        // </ProtectedRoute>
     );
 }
