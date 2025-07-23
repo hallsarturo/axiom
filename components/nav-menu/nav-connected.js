@@ -112,7 +112,7 @@ export function NavigationConnected() {
                     <NavigationMenuTrigger>
                         <Avatar>
                             <AvatarImage
-                                src={user ? user.profileImageUrl : null}
+                                src={user ? user.photoUrl : null}
                             />
                             <AvatarFallback>CN</AvatarFallback>
                         </Avatar>

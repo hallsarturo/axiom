@@ -1,5 +1,7 @@
 import { PostCard } from '@/components/feed/post-card';
 
-export function NewsPost({...props}) {
-    return <PostCard cardTitle="News Post"></PostCard>;
+export function NewsPost({ ...props }) {
+    return (
+        <PostCard cardTitle="News Post" imgSrc="/feed/news.jpg"></PostCard>
+    );
 }

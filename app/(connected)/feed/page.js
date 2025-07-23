@@ -2,6 +2,7 @@ import { SelectPostType } from '@/components/feed/select-post-type';
 import { PaperPost } from '@/components/feed/paper-post';
 import { Post } from '@/components/feed/post';
 import { NewsPost } from '@/components/feed/news-post';
+import { ScrollArea } from "@/components/ui/scroll-area"
 
 export default function Feed() {
     return (
@@ -14,10 +15,10 @@ export default function Feed() {
             <main className="">
                 <div className="flex flex-col max-h-screen mt-4 overflow-scroll gap-6">
                     <PaperPost></PaperPost>
-                    <PaperPost></PaperPost>
-                    <Post></Post>
                     <Post></Post>
                     <NewsPost></NewsPost>
+                    <Post></Post>
+                    <PaperPost></PaperPost>
                     <NewsPost></NewsPost>
                 </div>
             </main>

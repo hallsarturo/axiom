@@ -28,7 +28,7 @@ export function PostCard(props) {
                 <CardTitle>{props.cardTitle}</CardTitle>
                 <CardDescription className="flex flex-row items-center gap-4">
                     <Avatar>
-                        <AvatarImage src="https://github.com/shadcn.png" />
+                        <AvatarImage src={user ? user.photoUrl : null} />
                         <AvatarFallback>CN</AvatarFallback>
                     </Avatar>
                     <div>
@@ -74,7 +74,7 @@ export function PostCard(props) {
                 </CardAction>
             </CardHeader>
             <CardContent className="flex-1 min-h-0 max-h-[70%] overflow-hidden">
-                <Collapsible>
+                <Collapsible className="mb-3">
                     Donec vel orci consequat, venenatis leo pharetra, suscipit
                     risus. Donec at posuere elit, quis fringilla velit. Proin
                     turpis mauris, laoreet at aliquet ut, ornare nec mi.
@@ -92,7 +92,7 @@ export function PostCard(props) {
                 </Collapsible>
                 <div className="w-full flex justify-center items-center">
                     <Image
-                        src="/feed/edificio.jpg"
+                        src={props.imgSrc}
                         width={500}
                         height={500}
                         alt="Picture of the author"
