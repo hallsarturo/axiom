@@ -5,6 +5,7 @@ import { ProtectedRoute } from '@/components/auth/protected-route';
 import { CardPicker } from '@/components/dashboard/card-picker';
 import { useEffect, useState } from 'react';
 import { getDashboardData } from '@/lib/actions/actions';
+import { Button } from '@/components/ui/button';
 
 export default function Dashboard() {
     const { user } = useUser();
@@ -26,10 +27,17 @@ export default function Dashboard() {
         // <ProtectedRoute>
         <div className="flex min-h-[calc(100vh-80px)] justify-center items-start mt-6">
             <main className="w-full max-w-6xl mx-auto">
-                <h3 className="text-xl text-right font-medium mb-4">
-                    {user ? `Wellcome ${user.username}` : 'Loading user...'}
+                <h3 className="text-2xl text-primary text-right mb-2 tracking-tight">
+                    {user ? (
+                        <>
+                            welcome{' '}
+                            <span className="font-bold">{user.username}</span>
+                        </>
+                    ) : (
+                        'Loading user...'
+                    )}
                 </h3>
-                <h1 className="text-2xl text-center mb-10">
+                <h1 className="text-3xl font-medium uppercase text-center mb-10 text-gray-800 tracking-wide">
                     Configure your feed
                 </h1>
                 <section className="grid grid-cols-1 md:grid-cols-4 gap-8">
@@ -37,13 +45,13 @@ export default function Dashboard() {
                     <div className="flex flex-col gap-8 md:col-span-1">
                         {/* First row: You are */}
                         <div className="flex flex-col h-full">
-                            <h2 className="text-xl text-right mb-2">
+                            <h2 className="text-lg font-medium text-right mb-2 text-gray-700 uppercase tracking-wide">
                                 You are:
                             </h2>
                         </div>
                         {/* Second row: Interested in */}
                         <div className="flex flex-col h-full">
-                            <h2 className="text-xl text-right mb-2">
+                            <h2 className="text-lg font-medium text-right mb-2 text-gray-700 uppercase tracking-wide">
                                 Interested in:
                             </h2>
                         </div>
@@ -82,6 +90,10 @@ export default function Dashboard() {
                         </div>
                     </div>
                 </section>
+                <div className="flex justify-center mt-12 gap-10">
+                    <Button variant="outline">Clear all</Button>{' '}
+                    <Button variant="default">Save</Button>
+                </div>
             </main>
         </div>
         // </ProtectedRoute>

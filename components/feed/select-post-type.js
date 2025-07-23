@@ -6,16 +6,17 @@ import {
     SelectValue,
 } from '@/components/ui/select';
 
-export function SelectPostType() {
+export function SelectPostType({ defaultValue, className }) {
     return (
-        <Select>
-            <SelectTrigger className="w-[120px]">
+        <Select defaultValue={defaultValue}>
+            <SelectTrigger className={className ?? 'w-[120px]'}>
                 <SelectValue placeholder="Post Type" />
             </SelectTrigger>
             <SelectContent>
-                <SelectItem value="light">Papers</SelectItem>
-                <SelectItem value="dark">News</SelectItem>
-                <SelectItem value="system">Posts</SelectItem>
+                <SelectItem value="all">All</SelectItem>
+                <SelectItem value="papers">Papers</SelectItem>
+                <SelectItem value="posts">Posts</SelectItem>
+                <SelectItem value="news">News</SelectItem>
             </SelectContent>
         </Select>
     );
