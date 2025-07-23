@@ -16,7 +16,6 @@ export default function Dashboard() {
         async function fetchData() {
             const result = await getDashboardData();
             if (result.success) {
-                console.log('reuslt:  ', result);
                 setDashboardData(result.data);
             }
         }
