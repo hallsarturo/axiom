@@ -16,6 +16,8 @@ export default function Feed() {
                     <PaperPost></PaperPost>
                     <PaperPost></PaperPost>
                     <Post></Post>
+                    <Post></Post>
+                    <NewsPost></NewsPost>
                     <NewsPost></NewsPost>
                 </div>
             </main>
