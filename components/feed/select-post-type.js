@@ -9,7 +9,7 @@ import {
 export function SelectPostType({ defaultValue, className }) {
     return (
         <Select defaultValue={defaultValue}>
-            <SelectTrigger className={className ?? 'w-[120px]'}>
+            <SelectTrigger className={className ?? 'w-[120px] '}>
                 <SelectValue placeholder="Post Type" />
             </SelectTrigger>
             <SelectContent>

@@ -14,11 +14,16 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useUser } from '@/components/context/UserProfileContext';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
+import {
+    Collapsible,
+    CollapsibleContent,
+    CollapsibleTrigger,
+} from '@/components/ui/collapsible';
 
 export function PostCard(props) {
     const { user } = useUser();
     return (
-        <Card className="w-2xl md:min-h-[800px] md:min-w-[680px] flex flex-col h-full">
+        <Card className="w-2xl md:max-h-[800px] md:min-w-[680px] flex flex-col h-full">
             <CardHeader>
                 <CardTitle>{props.cardTitle}</CardTitle>
                 <CardDescription className="flex flex-row items-center gap-4">
@@ -31,7 +36,7 @@ export function PostCard(props) {
                         <p>date-posted</p>
                     </div>
                 </CardDescription>
-                <CardAction>
+                <CardAction className="">
                     <div className="flex gap-2 items-center">
                         <div className="cursor-pointer">
                             <svg
@@ -68,31 +73,39 @@ export function PostCard(props) {
                     </div>
                 </CardAction>
             </CardHeader>
-            <CardContent className="flex-1 min-h-0 max-h-[70%] overflow-auto">
-                <p className="mb-2">
+            <CardContent className="flex-1 min-h-0 max-h-[70%] overflow-hidden">
+                <Collapsible>
                     Donec vel orci consequat, venenatis leo pharetra, suscipit
                     risus. Donec at posuere elit, quis fringilla velit. Proin
-                    turpis mauris, laoreet at aliquet ut, ornare nec mi. Nam
-                    vitae diam nec lacus sodales tristique sed eget orci.
-                    Vivamus tristique urna eu justo sodales, in volutpat dui
-                    tempus. Proin posuere dui id nulla consectetur facilisis.
-                    Proin quis tempus mi. In maximus metus elit, in porta tortor
-                    blandit at. Nulla eu lorem et dolor elementum dictum et
-                    vitae sem.
-                </p>
-                <Image
-                    src="/feed/edificio.jpg"
-                    width={500}
-                    height={500}
-                    alt="Picture of the author"
-                ></Image>
+                    turpis mauris, laoreet at aliquet ut, ornare nec mi.
+                    <CollapsibleContent>
+                        Nam vitae diam nec lacus sodales tristique sed eget
+                        orci. Vivamus tristique urna eu justo sodales, in
+                        volutpat dui tempus. Proin posuere dui id nulla
+                        consectetur facilisis. Proin quis tempus mi. In maximus
+                        metus elit, in porta tortor blandit at. Nulla eu lorem
+                        et dolor elementum dictum et vitae sem.
+                    </CollapsibleContent>
+                    <CollapsibleTrigger className="text-blue-700 font-medium cursor-pointer ml-2">
+                        See more
+                    </CollapsibleTrigger>
+                </Collapsible>
+                <div className="w-full flex justify-center items-center">
+                    <Image
+                        src="/feed/edificio.jpg"
+                        width={500}
+                        height={500}
+                        alt="Picture of the author"
+                        className="rounded-t-lg object-cover max-h-[600px] w-full"
+                    ></Image>
+                </div>
             </CardContent>
             <CardFooter className="justify-center">
                 <div className="flex flex-col w-full gap-1.5">
-                    <div className="flex flex-row w-full justify-between">
+                    <div className="flex flex-row w-full justify-between text-sm">
                         <p>Likes count</p>
                         <p>comments count</p>
-                        <p>shars count</p>
+                        <p>shares count</p>
                     </div>
                     <Separator />
                     <div className="flex flex-row justify-around">
