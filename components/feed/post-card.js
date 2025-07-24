@@ -22,18 +22,28 @@ import {
 
 export function PostCard(props) {
     const { user } = useUser();
+
+    let avatarSrc = null;
+    if (props.type === 'post') {
+        avatarSrc = user ? user.photoUrl : null;
+    } else if (props.type === 'paper') {
+        avatarSrc = props.magazineImg;
+    } else if (props.type === 'news') {
+        avatarSrc = props.agencyImg;
+    }
+
     return (
         <Card className="w-2xl md:max-h-[800px] md:min-w-[680px] flex flex-col h-full">
             <CardHeader>
                 <CardTitle>{props.cardTitle}</CardTitle>
                 <CardDescription className="flex flex-row items-center gap-4">
                     <Avatar>
-                        <AvatarImage src={user ? user.photoUrl : null} />
+                        <AvatarImage src={avatarSrc} />
                         <AvatarFallback>CN</AvatarFallback>
                     </Avatar>
                     <div>
-                        <p>{user ? user.username : null}</p>
-                        <p>date-posted</p>
+                        <p>{props.author}</p>
+                        <p>{props.createdAt}</p>
                     </div>
                 </CardDescription>
                 <CardAction className="">

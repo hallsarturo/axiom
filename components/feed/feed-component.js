@@ -6,10 +6,20 @@ import { Post } from '@/components/feed/post';
 import { NewsPost } from '@/components/feed/news-post';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { getPaperPosts } from '@/lib/actions/actions';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export function FeedComponent() {
     const [paperPostsProps, setPaperPostsProps] = useState(null);
+
+    useEffect(() => {
+        async function fetchData() {
+            const result = await getPaperPosts();
+            if (result.success) {
+                setPaperPostsProps(result.data.paperPosts);
+            }
+        }
+        fetchData();
+    }, []);
 
     return (
         <div className="flex min-h-screen justify-center items-center mt-6">
@@ -27,12 +37,24 @@ export function FeedComponent() {
                 </div>
 
                 <div className="flex flex-col max-h-screen mt-4 overflow-scroll gap-6">
-                    <PaperPost></PaperPost>
-                    <Post></Post>
-                    <NewsPost></NewsPost>
-                    <Post></Post>
-                    <PaperPost></PaperPost>
-                    <NewsPost></NewsPost>
+                    {paperPostsProps ? (
+                        paperPostsProps.map((post) => {
+                            return (
+                                <PaperPost
+                                    key={post.id}
+                                    title={post.title}
+                                    description={post.description}
+                                    author={post.author}
+                                    createdAt={post.createdAt}
+                                />
+                            );
+                        })
+                    ) : (
+                        <></>
+                    )}
+
+                    {/* <Post></Post>
+                    <NewsPost></NewsPost> */}
                 </div>
             </main>
         </div>
