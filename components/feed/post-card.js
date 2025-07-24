@@ -19,9 +19,11 @@ import {
     CollapsibleContent,
     CollapsibleTrigger,
 } from '@/components/ui/collapsible';
+import { useState } from 'react';
 
 export function PostCard(props) {
     const { user } = useUser();
+    const [seeMore, setSeeMore] = useState(false);
 
     let avatarSrc = null;
     if (props.type === 'post') {
@@ -30,6 +32,21 @@ export function PostCard(props) {
         avatarSrc = props.magazineImg;
     } else if (props.type === 'news') {
         avatarSrc = props.agencyImg;
+    }
+
+    const description = props.description;
+    let part1 = description;
+    let part2 = '';
+
+    if (description.length > 250) {
+        const splitIndex = description.lastIndexOf(' ', 250);
+        if (splitIndex !== -1) {
+            part1 = description.slice(0, splitIndex);
+            part2 = description.slice(splitIndex + 1);
+        } else {
+            part1 = description.slice(0, 250);
+            part2 = description.slice(250);
+        }
     }
 
     return (
@@ -83,31 +100,30 @@ export function PostCard(props) {
                     </div>
                 </CardAction>
             </CardHeader>
-            <CardContent className="flex-1 min-h-0 max-h-[70%] overflow-hidden">
-                <Collapsible className="mb-3">
-                    Donec vel orci consequat, venenatis leo pharetra, suscipit
-                    risus. Donec at posuere elit, quis fringilla velit. Proin
-                    turpis mauris, laoreet at aliquet ut, ornare nec mi.
+            <CardContent className="flex-1 max-h-[70%] overflow-hidden">
+                <Collapsible
+                    open={seeMore}
+                    onOpenChange={setSeeMore}
+                    className="text-justify mb-3"
+                >
+                    {description ? part1 : null}
                     <CollapsibleContent>
-                        Nam vitae diam nec lacus sodales tristique sed eget
-                        orci. Vivamus tristique urna eu justo sodales, in
-                        volutpat dui tempus. Proin posuere dui id nulla
-                        consectetur facilisis. Proin quis tempus mi. In maximus
-                        metus elit, in porta tortor blandit at. Nulla eu lorem
-                        et dolor elementum dictum et vitae sem.
+                        {part2 ? part2 : null}
                     </CollapsibleContent>
                     <CollapsibleTrigger className="text-blue-700 font-medium cursor-pointer ml-2">
-                        See more
+                        {seeMore ? 'See less' : 'See more'}
                     </CollapsibleTrigger>
                 </Collapsible>
                 <div className="w-full flex justify-center items-center">
-                    <Image
-                        src={props.imgSrc}
-                        width={500}
-                        height={500}
-                        alt="Picture of the author"
-                        className="rounded-t-lg object-cover max-h-[600px] w-full"
-                    ></Image>
+                    {props.imgSrc ? (
+                        <Image
+                            src={props.imgSrc}
+                            width={500}
+                            height={500}
+                            alt="Picture of the author"
+                            className="rounded-t-lg object-cover max-h-[600px] w-full"
+                        ></Image>
+                    ) : null}
                 </div>
             </CardContent>
             <CardFooter className="justify-center">

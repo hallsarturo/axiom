@@ -4,7 +4,7 @@ export function PaperPost({ ...props }) {
     return (
         <PostCard
             cardTitle={props.title}
-            imgSrc="/feed/edificio.jpg"
+            imgSrc={null}
             description={props.description}
             author={props.author}
             createdAt={props.createdAt}
