@@ -129,9 +129,9 @@ export function PostCard(props) {
             <CardFooter className="justify-center">
                 <div className="flex flex-col w-full gap-1.5">
                     <div className="flex flex-row w-full justify-between text-sm">
-                        <p>Likes count</p>
-                        <p>comments count</p>
-                        <p>shares count</p>
+                        <p>Likes {props.totalReactions}</p>
+                        <p>comments {props.comments}</p>
+                        <p>shares {props.shares}</p>
                     </div>
                     <Separator />
                     <div className="flex flex-row justify-around">

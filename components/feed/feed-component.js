@@ -46,6 +46,9 @@ export function FeedComponent() {
                                     description={post.description}
                                     author={post.author}
                                     createdAt={post.createdAt}
+                                    totalReactions={post.totalReactions}
+                                    comments={post.comments}
+                                    shares={post.shares}
                                 />
                             );
                         })

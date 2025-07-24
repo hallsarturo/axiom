@@ -8,6 +8,9 @@ export function PaperPost({ ...props }) {
             description={props.description}
             author={props.author}
             createdAt={props.createdAt}
+            totalReactions={props.totalReactions}
+            comments={props.comments}
+            shares={props.shares}
         ></PostCard>
     );
 }
