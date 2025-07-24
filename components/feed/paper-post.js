@@ -3,6 +3,7 @@ import { PostCard } from '@/components/feed/post-card';
 export function PaperPost({ ...props }) {
     return (
         <PostCard
+            type="paper"
             cardTitle={props.title}
             imgSrc={null}
             description={props.description}
