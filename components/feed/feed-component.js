@@ -49,6 +49,7 @@ export function FeedComponent() {
                             return (
                                 <PaperPost
                                     key={post.id}
+                                    postId={post.id}
                                     title={post.title}
                                     description={post.description}
                                     author={post.author}
@@ -60,7 +61,7 @@ export function FeedComponent() {
                                     dislikes={post.dislikes}
                                     angers={post.angers}
                                     laughs={post.laughs}
-
+                                    
                                 />
                             );
                         })

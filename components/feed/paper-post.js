@@ -3,6 +3,8 @@ import { PostCard } from '@/components/feed/post-card';
 export function PaperPost({ ...props }) {
     return (
         <PostCard
+            key={props.id}
+            postId={props.postId}
             type="paper"
             cardTitle={props.title}
             imgSrc={null}
@@ -16,6 +18,7 @@ export function PaperPost({ ...props }) {
             dislikes={props.dislikes}
             angers={props.angers}
             laughs={props.laughs}
+            
         ></PostCard>
     );
 }

@@ -34,17 +34,75 @@ import { BiSolidDislike } from 'react-icons/bi';
 import { BiDislike } from 'react-icons/bi';
 import { motion, AnimatePresence } from 'motion/react';
 import { useUser } from '@/components/context/UserProfileContext';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import useSWR from 'swr';
+import { putReaction } from '@/lib/actions/actions';
+
+const fetchPost = async (postId, token, userId) => {
+    if (!postId) throw new Error('No postId provided');
+    const url = new URL(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/posts/${postId}`
+    );
+
+    // Add userId as query parameter for development
+    if (process.env.NODE_ENV === 'development' && userId) {
+        console.log('fetchPost userId: ', userId);
+        url.searchParams.append('userId', String(userId));
+    }
+
+    const res = await fetch(url, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        credentials: 'include',
+    });
+
+    if (!res.ok) {
+        const text = await res.text();
+        throw new Error(`Failed to fetch: ${res.status} ${text}`);
+    }
+    return res.json();
+};
 
 export function PostCard(props) {
     const { user } = useUser();
     const [seeMore, setSeeMore] = useState(false);
-    const [like, setLike] = useState(false);
-    const [dislike, setDislike] = useState(false);
-    const [laugh, setLaugh] = useState(false);
-    const [anger, setAnger] = useState(false);
     // Only one reaction can be active at a time
     const [activeReaction, setActiveReaction] = useState(null);
+
+    const token =
+        process.env.NODE_ENV === 'development'
+            ? typeof window !== 'undefined'
+                ? localStorage.getItem('token')
+                : null
+            : null;
+    const { data, mutate } = useSWR(
+        props.postId && token && user?.id
+            ? [`post`, props.postId, token, user.id]
+            : null,
+        ([, postId, token, userId]) => fetchPost(postId, token, userId)
+    );
+
+    // Set activeReaction from backend data when data changes
+    useEffect(() => {
+        if (data && data.currentUserReaction !== undefined) {
+            console.log('currentUserReaction', data.currentUserReaction);
+            setActiveReaction(data.currentUserReaction);
+        }
+    }, [data]);
+
+    // Use SWR data for reaction counts
+    const reactionCounts = data
+        ? {
+              likes: data.likes,
+              dislikes: data.dislikes,
+              laughs: data.laughs,
+              angers: data.angers,
+          }
+        : {
+              likes: props.likes,
+              dislikes: props.dislikes,
+              laughs: props.laughs,
+              angers: props.angers,
+          };
 
     // Conditionally render avatar according to Post Type
     let avatarSrc = null;
@@ -96,14 +154,28 @@ export function PostCard(props) {
         setActiveReaction(activeReaction === 'anger' ? null : 'anger');
     };
 
+    const handleReaction = async (type) => {
+        // Optimistically update UI
+        await mutate(
+            async () => {
+                await putReaction(token, user.id, props.postId, type);
+                return await fetchPost(props.postId, token, user.id);
+            },
+            { revalidate: true }
+        );
+    };
+
+    // Use SWR data for user's reaction
+    const userReaction = data?.currentUserReaction;
+
     // Modify Trigger Reaction icon
     let currentReactionIcon;
-    switch (activeReaction) {
+    switch (userReaction) {
         case 'like':
             currentReactionIcon = (
                 <div className="flex flex-row gap-2 align-middle">
                     <BiSolidLike className="size-5.5" />
-                    <span>{props.likes} Likes</span>
+                    <span>{reactionCounts.likes} Likes</span>
                 </div>
             );
             break;
@@ -111,7 +183,7 @@ export function PostCard(props) {
             currentReactionIcon = (
                 <div className="flex flex-row gap-2 align-middle">
                     <BiSolidDislike className="size-5.5" />
-                    <span>{props.dislikes} Dislikes</span>
+                    <span>{reactionCounts.dislikes} Dislikes</span>
                 </div>
             );
             break;
@@ -119,7 +191,7 @@ export function PostCard(props) {
             currentReactionIcon = (
                 <div className="flex flex-row gap-2 align-middle">
                     <FaLaughBeam className="size-5.5" />
-                    <span>{props.laughs} Laughs</span>
+                    <span>{reactionCounts.laughs} Laughs</span>
                 </div>
             );
             break;
@@ -127,7 +199,7 @@ export function PostCard(props) {
             currentReactionIcon = (
                 <div className="flex flex-row gap-2 align-middle">
                     <FaFaceAngry className="size-5.5" />
-                    <span>{props.angers} Anger</span>
+                    <span>{reactionCounts.angers} Anger</span>
                 </div>
             );
             break;
@@ -135,7 +207,7 @@ export function PostCard(props) {
             currentReactionIcon = (
                 <div className="flex flex-row gap-2 align-middle">
                     <BiLike className="size-5.5" />
-                    <span>{props.likes} Likes</span>
+                    <span>{reactionCounts.likes} Likes</span>
                 </div>
             );
     }
@@ -239,7 +311,7 @@ export function PostCard(props) {
                                     <Button variant="ghost">
                                         <AnimatePresence mode="wait">
                                             <motion.div
-                                                key={activeReaction}
+                                                key={userReaction}
                                                 initial={{
                                                     opacity: 0,
                                                     scale: 0.95,
@@ -263,71 +335,71 @@ export function PostCard(props) {
                             </PopoverTrigger>
                             <PopoverContent className="w-full">
                                 <Button
-                                    onClick={handleLikeToggle}
+                                    onClick={() => handleReaction('like')}
                                     className="text-xs"
                                     variant="ghost"
                                 >
-                                    {activeReaction === 'like' ? (
+                                    {data?.currentUserReaction === 'like' ? (
                                         <div className="flex flex-row gap-2 align-middle">
                                             <BiSolidLike />
-                                            {props.likes}
+                                            {reactionCounts.likes}
                                         </div>
                                     ) : (
                                         <div className="flex flex-row gap-2 align-middle">
                                             <BiLike />
-                                            {props.likes}
+                                            {reactionCounts.likes}
                                         </div>
                                     )}{' '}
                                 </Button>
                                 <Button
-                                    onClick={handleDislikeToggle}
+                                    onClick={() => handleReaction('dislike')}
                                     className="text-xs"
                                     variant="ghost"
                                 >
-                                    {activeReaction === 'dislike' ? (
+                                    {data?.currentUserReaction === 'dislike' ? (
                                         <div className="flex flex-row gap-2 align-middle">
                                             <BiSolidDislike />
-                                            {props.dislikes}
+                                            {reactionCounts.dislikes}
                                         </div>
                                     ) : (
                                         <div className="flex flex-row gap-2 align-middle">
                                             <BiDislike />
-                                            {props.dislikes}
+                                            {reactionCounts.dislikes}
                                         </div>
                                     )}{' '}
                                 </Button>
 
                                 <Button
-                                    onClick={handleLaughToggle}
+                                    onClick={() => handleReaction('laugh')}
                                     className="text-xs"
                                     variant="ghost"
                                 >
-                                    {activeReaction === 'laugh' ? (
+                                    {data?.currentUserReaction === 'laugh' ? (
                                         <div className="flex flex-row gap-2 align-middle">
                                             <FaLaughBeam />
-                                            {props.laughs}
+                                            {reactionCounts.laughs}
                                         </div>
                                     ) : (
                                         <div className="flex flex-row gap-2 align-middle">
                                             <FaRegLaughBeam />
-                                            {props.laughs}
+                                            {reactionCounts.laughs}
                                         </div>
                                     )}
                                 </Button>
                                 <Button
-                                    onClick={handleAngerToggle}
+                                    onClick={() => handleReaction('anger')}
                                     className="text-xs"
                                     variant="ghost"
                                 >
-                                    {activeReaction === 'anger' ? (
+                                    {data?.currentUserReaction === 'anger' ? (
                                         <div className="flex flex-row gap-2 align-middle">
                                             <FaFaceAngry />
-                                            {props.angers}
+                                            {reactionCounts.angers}
                                         </div>
                                     ) : (
                                         <div className="flex flex-row gap-2 align-middle">
                                             <FaRegAngry />
-                                            {props.angers}
+                                            {reactionCounts.angers}
                                         </div>
                                     )}
                                 </Button>

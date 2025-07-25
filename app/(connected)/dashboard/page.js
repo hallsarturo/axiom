@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 export default function Dashboard() {
     const { user } = useUser();
     const [dashboardData, setDashboardData] = useState(null);
-    //console.log(`context useUser: ${user}`);
+   
 
     useEffect(() => {
         async function fetchData() {
