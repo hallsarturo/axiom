@@ -14,7 +14,14 @@ export default function Dashboard() {
 
     useEffect(() => {
         async function fetchData() {
-            const result = await getDashboardData();
+            let token = null
+            if (process.env.NODE_ENV === 'development') {
+                token = localStorage.getItem('token')
+            } else {
+                // In production, token is handled by HttpOnly cookie, do pass null
+                token = null
+            }
+            const result = await getDashboardData(token);
             if (result.success) {
                 setDashboardData(result.data);
             }
