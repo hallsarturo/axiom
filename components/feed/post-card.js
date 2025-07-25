@@ -24,6 +24,14 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from '@/components/ui/popover';
+import { FaRegLaughBeam } from 'react-icons/fa';
+import { FaLaughBeam } from 'react-icons/fa';
+import { FaRegAngry } from 'react-icons/fa';
+import { FaFaceAngry } from 'react-icons/fa6';
+import { BiLike } from 'react-icons/bi';
+import { BiSolidLike } from 'react-icons/bi';
+import { BiSolidDislike } from 'react-icons/bi';
+import { BiDislike } from 'react-icons/bi';
 import { useUser } from '@/components/context/UserProfileContext';
 import { useState } from 'react';
 
@@ -34,6 +42,8 @@ export function PostCard(props) {
     const [dislike, setDislike] = useState(false);
     const [laugh, setLaugh] = useState(false);
     const [anger, setAnger] = useState(false);
+    // Only one reaction can be active at a time
+    const [activeReaction, setActiveReaction] = useState(null);
 
     // Conditionally render avatar according to Post Type
     let avatarSrc = null;
@@ -73,20 +83,61 @@ export function PostCard(props) {
 
     // Reaction States
     const handleLikeToggle = () => {
-        setLike(!like);
+        setActiveReaction(activeReaction === 'like' ? null : 'like');
     };
-
     const handleDislikeToggle = () => {
-        setDislike(!dislike);
+        setActiveReaction(activeReaction === 'dislike' ? null : 'dislike');
     };
-
     const handleLaughToggle = () => {
-        setLaugh(!laugh);
+        setActiveReaction(activeReaction === 'laugh' ? null : 'laugh');
+    };
+    const handleAngerToggle = () => {
+        setActiveReaction(activeReaction === 'anger' ? null : 'anger');
     };
 
-    const handleAngerToggle = () => {
-        setAnger(!anger);
-    };
+    // Modify Trigger Reaction icon
+    let currentReactionIcon;
+    switch (activeReaction) {
+        case 'like':
+            currentReactionIcon = (
+                <div className="flex flex-row gap-2 align-middle">
+                    <BiSolidLike className="size-5.5" />
+                    <span>{props.likes} Likes</span>
+                </div>
+            );
+            break;
+        case 'dislike':
+            currentReactionIcon = (
+                <div className="flex flex-row gap-2 align-middle">
+                    <BiSolidDislike className="size-5.5" />
+                    <span>{props.dislikes} Dislikes</span>
+                </div>
+            );
+            break;
+        case 'laugh':
+            currentReactionIcon = (
+                <div className="flex flex-row gap-2 align-middle">
+                    <FaLaughBeam className="size-5.5" />
+                    <span>{props.laughs} Laughs</span>
+                </div>
+            );
+            break;
+        case 'anger':
+            currentReactionIcon = (
+                <div className="flex flex-row gap-2 align-middle">
+                    <FaFaceAngry className="size-5.5" />
+                    <span>{props.angers} Anger</span>
+                </div>
+            );
+            break;
+        default:
+            currentReactionIcon = (
+                <div className="flex flex-row gap-2 align-middle">
+                    <BiSolidLike className="size-5.5" />
+                    <span>{props.likes}</span>
+                </div>
+            );
+    }
 
     return (
         <Card className="w-2xl md:max-h-[800px] md:min-w-[680px] flex flex-col h-full">
@@ -175,50 +226,112 @@ export function PostCard(props) {
             <CardFooter className="justify-center">
                 <div className="flex flex-col w-full gap-1.5">
                     <div className="flex flex-row w-full justify-between text-sm">
-                        <p>Likes {props.totalReactions}</p>
+                        <p>Reactions {props.totalReactions}</p>
                         <p>comments {props.comments}</p>
                         <p>shares {props.shares}</p>
                     </div>
                     <Separator />
                     <div className="flex flex-row justify-around">
                         <Popover>
-                            <PopoverTrigger>
+                            <PopoverTrigger asChild>
+                                <span>
+                                    <Button variant="ghost">
+                                        {activeReaction ? (
+                                            <div className="flex flex-row gap-2 align-middle">
+                                                {currentReactionIcon}
+                                            </div>
+                                        ) : (
+                                            <div className="flex flex-row gap-2 align-middle">
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    fill="none"
+                                                    viewBox="0 0 24 24"
+                                                    strokeWidth={1.5}
+                                                    stroke="currentColor"
+                                                    className="size-6"
+                                                >
+                                                    <path
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        d="M6.633 10.25c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 0 1 2.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 0 0 .322-1.672V2.75a.75.75 0 0 1 .75-.75 2.25 2.25 0 0 1 2.25 2.25c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282m0 0h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 0 1-2.649 7.521c-.388.482-.987.729-1.605.729H13.48c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 0 0-1.423-.23H5.904m10.598-9.75H14.25M5.904 18.5c.083.205.173.405.27.602.197.4-.078.898-.523.898h-.908c-.889 0-1.713-.518-1.972-1.368a12 12 0 0 1-.521-3.507c0-1.553.295-3.036.831-4.398C3.387 9.953 4.167 9.5 5 9.5h1.053c.472 0 .745.556.5.96a8.958 8.958 0 0 0-1.302 4.665c0 1.194.232 2.333.654 3.375Z"
+                                                    />
+                                                </svg>
+                                                <p>Like</p>
+                                            </div>
+                                        )}
+                                    </Button>
+                                </span>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-full">
                                 <Button
                                     onClick={handleLikeToggle}
+                                    className="text-xs"
                                     variant="ghost"
                                 >
-                                    {like ? (
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 24 24"
-                                            fill="currentColor"
-                                            className="size-6"
-                                        >
-                                            <path d="M7.493 18.5c-.425 0-.82-.236-.975-.632A7.48 7.48 0 0 1 6 15.125c0-1.75.599-3.358 1.602-4.634.151-.192.373-.309.6-.397.473-.183.89-.514 1.212-.924a9.042 9.042 0 0 1 2.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 0 0 .322-1.672V2.75A.75.75 0 0 1 15 2a2.25 2.25 0 0 1 2.25 2.25c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 0 1-2.649 7.521c-.388.482-.987.729-1.605.729H14.23c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 0 0-1.423-.23h-.777ZM2.331 10.727a11.969 11.969 0 0 0-.831 4.398 12 12 0 0 0 .52 3.507C2.28 19.482 3.105 20 3.994 20H4.9c.445 0 .72-.498.523-.898a8.963 8.963 0 0 1-.924-3.977c0-1.708.476-3.305 1.302-4.666.245-.403-.028-.959-.5-.959H4.25c-.832 0-1.612.453-1.918 1.227Z" />
-                                        </svg>
+                                    {activeReaction === 'like' ? (
+                                        <div className="flex flex-row gap-2 align-middle">
+                                            <BiSolidLike />
+                                            {props.likes}
+                                        </div>
                                     ) : (
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            fill="none"
-                                            viewBox="0 0 24 24"
-                                            strokeWidth={1.5}
-                                            stroke="currentColor"
-                                            className="size-6"
-                                        >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                d="M6.633 10.25c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 0 1 2.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 0 0 .322-1.672V2.75a.75.75 0 0 1 .75-.75 2.25 2.25 0 0 1 2.25 2.25c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282m0 0h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 0 1-2.649 7.521c-.388.482-.987.729-1.605.729H13.48c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 0 0-1.423-.23H5.904m10.598-9.75H14.25M5.904 18.5c.083.205.173.405.27.602.197.4-.078.898-.523.898h-.908c-.889 0-1.713-.518-1.972-1.368a12 12 0 0 1-.521-3.507c0-1.553.295-3.036.831-4.398C3.387 9.953 4.167 9.5 5 9.5h1.053c.472 0 .745.556.5.96a8.958 8.958 0 0 0-1.302 4.665c0 1.194.232 2.333.654 3.375Z"
-                                            />
-                                        </svg>
-                                    )}
-                                    Like
+                                        <div className="flex flex-row gap-2 align-middle">
+                                            <BiLike />
+                                            {props.likes}
+                                        </div>
+                                    )}{' '}
                                 </Button>
-                            </PopoverTrigger>
-                            <PopoverContent>
-                                <Button variant="ghost">Dislike</Button>
-                                <Button variant="ghost">Laugh</Button>
-                                <Button variant="ghost">Angry</Button>
+                                <Button
+                                    onClick={handleDislikeToggle}
+                                    className="text-xs"
+                                    variant="ghost"
+                                >
+                                    {activeReaction === 'dislike' ? (
+                                        <div className="flex flex-row gap-2 align-middle">
+                                            <BiSolidDislike />
+                                            {props.dislikes}
+                                        </div>
+                                    ) : (
+                                        <div className="flex flex-row gap-2 align-middle">
+                                            <BiDislike />
+                                            {props.dislikes}
+                                        </div>
+                                    )}{' '}
+                                </Button>
+
+                                <Button
+                                    onClick={handleLaughToggle}
+                                    className="text-xs"
+                                    variant="ghost"
+                                >
+                                    {activeReaction === 'laugh' ? (
+                                        <div className="flex flex-row gap-2 align-middle">
+                                            <FaLaughBeam />
+                                            {props.laughs}
+                                        </div>
+                                    ) : (
+                                        <div className="flex flex-row gap-2 align-middle">
+                                            <FaRegLaughBeam />
+                                            {props.laughs}
+                                        </div>
+                                    )}
+                                </Button>
+                                <Button
+                                    onClick={handleAngerToggle}
+                                    className="text-xs"
+                                    variant="ghost"
+                                >
+                                    {activeReaction === 'anger' ? (
+                                        <div className="flex flex-row gap-2 align-middle">
+                                            <FaFaceAngry />
+                                            {props.angers}
+                                        </div>
+                                    ) : (
+                                        <div className="flex flex-row gap-2 align-middle">
+                                            <FaRegAngry />
+                                            {props.angers}
+                                        </div>
+                                    )}
+                                </Button>
                             </PopoverContent>
                         </Popover>
                         <Button variant="ghost">

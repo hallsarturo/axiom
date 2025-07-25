@@ -49,6 +49,11 @@ export function FeedComponent() {
                                     totalReactions={post.totalReactions}
                                     comments={post.comments}
                                     shares={post.shares}
+                                    likes={post.likes}
+                                    dislikes={post.dislikes}
+                                    angers={post.angers}
+                                    laughs={post.laughs}
+
                                 />
                             );
                         })

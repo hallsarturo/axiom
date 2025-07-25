@@ -12,6 +12,10 @@ export function PaperPost({ ...props }) {
             totalReactions={props.totalReactions}
             comments={props.comments}
             shares={props.shares}
+            likes={props.likes}
+            dislikes={props.dislikes}
+            angers={props.angers}
+            laughs={props.laughs}
         ></PostCard>
     );
 }
