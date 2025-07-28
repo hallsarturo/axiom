@@ -6,6 +6,7 @@ import { getPaperPosts } from '@/lib/actions/actions';
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { useInView } from 'react-intersection-observer';
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 
 export function FeedComponent() {
     const [posts, setPosts] = useState([]);
@@ -21,6 +22,8 @@ export function FeedComponent() {
 
     // Container ref for virtualizer
     const parentRef = useRef(null);
+    // Ref for the scrollable viewport inside ScrollArea
+    const viewportRef = useRef(null);
 
     // Console logging for debugging
     const logState = useCallback(() => {
@@ -150,7 +153,7 @@ export function FeedComponent() {
     // Setup virtualizer with improved config
     const rowVirtualizer = useVirtualizer({
         count: posts.length + (hasMore ? 1 : 0), // +1 for loader row
-        getScrollElement: () => parentRef.current,
+        getScrollElement: () => viewportRef.current,
         estimateSize: () => 450, // Adjusted for your card size
         overscan: 3,
     });
@@ -206,81 +209,103 @@ export function FeedComponent() {
             )}
 
             {/* Virtualized posts container - FIXED STYLING */}
-            <div
-                ref={parentRef}
-                className="w-full max-w-[700px] h-[calc(100vh-250px)] overflow-auto"
-                style={{
-                    scrollbarGutter: 'stable',
-                }}
-            >
+            <ScrollArea className="w-full max-w-[700px] h-[calc(100vh-120px)]">
                 <div
+                    ref={viewportRef}
+                    className="relative w-full h-full overflow-auto"
                     style={{
-                        height: `${rowVirtualizer.getTotalSize()}px`,
+                        height: '100%',
                         width: '100%',
-                        position: 'relative',
+                        scrollbarGutter: 'stable',
                     }}
                 >
-                    {rowVirtualizer.getVirtualItems().map((virtualItem) => {
-                        const isLoaderRow = virtualItem.index >= posts.length;
+                    <div
+                        style={{
+                            height: `${rowVirtualizer.getTotalSize()}px`,
+                            width: '100%',
+                            position: 'relative',
+                        }}
+                    >
+                        {rowVirtualizer.getVirtualItems().map((virtualItem) => {
+                            const isLoaderRow =
+                                virtualItem.index >= posts.length;
 
-                        return (
-                            <div
-                                key={
-                                    isLoaderRow
-                                        ? 'loader'
-                                        : `post-${posts[virtualItem.index]?.id}-idx-${virtualItem.index}`
-                                }
-                                ref={isLoaderRow ? loadMoreRef : null}
-                                className="absolute left-0 right-0 flex justify-center"
-                                style={{
-                                    top: 0,
-                                    height: `${virtualItem.size}px`,
-                                    transform: `translateY(${virtualItem.start}px)`,
-                                    padding: '8px 0',
-                                }}
-                            >
-                                {isLoaderRow ? (
-                                    hasMore ? (
-                                        <div className="py-4 text-center w-full">
-                                            Loading more posts...
-                                        </div>
+                            return (
+                                <div
+                                    key={
+                                        isLoaderRow
+                                            ? 'loader'
+                                            : `post-${posts[virtualItem.index]?.id}-idx-${virtualItem.index}`
+                                    }
+                                    ref={isLoaderRow ? loadMoreRef : null}
+                                    className="absolute left-0 right-0 flex justify-center"
+                                    style={{
+                                        top: 0,
+                                        height: `${virtualItem.size}px`,
+                                        transform: `translateY(${virtualItem.start}px)`,
+                                        padding: '8px 0',
+                                    }}
+                                >
+                                    {isLoaderRow ? (
+                                        hasMore ? (
+                                            <div className="py-4 text-center w-full">
+                                                Loading more posts...
+                                            </div>
+                                        ) : (
+                                            <div className="py-4 text-center w-full">
+                                                No more posts to load
+                                            </div>
+                                        )
                                     ) : (
-                                        <div className="py-4 text-center w-full">
-                                            No more posts to load
-                                        </div>
-                                    )
-                                ) : (
-                                    <PaperPost
-                                        postId={posts[virtualItem.index].id}
-                                        title={posts[virtualItem.index].title}
-                                        description={
-                                            posts[virtualItem.index].description
-                                        }
-                                        author={posts[virtualItem.index].author}
-                                        createdAt={
-                                            posts[virtualItem.index].createdAt
-                                        }
-                                        totalReactions={
-                                            posts[virtualItem.index]
-                                                .totalReactions
-                                        }
-                                        comments={
-                                            posts[virtualItem.index].comments
-                                        }
-                                        shares={posts[virtualItem.index].shares}
-                                        likes={posts[virtualItem.index].likes}
-                                        dislikes={
-                                            posts[virtualItem.index].dislikes
-                                        }
-                                        angers={posts[virtualItem.index].angers}
-                                        laughs={posts[virtualItem.index].laughs}
-                                    />
-                                )}
-                            </div>
-                        );
-                    })}
+                                        <PaperPost
+                                            postId={posts[virtualItem.index].id}
+                                            title={
+                                                posts[virtualItem.index].title
+                                            }
+                                            description={
+                                                posts[virtualItem.index]
+                                                    .description
+                                            }
+                                            author={
+                                                posts[virtualItem.index].author
+                                            }
+                                            createdAt={
+                                                posts[virtualItem.index]
+                                                    .createdAt
+                                            }
+                                            totalReactions={
+                                                posts[virtualItem.index]
+                                                    .totalReactions
+                                            }
+                                            comments={
+                                                posts[virtualItem.index]
+                                                    .comments
+                                            }
+                                            shares={
+                                                posts[virtualItem.index].shares
+                                            }
+                                            likes={
+                                                posts[virtualItem.index].likes
+                                            }
+                                            dislikes={
+                                                posts[virtualItem.index]
+                                                    .dislikes
+                                            }
+                                            angers={
+                                                posts[virtualItem.index].angers
+                                            }
+                                            laughs={
+                                                posts[virtualItem.index].laughs
+                                            }
+                                        />
+                                    )}
+                                </div>
+                            );
+                        })}
+                    </div>
                 </div>
-            </div>
+                <ScrollBar orientation="vertical" />
+            </ScrollArea>
         </div>
     );
 }
