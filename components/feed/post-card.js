@@ -129,7 +129,7 @@ export function PostCard(props) {
     let part1 = description;
     let part2 = '';
 
-    if (description.length > 250) {
+    if (description && description.length > 250) {
         const splitIndex = description.lastIndexOf(' ', 250);
         if (splitIndex !== -1) {
             part1 = description.slice(0, splitIndex);
