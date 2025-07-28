@@ -29,7 +29,7 @@ export function FeedComponent() {
     }, []);
 
     return (
-        <div className="flex min-h-screen justify-center items-center mt-6">
+        <div className="flex justify-center items-center mt-6">
             <div className="fixed top-1/3 left-20">
                 <div className="flex flex-col justify-center">
                     <SelectPostType
@@ -38,11 +38,7 @@ export function FeedComponent() {
                     ></SelectPostType>
                 </div>
             </div>
-            <main className="">
-                <div className="min-h-30 border-1 border-solid border-emerald-500">
-                    <h1>make a post Form</h1>
-                </div>
-
+            <div className="">
                 <div className="flex flex-col max-h-screen mt-4 overflow-scroll gap-6">
                     {paperPostsProps ? (
                         paperPostsProps.map((post) => {
@@ -61,7 +57,6 @@ export function FeedComponent() {
                                     dislikes={post.dislikes}
                                     angers={post.angers}
                                     laughs={post.laughs}
-                                    
                                 />
                             );
                         })
@@ -72,7 +67,7 @@ export function FeedComponent() {
                     {/* <Post></Post>
                     <NewsPost></NewsPost> */}
                 </div>
-            </main>
+            </div>
         </div>
     );
 }
