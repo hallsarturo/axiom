@@ -22,7 +22,7 @@ export default function ConnectedLayout({ children }) {
             <div className="fixed top-0 left-0 w-full z-40 bg-white dark:bg-background shadow-md border-b flex justify-center pt-4 pb-4">
                 <NavigationConnected className="" />
             </div>
-            <main className="pt-20">{children}</main>
+            <main className="pt-17">{children}</main>
         </div>
     );
 }

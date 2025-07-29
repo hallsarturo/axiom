@@ -7,6 +7,7 @@ import { useEffect, useState, useRef, useCallback } from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { useInView } from 'react-intersection-observer';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+import { Skeleton } from '@/components/ui/skeleton';
 
 export function FeedComponent() {
     const [posts, setPosts] = useState([]);
