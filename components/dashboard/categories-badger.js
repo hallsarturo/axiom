@@ -1,6 +1,7 @@
 'use client';
 
 import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
 import { getCategoriesData } from '@/lib/actions/actions';
 import { useEffect, useState } from 'react';
 
@@ -57,52 +58,98 @@ const level0Categories = [
 ];
 
 export function CategoriesBadger({ ...props }) {
-    const [dashboardData, setCategoriesData] = useState(null);
     const [activeCategories, setActiveCategories] = useState([]);
-    const [parentId, setParentId] = useState(null);
+    const [subCategoriesMap, setSubCategoriesMap] = useState({});
 
-    useEffect(() => {
-        async function fetchData() {
-            let token = null;
-            if (process.env.NODE_ENV === 'development') {
-                token = localStorage.getItem('token');
-            } else {
-                token = null;
-            }
-            const result = await getCategoriesData(token, parentId);
-            if (result.success) {
-                setCategoriesData(result.data);
-            }
+    const fetchData = async (parentId) => {
+        let token = null;
+        if (process.env.NODE_ENV === 'development') {
+            token = localStorage.getItem('token');
         }
-        fetchData();
-    }, [parentId]);
+        const result = await getCategoriesData(token, parentId);
+        if (result.success) {
+            setSubCategoriesMap((prev) => ({
+                ...prev,
+                [parentId]: result.data.children,
+            }));
+        }
+    };
 
-    const handleBadgeClick = (id) => {
-        setActiveCategories((prev) =>
-            prev.includes(id)
-                ? prev.filter((catId) => catId !== id)
-                : [...prev, id]
-        );
+    const handleBadgeClick = (id, parentId) => {
+        setActiveCategories((prev) => {
+            const isActive = prev.includes(id);
+            if (isActive) {
+                // Remove subcategories for this parentId
+                setSubCategoriesMap((subPrev) => {
+                    const updated = { ...subPrev };
+                    delete updated[parentId];
+                    return updated;
+                });
+                return prev.filter((catId) => catId !== id);
+            } else {
+                // Fetch and show subcategories for this parentId
+                fetchData(parentId);
+                return [...prev, id];
+            }
+        });
     };
 
     return (
-        <div
-            className={`flex flex-row flex-wrap gap-4 max-w-2xl ${props.className}`}
-        >
-            {level0Categories.map((categorie) => (
-                <Badge
-                    key={categorie.id}
-                    variant="secondary"
-                    className={`cursor-pointer transition-colors ${
-                        activeCategories.includes(categorie.id)
-                            ? 'bg-primary text-primary-foreground'
-                            : ''
-                    }`}
-                    onClick={() => handleBadgeClick(categorie.id)}
-                >
-                    {categorie.name}
-                </Badge>
-            ))}
+        <div>
+            <div
+                className={`flex flex-row justify-center flex-wrap gap-4 max-w-2xl ${props.className}`}
+            >
+                {level0Categories.map((categorie) => (
+                    <Badge
+                        key={categorie.id}
+                        variant="secondary"
+                        className={`cursor-pointer transition-colors ${
+                            activeCategories.includes(categorie.id)
+                                ? 'bg-primary text-primary-foreground'
+                                : ''
+                        }`}
+                        onClick={() =>
+                            handleBadgeClick(categorie.id, categorie.parentId)
+                        }
+                    >
+                        {categorie.name}
+                    </Badge>
+                ))}
+            </div>
+            {/* Render subcategories for all active parent categories */}
+            {activeCategories.map((catId) =>
+                subCategoriesMap[catId] &&
+                subCategoriesMap[catId].length > 0 ? (
+                    <div key={catId}>
+                        <Separator className="my-5" />
+                        <p className="mt-1 text-sm/6 text-muted-foreground text-center">
+                            Subcategories for{' '}
+                            {level0Categories.find((c) => c.id === catId)?.name}
+                        </p>
+                        <div className="flex flex-row max-w-2xl justify-center flex-wrap gap-4 mt-8 ">
+                            {subCategoriesMap[catId].map((subCat) => (
+                                <Badge
+                                    key={subCat.id}
+                                    variant="secondary"
+                                    className={`cursor-pointer transition-colors ${
+                                        activeCategories.includes(subCat.id)
+                                            ? 'bg-primary text-primary-foreground'
+                                            : ''
+                                    }`}
+                                    onClick={() =>
+                                        handleBadgeClick(
+                                            subCat.id,
+                                            subCat.parentId
+                                        )
+                                    }
+                                >
+                                    {subCat.name}
+                                </Badge>
+                            ))}
+                        </div>
+                    </div>
+                ) : null
+            )}
         </div>
     );
 }

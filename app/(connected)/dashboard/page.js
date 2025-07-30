@@ -186,7 +186,7 @@ export default function Dashboard() {
                                     social algorithm
                                 </p>
                                 <div className="flex justify-center">
-                                    <CategoriesBadger className="flex flex-row mt-4" />
+                                    <CategoriesBadger className="flex flex-row mt-8" />
                                 </div>
                             </div>
                             <div className="border-b border-border pb-12">
