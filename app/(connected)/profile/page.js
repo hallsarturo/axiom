@@ -17,7 +17,6 @@ import { useUser } from '@/components/context/UserProfileContext';
 
 export default function Profile() {
     const { user } = useUser();
-    console.log('user from page: ', user)
     return (
         <div className="mx-auto my-12 max-w-4xl bg-muted">
             <Card className="p-8">
@@ -95,7 +94,7 @@ export default function Profile() {
                                 About
                             </dt>
                             <dd className="ml-12 text-sm/6 text-muted-foreground">
-                               {user ? user.about : ''}
+                               {user ? user.about : 'Let the community know your areas of expertise'}
                             </dd>
                         </div>
                         <div className="px-4 py-6 flex items-start sm:px-0">
