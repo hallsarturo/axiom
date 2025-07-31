@@ -1,6 +1,7 @@
 'use client';
 
 import { PaperClipIcon } from '@heroicons/react/20/solid';
+import { AlertCircleIcon, BadgeCheckIcon, CheckIcon } from 'lucide-react';
 import {
     Card,
     CardAction,
@@ -11,10 +12,12 @@ import {
     CardTitle,
 } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
 import { useUser } from '@/components/context/UserProfileContext';
 
 export default function Profile() {
     const { user } = useUser();
+    console.log('user from page: ', user)
     return (
         <div className="mx-auto my-12 max-w-4xl bg-muted">
             <Card className="p-8">
@@ -25,20 +28,32 @@ export default function Profile() {
                     <p className="mt-1 max-w-2xl text-sm/6 text-muted-foreground">
                         Personal details.
                     </p>
+
                     <CardAction
                         className="flex justify-end"
                         style={{ marginTop: '-50px', marginBottom: '0px' }}
                     >
-                        <Avatar className="w-24 h-24">
-                            <AvatarImage
-                                src={
-                                    user
-                                        ? user.photoUrl
-                                        : 'https://github.com/shadcn.png'
-                                }
-                            />
-                            <AvatarFallback>CN</AvatarFallback>
-                        </Avatar>
+                        <div className="flex flex-row items-center gap-6">
+                            <div>
+                                <Badge
+                                    variant="secondary"
+                                    className="bg-blue-500 text-white dark:bg-blue-600"
+                                >
+                                    <BadgeCheckIcon />
+                                    Verified
+                                </Badge>
+                            </div>
+                            <Avatar className="w-24 h-24">
+                                <AvatarImage
+                                    src={
+                                        user
+                                            ? user.photoUrl
+                                            : 'https://github.com/shadcn.png'
+                                    }
+                                />
+                                <AvatarFallback>CN</AvatarFallback>
+                            </Avatar>
+                        </div>
                     </CardAction>
                 </div>
                 <div className="mt-6 border-t border-border">
@@ -80,12 +95,7 @@ export default function Profile() {
                                 About
                             </dt>
                             <dd className="ml-12 text-sm/6 text-muted-foreground">
-                                Fugiat ipsum ipsum deserunt culpa aute sint do
-                                nostrud anim incididunt cillum culpa consequat.
-                                Excepteur qui ipsum aliquip consequat sint. Sit
-                                id mollit nulla mollit nostrud in ea officia
-                                proident. Irure nostrud pariatur mollit ad
-                                adipisicing reprehenderit deserunt qui eu.
+                               {user ? user.about : ''}
                             </dd>
                         </div>
                         <div className="px-4 py-6 flex items-start sm:px-0">

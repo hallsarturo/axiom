@@ -51,7 +51,7 @@ export default function Dashboard() {
                                     you matching topics in your feed
                                 </p>
                                 <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                                    <div className="sm:col-span-4">
+                                    {/* <div className="sm:col-span-4">
                                         <label
                                             htmlFor="username"
                                             className="block text-sm/6 font-medium text-foreground"
@@ -70,7 +70,7 @@ export default function Dashboard() {
                                                 />
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> */}
                                     <div className="col-span-full">
                                         <label
                                             htmlFor="about"
@@ -88,8 +88,7 @@ export default function Dashboard() {
                                             />
                                         </div>
                                         <p className="mt-3 text-sm/6 text-muted-foreground">
-                                            Write a few sentences about
-                                            yourself.
+                                            Let the community know your areas of expertise.
                                         </p>
                                     </div>
                                     <div className="col-span-full">
@@ -189,7 +188,7 @@ export default function Dashboard() {
                                     <CategoriesBadger className="flex flex-row mt-8" />
                                 </div>
                             </div>
-                            <div className="border-b border-border pb-12">
+                            {/* <div className="border-b border-border pb-12">
                                 <h2 className="text-base/7 font-semibold text-primary">
                                     Notifications
                                 </h2>
@@ -409,7 +408,7 @@ export default function Dashboard() {
                                         </div>
                                     </fieldset>
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
                         <div className="mt-6 flex items-center justify-end gap-x-6">
                             <button

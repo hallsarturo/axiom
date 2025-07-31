@@ -1,0 +1,286 @@
+{
+  "level0": [
+    {
+      "id": 1,
+      "name": "Metaphysics and Epistemology",
+      "parentId": null
+    },
+    {
+      "id": 2094,
+      "name": "Value Theory",
+      "parentId": null
+    },
+    {
+      "id": 3790,
+      "name": "Science, Logic, and Mathematics",
+      "parentId": null
+    },
+    {
+      "id": 5126,
+      "name": "History of Western Philosophy",
+      "parentId": null
+    },
+    {
+      "id": 6653,
+      "name": "Philosophical Traditions",
+      "parentId": null
+    },
+    {
+      "id": 7310,
+      "name": "Philosophy, Misc",
+      "parentId": null
+    },
+    {
+      "id": 7330,
+      "name": "Other Academic Areas",
+      "parentId": null
+    }
+  ],
+  "level1": [
+    {
+      "id": 2,
+      "name": "Epistemology",
+      "parentId": 1
+    },
+    {
+      "id": 315,
+      "name": "Metaphilosophy",
+      "parentId": 1
+    },
+    {
+      "id": 429,
+      "name": "Metaphysics",
+      "parentId": 1
+    },
+    {
+      "id": 837,
+      "name": "Philosophy of Action",
+      "parentId": 1
+    },
+    {
+      "id": 985,
+      "name": "Philosophy of Language",
+      "parentId": 1
+    },
+    {
+      "id": 1422,
+      "name": "Philosophy of Mind",
+      "parentId": 1
+    },
+    {
+      "id": 1971,
+      "name": "Philosophy of Religion",
+      "parentId": 1
+    },
+    {
+      "id": 2093,
+      "name": "M&E, Misc",
+      "parentId": 1
+    },
+    {
+      "id": 2095,
+      "name": "Aesthetics",
+      "parentId": 2094
+    },
+    {
+      "id": 2255,
+      "name": "Applied Ethics",
+      "parentId": 2094
+    },
+    {
+      "id": 2546,
+      "name": "Meta-Ethics",
+      "parentId": 2094
+    },
+    {
+      "id": 2654,
+      "name": "Normative Ethics",
+      "parentId": 2094
+    },
+    {
+      "id": 2898,
+      "name": "Philosophy of Gender, Race, and Sexuality",
+      "parentId": 2094
+    },
+    {
+      "id": 3186,
+      "name": "Philosophy of Law",
+      "parentId": 2094
+    },
+    {
+      "id": 3268,
+      "name": "Social and Political Philosophy",
+      "parentId": 2094
+    },
+    {
+      "id": 3712,
+      "name": "Value Theory, Miscellaneous",
+      "parentId": 2094
+    },
+    {
+      "id": 3791,
+      "name": "Logic and Philosophy of Logic",
+      "parentId": 3790
+    },
+    {
+      "id": 3881,
+      "name": "Philosophy of Biology",
+      "parentId": 3790
+    },
+    {
+      "id": 4054,
+      "name": "Philosophy of Cognitive Science",
+      "parentId": 3790
+    },
+    {
+      "id": 4370,
+      "name": "Philosophy of Computing and Information",
+      "parentId": 3790
+    },
+    {
+      "id": 4443,
+      "name": "Philosophy of Mathematics",
+      "parentId": 3790
+    },
+    {
+      "id": 4540,
+      "name": "Philosophy of Physical Science",
+      "parentId": 3790
+    },
+    {
+      "id": 4667,
+      "name": "Philosophy of Social Science",
+      "parentId": 3790
+    },
+    {
+      "id": 4757,
+      "name": "Philosophy of Probability",
+      "parentId": 3790
+    },
+    {
+      "id": 4832,
+      "name": "General Philosophy of Science",
+      "parentId": 3790
+    },
+    {
+      "id": 5076,
+      "name": "Philosophy of Science, Misc",
+      "parentId": 3790
+    },
+    {
+      "id": 5127,
+      "name": "Ancient Greek and Roman Philosophy",
+      "parentId": 5126
+    },
+    {
+      "id": 5573,
+      "name": "Medieval and Renaissance Philosophy",
+      "parentId": 5126
+    },
+    {
+      "id": 5728,
+      "name": "17th/18th Century Philosophy",
+      "parentId": 5126
+    },
+    {
+      "id": 6226,
+      "name": "19th Century Philosophy",
+      "parentId": 5126
+    },
+    {
+      "id": 6430,
+      "name": "20th Century Philosophy",
+      "parentId": 5126
+    },
+    {
+      "id": 6652,
+      "name": "History of Western Philosophy, Misc",
+      "parentId": 5126
+    },
+    {
+      "id": 6654,
+      "name": "African/Africana Philosophy",
+      "parentId": 6653
+    },
+    {
+      "id": 6719,
+      "name": "Asian Philosophy",
+      "parentId": 6653
+    },
+    {
+      "id": 6897,
+      "name": "Continental Philosophy",
+      "parentId": 6653
+    },
+    {
+      "id": 7126,
+      "name": "European Philosophy",
+      "parentId": 6653
+    },
+    {
+      "id": 7228,
+      "name": "Philosophy of the Americas",
+      "parentId": 6653
+    },
+    {
+      "id": 7284,
+      "name": "Philosophical Traditions, Miscellaneous",
+      "parentId": 6653
+    },
+    {
+      "id": 7311,
+      "name": "Philosophy, Introductions and Anthologies",
+      "parentId": 7310
+    },
+    {
+      "id": 7312,
+      "name": "Philosophy, General Works",
+      "parentId": 7310
+    },
+    {
+      "id": 7313,
+      "name": "Teaching Philosophy",
+      "parentId": 7310
+    },
+    {
+      "id": 7329,
+      "name": "Philosophy, Miscellaneous",
+      "parentId": 7310
+    },
+    {
+      "id": 7331,
+      "name": "Natural Sciences",
+      "parentId": 7330
+    },
+    {
+      "id": 7339,
+      "name": "Social Sciences",
+      "parentId": 7330
+    },
+    {
+      "id": 7357,
+      "name": "Cognitive Sciences",
+      "parentId": 7330
+    },
+    {
+      "id": 7363,
+      "name": "Formal Sciences",
+      "parentId": 7330
+    },
+    {
+      "id": 7371,
+      "name": "Arts and Humanities",
+      "parentId": 7330
+    },
+    {
+      "id": 7383,
+      "name": "Professional Areas",
+      "parentId": 7330
+    },
+    {
+      "id": 7397,
+      "name": "Other Academic Areas, Misc",
+      "parentId": 7330
+    }
+  ]
+}
