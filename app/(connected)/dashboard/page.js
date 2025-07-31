@@ -17,12 +17,34 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ChevronDownIcon } from '@heroicons/react/16/solid';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Input } from '@/components/ui/input';
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from '@/components/ui/form';
 import { CategoriesBadger } from '@/components/dashboard/categories-badger';
 import { useUser } from '@/components/context/UserProfileContext';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { configFormSchema } from '@/lib/schemas/dashboard-config';
+import { ImageDropField } from '@/components/file-handling/image-drop-field';
 
 export default function Dashboard() {
     const { user } = useUser();
+    const [selectedCategories, setSelectedCategories] = useState([]);
+
+    // Pull the categories from CategoriesBadger
+    const handleCategoriesChange = (ids) => {
+        setSelectedCategories(ids);
+    };
+
+    // DropZone for image drop
 
     return (
         <div className="flex justify-center items-start mt-6">
@@ -88,7 +110,8 @@ export default function Dashboard() {
                                             />
                                         </div>
                                         <p className="mt-3 text-sm/6 text-muted-foreground">
-                                            Let the community know your areas of expertise.
+                                            Let the community know your areas of
+                                            expertise.
                                         </p>
                                     </div>
                                     <div className="col-span-full">
@@ -98,7 +121,7 @@ export default function Dashboard() {
                                         >
                                             Photo
                                         </label>
-                                        <div className="mt-2 flex items-center gap-x-3">
+                                        <div className="mt-2 flex justify-around items-center gap-x-2">
                                             <Avatar className="w-14 h-14">
                                                 <AvatarImage
                                                     src={
@@ -111,12 +134,7 @@ export default function Dashboard() {
                                                     CN
                                                 </AvatarFallback>
                                             </Avatar>
-                                            <button
-                                                type="button"
-                                                className="rounded-md bg-muted px-2.5 py-1.5 text-sm font-semibold text-foreground shadow-xs ring-1 ring-border ring-inset hover:bg-accent"
-                                            >
-                                                Change
-                                            </button>
+                                            <ImageDropField></ImageDropField>
                                         </div>
                                     </div>
                                 </div>
@@ -185,7 +203,12 @@ export default function Dashboard() {
                                     social algorithm
                                 </p>
                                 <div className="flex justify-center">
-                                    <CategoriesBadger className="flex flex-row mt-8" />
+                                    <CategoriesBadger
+                                        className="flex flex-row mt-8"
+                                        onSelectionChange={
+                                            handleCategoriesChange
+                                        }
+                                    />
                                 </div>
                             </div>
                             {/* <div className="border-b border-border pb-12">
@@ -411,18 +434,8 @@ export default function Dashboard() {
                             </div> */}
                         </div>
                         <div className="mt-6 flex items-center justify-end gap-x-6">
-                            <button
-                                type="button"
-                                className="text-sm/6 font-semibold text-foreground"
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                type="submit"
-                                className="rounded-md bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground shadow-xs hover:bg-primary/90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-                            >
-                                Save
-                            </button>
+                            <Button variant="secondary">Cancel</Button>
+                            <Button type="submit">Save</Button>
                         </div>
                     </form>
                 </Card>
@@ -430,4 +443,3 @@ export default function Dashboard() {
         </div>
     );
 }
-

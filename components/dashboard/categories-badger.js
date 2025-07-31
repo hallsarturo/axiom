@@ -30,6 +30,13 @@ export function CategoriesBadger({ onSelectionChange, ...props }) {
     const prevVisibleCount = useRef(0);
 
     useEffect(() => {
+        if (onSelectionChange) {
+            onSelectionChange(activeCategories);
+        }
+    }, [activeCategories, onSelectionChange]);
+    
+    
+    useEffect(() => {
         prevVisibleCount.current = visibleCount - 10;
     }, [visibleCount]);
 
