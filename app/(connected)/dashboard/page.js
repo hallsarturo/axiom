@@ -431,13 +431,3 @@ export default function Dashboard() {
     );
 }
 
-// <h3 className="text-2xl text-primary text-right mb-2 tracking-tight">
-//     {user ? (
-//         <>
-//             welcome{' '}
-//             <span className="font-bold">{user.username}</span>
-//         </>
-//     ) : (
-//         'Loading user...'
-//     )}
-// </h3>

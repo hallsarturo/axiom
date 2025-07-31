@@ -51,7 +51,7 @@ export function CategoriesBadger({ onSelectionChange, ...props }) {
         <div>
             {/* Render level0 categories stagger*/}
             <motion.div
-                className={`flex flex-row flex-wrap gap-4 max-w-2xl ${props.className}`}
+                className={`flex flex-row flex-wrap gap-4 max-w-2xl justify-center ${props.className}`}
                 variants={staggerContainer}
                 initial="hidden"
                 whileInView="show"
@@ -79,7 +79,7 @@ export function CategoriesBadger({ onSelectionChange, ...props }) {
                 Subcategories
             </p>
             <div
-                className={`flex flex-row flex-wrap gap-4 max-w-2xl ${props.className}`}
+                className={`flex flex-row flex-wrap gap-4 max-w-2xl justify-center ${props.className}`}
             >
                 {/* Already visible badges (no animation) */}
                 {level1Categories
@@ -104,7 +104,7 @@ export function CategoriesBadger({ onSelectionChange, ...props }) {
                 {visibleCount > prevVisibleCount.current && (
                     <motion.div
                         key={visibleCount} // <-- This forces remount and retriggers stagger
-                        className="flex flex-row flex-wrap gap-4"
+                        className="flex flex-row flex-wrap gap-4 justify-center"
                         variants={staggerContainer}
                         initial="hidden"
                         animate="show"
