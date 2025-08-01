@@ -35,6 +35,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { configFormSchema } from '@/lib/schemas/dashboard-config';
 import { ImageDroper } from '@/components/file-handling/image-droper';
+import { toast } from 'sonner';
 
 export default function Dashboard() {
     const { user } = useUser();
@@ -53,13 +54,6 @@ export default function Dashboard() {
     // Pull the categories from CategoriesBadger
     const handleCategoriesChange = (ids) => {
         setSelectedCategories(ids);
-    };
-
-    // Handle image drop
-    const handleImageDrop = (files) => {
-        if (files && files[0]) {
-            form.setValue('image', files[0]);
-        }
     };
 
     // Form submition
@@ -182,6 +176,14 @@ export default function Dashboard() {
                                                     <ImageDroper
                                                         className="rounded-full overflow-hidden flex items-center justify-center filepond"
                                                         name="file"
+                                                        onprocessfile={() => {
+                                                            console.log(
+                                                                'success!'
+                                                            );
+                                                            toast.success(
+                                                                'Profile image updated!'
+                                                            );
+                                                        }}
                                                     ></ImageDroper>
                                                 </div>
                                             </div>

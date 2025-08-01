@@ -4,6 +4,7 @@ import { ThemeProvider } from '@/components/theme-provider';
 import { UserProvider } from '@/components/context/UserProfileContext';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { Toaster } from 'sonner';
 
 const geistSans = Geist({
     variable: '--font-geist-sans',
@@ -33,7 +34,8 @@ export default function RootLayout({ children }) {
                         enableSystem
                         disableTransitionOnChange
                     >
-                        {children}
+                        <Toaster />
+                        <main>{children}</main>
                         <footer className="flex flex-row justify-center items-center min-h-35 text-white bg-gradient-to-br  from-slate-950 to-slate-700">
                             <div className="mr-25">
                                 <Button

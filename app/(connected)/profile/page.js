@@ -20,7 +20,7 @@ export default function Profile() {
     return (
         <div className="mx-auto my-12 max-w-4xl bg-muted">
             <div className="flex justify-center mb-4">
-                <Card ClassName="">Meter Caja de resonancia</Card>
+                <Card className="">Meter Caja de resonancia</Card>
             </div>
             <Card className="p-8">
                 <div className="px-4 sm:px-0">
@@ -122,8 +122,8 @@ export default function Profile() {
                 </div>
             </Card>
 
-            <Card ClassName="mb-4">Followers</Card>
-            <Card ClassName="mb-4">Following</Card>
+            <Card className="mb-4">Followers</Card>
+            <Card className="mb-4">Following</Card>
         </div>
     );
 }

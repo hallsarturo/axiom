@@ -29,10 +29,10 @@ if (process.env.NODE_ENV === 'development' && typeof window !== 'undefined') {
     token = localStorage.getItem('token');
 }
 
-export function ImageDroper({ onUploaded }) {
+export function ImageDroper({onprocessfile}) {
     return (
         <FilePond
-        name="file"
+            name="file"
             allowMultiple={false}
             acceptedFileTypes={['image/png', 'image/jpeg', 'image/gif']}
             server={{
@@ -45,13 +45,10 @@ export function ImageDroper({ onUploaded }) {
                               Authorization: `Bearer ${token}`,
                           }
                         : {},
-                    onload: (response) => {
-                        const fileUrl = JSON.parse(response).url;
-                        onUploaded();
-                    },
                 },
             }}
-            onremovefile={() => onUploaded(null)}
+            onprocessfile={onprocessfile}
+            onremovefile={() => {}}
             labelIdle='Drag & Drop your image or <span class="filepond--label-action">Browse</span>'
             imagePreviewHeight={85}
             imageCropAspectRatio="1:1"
