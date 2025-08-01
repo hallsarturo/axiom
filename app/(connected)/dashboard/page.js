@@ -161,7 +161,7 @@ export default function Dashboard() {
                                                 Photo
                                             </label>
                                             <div className="mt-2 flex justify-around items-center gap-x-2">
-                                                <Avatar className="w-14 h-14">
+                                                <Avatar className="w-34 h-34">
                                                     <AvatarImage
                                                         src={
                                                             user
@@ -175,16 +175,13 @@ export default function Dashboard() {
                                                 </Avatar>
 
                                                 <div className="">
-                                                    <input className="w-[150px] h-[5px]" disabled={true} />
+                                                    <input
+                                                        className="w-[150px] h-[0px]"
+                                                        disabled={true}
+                                                    />
                                                     <ImageDroper
                                                         className="rounded-full overflow-hidden flex items-center justify-center filepond"
-                                                        name="filepond"
-                                                        onUploaded={(fileUrl) =>
-                                                            form.setValue(
-                                                                'image',
-                                                                fileUrl
-                                                            )
-                                                        }
+                                                        name="file"
                                                     ></ImageDroper>
                                                 </div>
                                             </div>

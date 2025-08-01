@@ -32,6 +32,7 @@ if (process.env.NODE_ENV === 'development' && typeof window !== 'undefined') {
 export function ImageDroper({ onUploaded }) {
     return (
         <FilePond
+        name="file"
             allowMultiple={false}
             acceptedFileTypes={['image/png', 'image/jpeg', 'image/gif']}
             server={{
@@ -46,7 +47,7 @@ export function ImageDroper({ onUploaded }) {
                         : {},
                     onload: (response) => {
                         const fileUrl = JSON.parse(response).url;
-                        onUploaded(fileUrl);
+                        onUploaded();
                     },
                 },
             }}
