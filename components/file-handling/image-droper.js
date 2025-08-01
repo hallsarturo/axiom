@@ -24,34 +24,43 @@ registerPlugin(
     FilePondPluginImageEdit
 );
 
-export function ImageDroper({ onUploaded, children }) {
+let token = null;
+if (process.env.NODE_ENV === 'development' && typeof window !== 'undefined') {
+    token = localStorage.getItem('token');
+}
+
+export function ImageDroper({ onUploaded }) {
     return (
-        <>
-            {children}
-            <FilePond
-                allowMultiple={false}
-                acceptedFileTypes={['image/png', 'image/jpeg', 'image/gif']}
-                server={{
-                    process: {
-                        url: '/api/upload/notyet',
-                        onload: (response) => {
-                            const fileUrl = JSON.parse(response).url;
-                            onUploaded(fileUrl);
-                        },
+        <FilePond
+            allowMultiple={false}
+            acceptedFileTypes={['image/png', 'image/jpeg', 'image/gif']}
+            server={{
+                process: {
+                    url: `${process.env.NEXT_PUBLIC_API_URL}/api/user/profile/picture`,
+                    method: 'POST',
+                    withCredentials: true,
+                    headers: token
+                        ? {
+                              Authorization: `Bearer ${token}`,
+                          }
+                        : {},
+                    onload: (response) => {
+                        const fileUrl = JSON.parse(response).url;
+                        onUploaded(fileUrl);
                     },
-                }}
-                onremovefile={() => onUploaded(null)}
-                labelIdle='Drag & Drop your image or <span class="filepond--label-action">Browse</span>'
-                imagePreviewHeight={85}
-                imageCropAspectRatio="1:1"
-                imageResizeTargetWidth={85}
-                imageResizeTargetHeight={85}
-                stylePanelLayout="compact circle"
-                styleLoadIndicatorPosition="center bottom"
-                styleProgressIndicatorPosition="right bottom"
-                styleButtonRemoveItemPosition="left bottom"
-                styleButtonProcessItemPosition="right bottom"
-            />
-        </>
+                },
+            }}
+            onremovefile={() => onUploaded(null)}
+            labelIdle='Drag & Drop your image or <span class="filepond--label-action">Browse</span>'
+            imagePreviewHeight={85}
+            imageCropAspectRatio="1:1"
+            imageResizeTargetWidth={85}
+            imageResizeTargetHeight={85}
+            stylePanelLayout="compact circle"
+            styleLoadIndicatorPosition="center bottom"
+            styleProgressIndicatorPosition="right bottom"
+            styleButtonRemoveItemPosition="left bottom"
+            styleButtonProcessItemPosition="right bottom"
+        />
     );
 }

@@ -175,7 +175,7 @@ export default function Dashboard() {
                                                 </Avatar>
 
                                                 <div className="">
-                                                    <input className="w-[150px] h-[5px]" />
+                                                    <input className="w-[150px] h-[5px]" disabled={true} />
                                                     <ImageDroper
                                                         className="rounded-full overflow-hidden flex items-center justify-center filepond"
                                                         name="filepond"
