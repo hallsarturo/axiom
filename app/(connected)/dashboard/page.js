@@ -155,7 +155,7 @@ export default function Dashboard() {
                                                 Photo
                                             </label>
                                             <div className="mt-2 flex justify-around items-center gap-x-2">
-                                                <Avatar className="w-34 h-34">
+                                                <Avatar className="w-36 h-36">
                                                     <AvatarImage
                                                         src={
                                                             user
