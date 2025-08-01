@@ -174,14 +174,19 @@ export default function Dashboard() {
                                                     </AvatarFallback>
                                                 </Avatar>
 
-                                                <ImageDroper
-                                                    onUploaded={(url) =>
-                                                        form.setValue(
-                                                            'image',
-                                                            url
-                                                        )
-                                                    }
-                                                />
+                                                <div className="">
+                                                    <input className="w-[150px] h-[5px]" />
+                                                    <ImageDroper
+                                                        className="rounded-full overflow-hidden flex items-center justify-center filepond"
+                                                        name="filepond"
+                                                        onUploaded={(fileUrl) =>
+                                                            form.setValue(
+                                                                'image',
+                                                                fileUrl
+                                                            )
+                                                        }
+                                                    ></ImageDroper>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
