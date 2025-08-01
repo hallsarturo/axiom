@@ -34,7 +34,7 @@ import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { configFormSchema } from '@/lib/schemas/dashboard-config';
-import { ImageDropField } from '@/components/file-handling/image-drop-field';
+import { ImageDroper } from '@/components/file-handling/image-droper';
 
 export default function Dashboard() {
     const { user } = useUser();
@@ -46,12 +46,20 @@ export default function Dashboard() {
             about: '',
             degreeLevel: null,
             categories: null,
+            image: null,
         },
     });
 
     // Pull the categories from CategoriesBadger
     const handleCategoriesChange = (ids) => {
         setSelectedCategories(ids);
+    };
+
+    // Handle image drop
+    const handleImageDrop = (files) => {
+        if (files && files[0]) {
+            form.setValue('image', files[0]);
+        }
     };
 
     // Form submition
@@ -165,7 +173,15 @@ export default function Dashboard() {
                                                         CN
                                                     </AvatarFallback>
                                                 </Avatar>
-                                                <ImageDropField></ImageDropField>
+
+                                                <ImageDroper
+                                                    onUploaded={(url) =>
+                                                        form.setValue(
+                                                            'image',
+                                                            url
+                                                        )
+                                                    }
+                                                />
                                             </div>
                                         </div>
                                     </div>
