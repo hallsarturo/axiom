@@ -46,16 +46,11 @@ export default function Dashboard() {
         resolver: zodResolver(configFormSchema),
         defaultValues: {
             about: '',
-            degreeLevel: null,
-            categories: null,
+            degreeLevel: '', // empty string for enum
+            categories: [], // empty array for categories
             image: null,
         },
     });
-
-    // Pull the categories from CategoriesBadger
-    const handleCategoriesChange = (ids) => {
-        setSelectedCategories(ids);
-    };
 
     // Form submition
     async function onSubmit(values) {
@@ -80,9 +75,8 @@ export default function Dashboard() {
         if (user) {
             form.reset({
                 about: user.about || '',
-                degreeLevel: user.degreeLevel || '',
-                categories: user.categories || [],
-                image: null,
+                degreeLevel: String(user.degreeLevel.id) || '', // dynamic from user or ''
+                categories: user.categories || [], // dynamic from user or []
             });
         }
     }, [user, form]);
@@ -233,7 +227,7 @@ export default function Dashboard() {
                                                         }
                                                         className="flex flex-row justify-around mt-8 cursor-pointer"
                                                         orientation="horizontal"
-                                                        defaultValue=""
+                                                        
                                                     >
                                                         <div className="flex items-center space-x-2 cursor-pointer">
                                                             <RadioGroupItem
@@ -315,7 +309,7 @@ export default function Dashboard() {
                                     onClick={() => form.reset()}
                                     variant="secondary"
                                 >
-                                    Cancel
+                                    Revert changes
                                 </Button>
                                 <Button type="submit">Save</Button>
                             </div>
