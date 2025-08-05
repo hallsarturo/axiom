@@ -52,8 +52,8 @@ export function ImageDroper({onprocessfile}) {
             labelIdle='Drag & Drop your image or <span class="filepond--label-action">Browse</span>'
             imagePreviewHeight={85}
             imageCropAspectRatio="1:1"
-            imageResizeTargetWidth={85}
-            imageResizeTargetHeight={85}
+            imageResizeTargetWidth={200}
+            imageResizeTargetHeight={200}
             stylePanelLayout="compact circle"
             styleLoadIndicatorPosition="center bottom"
             styleProgressIndicatorPosition="right bottom"

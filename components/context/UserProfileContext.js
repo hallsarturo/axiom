@@ -8,23 +8,23 @@ const UserContext = createContext();
 export function UserProvider({ children }) {
     const [user, setUser] = useState(null);
 
-    useEffect(() => {
-        async function fetchUser() {
-            let token = null;
-            if (process.env.NODE_ENV === 'development') {
-                token = localStorage.getItem('token');
-            } else {
-                // In production, token is handled by HttpOnly cookie, so pass null
-                token = null;
-            }
-            const userData = await getUserProfile(token);
-            setUser(userData?.user || null);
+    async function fetchUser() {
+        let token = null;
+        if (process.env.NODE_ENV === 'development') {
+            token = localStorage.getItem('token');
+        } else {
+            token = null;
         }
+        const userData = await getUserProfile(token);
+        setUser(userData?.user || null);
+    }
+
+    useEffect(() => {
         fetchUser();
     }, []);
 
     return (
-        <UserContext.Provider value={{ user, setUser }}>
+        <UserContext.Provider value={{ user, setUser, refreshUser: fetchUser }}>
             {children}
         </UserContext.Provider>
     );

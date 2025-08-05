@@ -38,7 +38,7 @@ import { ImageDroper } from '@/components/file-handling/image-droper';
 import { toast } from 'sonner';
 
 export default function Dashboard() {
-    const { user } = useUser();
+    const { user, refreshUser } = useUser();
     const [selectedCategories, setSelectedCategories] = useState([]);
     const [message, setMessage] = useState('');
     const form = useForm({
@@ -177,9 +177,7 @@ export default function Dashboard() {
                                                         className="rounded-full overflow-hidden flex items-center justify-center filepond"
                                                         name="file"
                                                         onprocessfile={() => {
-                                                            console.log(
-                                                                'success!'
-                                                            );
+                                                            refreshUser();
                                                             toast.success(
                                                                 'Profile image updated!'
                                                             );
