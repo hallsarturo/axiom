@@ -24,29 +24,27 @@ const badgeVariant = {
     show: { opacity: 1, y: 0 },
 };
 
-export function CategoriesBadger({ onSelectionChange, ...props }) {
-    const [activeCategories, setActiveCategories] = useState([]);
+export function CategoriesBadger({
+    selected = [],
+    onSelectionChange,
+    ...props
+}) {
     const [visibleCount, setVisibleCount] = useState(10);
     const prevVisibleCount = useRef(0);
 
-    useEffect(() => {
-        if (onSelectionChange) {
-            onSelectionChange(activeCategories);
-        }
-    }, [activeCategories, onSelectionChange]);
-    
-    
     useEffect(() => {
         prevVisibleCount.current = visibleCount - 10;
     }, [visibleCount]);
 
     // Toggle badge active state
     const handleBadgeClick = (id) => {
-        setActiveCategories((prev) =>
-            prev.includes(id)
-                ? prev.filter((catId) => catId !== id)
-                : [...prev, id]
-        );
+        let newSelected;
+        if (selected.includes(id)) {
+            newSelected = selected.filter((catId) => catId !== id);
+        } else {
+            newSelected = [...selected, id];
+        }
+        onSelectionChange?.(newSelected);
     };
 
     // Load more categoriesLevel1
@@ -69,7 +67,7 @@ export function CategoriesBadger({ onSelectionChange, ...props }) {
                         <Badge
                             variant="secondary"
                             className={`cursor-pointer transition-colors ${
-                                activeCategories.includes(categorie.id)
+                                selected.includes(categorie.id)
                                     ? 'bg-primary text-primary-foreground'
                                     : ''
                             }`}
@@ -96,7 +94,7 @@ export function CategoriesBadger({ onSelectionChange, ...props }) {
                             <Badge
                                 variant="secondary"
                                 className={`cursor-pointer transition-colors ${
-                                    activeCategories.includes(categorie.id)
+                                    selected.includes(categorie.id)
                                         ? 'bg-primary text-primary-foreground'
                                         : ''
                                 }`}
@@ -126,9 +124,7 @@ export function CategoriesBadger({ onSelectionChange, ...props }) {
                                     <Badge
                                         variant="secondary"
                                         className={`cursor-pointer transition-colors ${
-                                            activeCategories.includes(
-                                                categorie.id
-                                            )
+                                            selected.includes(categorie.id)
                                                 ? 'bg-primary text-primary-foreground'
                                                 : ''
                                         }`}
