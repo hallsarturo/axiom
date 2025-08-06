@@ -29,19 +29,19 @@ export function NavigationMenuHome() {
                 <NavigationMenu
                     position="popper"
                     viewport={false}
-                    className="min-w-0"
+                    className="min-w-0 bg-transparent"
                 >
-                    <NavigationMenuList className="gap-4">
-                        <NavigationMenuItem>
+                    <NavigationMenuList className="gap-4 bg-transparent">
+                        <NavigationMenuItem className="bg-transparent">
                             <NavigationMenuLink
                                 asChild
-                                className={navigationMenuTriggerStyle()}
+                                className='bg-transparent'
                             >
                                 <Link href="/">Home</Link>
                             </NavigationMenuLink>
                         </NavigationMenuItem>
                         <NavigationMenuItem>
-                            <NavigationMenuTrigger>About</NavigationMenuTrigger>
+                            <NavigationMenuTrigger className="bg-transparent">About</NavigationMenuTrigger>
                             <NavigationMenuContent>
                                 <ul className="grid w-[200px] gap-4">
                                     <li>
@@ -79,7 +79,7 @@ export function NavigationMenuHome() {
                         <NavigationMenuItem>
                             <NavigationMenuLink
                                 asChild
-                                className={navigationMenuTriggerStyle()}
+                                className='bg-transparent'
                             >
                                 <Link href="/sign-up">Sign Up</Link>
                             </NavigationMenuLink>
@@ -87,7 +87,7 @@ export function NavigationMenuHome() {
                         <NavigationMenuItem>
                             <NavigationMenuLink
                                 asChild
-                                className={navigationMenuTriggerStyle()}
+                                className='bg-transparent'
                             >
                                 <Link href="/sign-in">Sign In</Link>
                             </NavigationMenuLink>

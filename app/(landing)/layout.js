@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 export default function LandingLayout({ children }) {
     return (
         <>
-            <div className="flex full-w justify-center mt-4 shadow-md">
-                <div className="mb-4">
+            <div className="flex full-w justify-center mt-4 shadow-md ">
+                <div className="fixed z-50 mb-4">
                     <NavigationMenuHome className="" />
                 </div>
             </div>
