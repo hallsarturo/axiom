@@ -16,10 +16,10 @@ export function H2Marquee() {
     }, []);
     return (
         <div className="flex justify-center md:pl-32">
-            <h2 className="text-lg text-center sm:text-4xl md:text-6xl flex md:flex-row flex-col justify-center items-center text-nowrap">
-                No more{'  '}
+            <h2 className="text-4xl text-center sm:text-5xl md:text-6xl flex md:flex-row flex-col justify-center items-center text-nowrap">
+                no more:{' '}
                 <span
-                    className="flex flex-col align-baseline relative h-[3.5rem]  md:text-5xl overflow-hidden ml-4"
+                    className="flex flex-col justify-center text-center relative h-[3.5rem] lg:text-6xl md:text-5xl overflow-hidden ml-10 sm:ml-20 md:ml-0"
                     style={{ minWidth: `${longestWordLength + 2}ch` }}
                 >
                     <div
@@ -31,7 +31,7 @@ export function H2Marquee() {
                         {wordList.map((word, i) => (
                             <div
                                 key={i}
-                                className="h-[3.5rem] leading-[3.5rem] text-purple-800 px-2"
+                                className="h-[3.6rem] leading-[3.6rem] text-purple-800 px-2"
                             >
                                 {word}
                             </div>

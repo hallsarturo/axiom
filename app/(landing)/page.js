@@ -5,7 +5,7 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 
 export default function Home() {
     return (
-        <div className="relative isolate min-h-screen px-6 pt-14 lg:px-8 overflow-hidden">
+        <div className="relative isolate min-h-screen px-6 lg:px-8 overflow-hidden">
             <div
                 aria-hidden="true"
                 className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
@@ -18,7 +18,7 @@ export default function Home() {
                     className="relative left-[calc(50%-11rem)] aspect-1155/678 w-144.5 -translate-x-1/2 rotate-30 bg-linear-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-30rem)] sm:w-288.75"
                 />
             </div>
-            <div className="flex flex-col mx-auto max-w-4xl py-32 sm:py-48 lg:py-56">
+            <div className="flex flex-col  mx-auto max-w-4xl py-32 sm:py-32 lg:py-48">
                 <div className="flex flex-col w-full my-6">
                     <H2Marquee></H2Marquee>
                 </div>
@@ -36,16 +36,16 @@ export default function Home() {
                 </div>
                 <div className="flex flex-col text-center">
                     <div className="">
-                        <h1 className="text-7xl sm:text-9xl md:text-[11rem] font-semibold tracking-tight text-balance text-foreground ">
+                        <h1 className="text-8xl sm:text-9xl md:text-[11rem] font-semibold tracking-tight text-balance text-foreground ">
                             AXIOM
                         </h1>
-                        <p className="ml-40 mt-2">alpha v0.1.0</p>
+                        <p className="ml-40 mt-2 sm:ml-80 md:ml-120">alpha v0.1.0</p>
                     </div>
                     <p className="mt-8 text-lg font-medium text-pretty text-muted-foreground sm:text-xl/8">
                         Knowledge-focused social network for serious
                         intellectuals
                     </p>
-                    <div className="mt-10 flex items-center justify-center gap-x-6">
+                    <div className="mt-10 flex flex-col gap-8 md:flex-row items-center justify-center gap-x-6">
                         <Button href="#" className="">
                             Get started
                         </Button>
