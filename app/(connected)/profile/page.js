@@ -19,10 +19,10 @@ export default function Profile() {
     const { user } = useUser();
     return (
         <div className="mx-auto my-12 max-w-4xl bg-muted">
-            <div className="flex justify-center mb-4">
-                <Card className="">Meter Caja de resonancia</Card>
+            <div className="flex justify-center">
+                <Card className="m-4 p-8">Meter Caja de resonancia</Card>
             </div>
-            <Card className="p-8">
+            <Card className="m-4 p-8">
                 <div className="px-4 sm:px-0">
                     <h3 className="text-base/7 font-semibold text-primary">
                         Profile information
@@ -122,8 +122,8 @@ export default function Profile() {
                 </div>
             </Card>
 
-            <Card className="mb-4">Followers</Card>
-            <Card className="mb-4">Following</Card>
+            <Card className="m-4 p-8">Followers</Card>
+            <Card className="m-4 p-8">Following</Card>
         </div>
     );
 }

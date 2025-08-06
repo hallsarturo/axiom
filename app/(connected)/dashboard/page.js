@@ -87,7 +87,7 @@ export default function Dashboard() {
     return (
         <div className="flex justify-center items-start my-6">
             <div>
-                <Card className="p-8 bg-card text-card-foreground transition-colors">
+                <Card className="m-4 p-8 bg-card text-card-foreground transition-colors">
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(onSubmit)}>
                             <div className="space-y-12">

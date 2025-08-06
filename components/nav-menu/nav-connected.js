@@ -43,7 +43,7 @@ export function NavigationConnected() {
             <nav className="">
                 {/* Desktop menu */}
                 <div className="hidden md:block">
-                    <NavigationMenu viewport={false}>
+                    <NavigationMenu position="popper" viewport={false} className="min-w-0">
                         <NavigationMenuList className="gap-4">
                             <NavigationMenuItem>
                                 <NavigationMenuLink
@@ -99,7 +99,7 @@ export function NavigationConnected() {
                                         <AvatarFallback>CN</AvatarFallback>
                                     </Avatar>
                                 </NavigationMenuTrigger>
-                                <NavigationMenuContent>
+                                <NavigationMenuContent className="">
                                     <NavigationMenuLink
                                         asChild
                                         className="flex flex-col justify-center items-center w-[150px]"

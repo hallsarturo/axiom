@@ -14,11 +14,11 @@ const geistMono = Geist_Mono({
 
 export default function ConnectedLayout({ children }) {
     return (
-        <div className="bg-muted min-h-screen overflow-x-hidden">
-            <div className="fixed  top-0 left-0 w-screen overflow-x-hidden z-40 bg-white dark:bg-background shadow-md border-b flex justify-center pt-4 pb-4 px-2 sm:px-4">
+        <div className="bg-muted min-h-screen">
+            <div className="fixed top-0 left-0 w-screen  z-40 bg-white dark:bg-background shadow-md border-b flex justify-center pt-4 pb-4 px-2 sm:px-4">
                 <NavigationConnected />
             </div>
-            <main className="pt-17 pb-4 overflow-x-hidden">{children}</main>
+            <main className="pt-17 pb-4">{children}</main>
         </div>
     );
 }
