@@ -5,7 +5,7 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 
 export default function Home() {
     return (
-        <div className="relative isolate px-6 pt-14 lg:px-8 overflow-hidden">
+        <div className="relative isolate min-h-screen px-6 pt-14 lg:px-8 overflow-hidden">
             <div
                 aria-hidden="true"
                 className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
