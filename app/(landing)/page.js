@@ -18,8 +18,10 @@ export default function Home() {
                     className="relative left-[calc(50%-11rem)] aspect-1155/678 w-144.5 -translate-x-1/2 rotate-30 bg-linear-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-30rem)] sm:w-288.75"
                 />
             </div>
-
-            <div className="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
+            <div className="flex flex-col mx-auto max-w-4xl py-32 sm:py-48 lg:py-56">
+                <div className="flex flex-col w-full my-6">
+                    <H2Marquee></H2Marquee>
+                </div>
                 <div className="hidden sm:mb-8 sm:flex sm:justify-center">
                     <div className="relative rounded-full px-3 py-1 text-sm/6 text-muted-foreground ring-1 ring-border hover:ring-ring">
                         Announcing our next round of funding.{' '}
@@ -32,28 +34,28 @@ export default function Home() {
                         </a>
                     </div>
                 </div>
-                <div className="text-center">
-                    <h1 className="text-5xl font-semibold tracking-tight text-balance text-foreground sm:text-7xl">
-                        Data to enrich your online business
-                    </h1>
+                <div className="flex flex-col text-center">
+                    <div className="">
+                        <h1 className="text-7xl sm:text-9xl md:text-[11rem] font-semibold tracking-tight text-balance text-foreground ">
+                            AXIOM
+                        </h1>
+                        <p className="ml-40 mt-2">alpha v0.1.0</p>
+                    </div>
                     <p className="mt-8 text-lg font-medium text-pretty text-muted-foreground sm:text-xl/8">
-                        Anim aute id magna aliqua ad ad non deserunt sunt. Qui
-                        irure qui lorem cupidatat commodo. Elit sunt amet fugiat
-                        veniam occaecat.
+                        Knowledge-focused social network for serious
+                        intellectuals
                     </p>
                     <div className="mt-10 flex items-center justify-center gap-x-6">
-                        <a
-                            href="#"
-                            className="rounded-md bg-primary px-3.5 py-2.5 text-sm font-semibold text-primary-foreground shadow-xs hover:bg-primary/80 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-                        >
+                        <Button href="#" className="">
                             Get started
-                        </a>
-                        <a
+                        </Button>
+                        <Button
+                            variant="link"
                             href="#"
                             className="text-sm/6 font-semibold text-foreground"
                         >
                             Learn more <span aria-hidden="true">→</span>
-                        </a>
+                        </Button>
                     </div>
                 </div>
             </div>

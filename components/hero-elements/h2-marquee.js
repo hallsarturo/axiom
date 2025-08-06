@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 
 const wordList = ['comment rage', 'stolen data', 'fake news'];
-const longestWordLength = Math.max(...wordList.map(word => word.length));
+const longestWordLength = Math.max(...wordList.map((word) => word.length));
 
 export function H2Marquee() {
     const [index, setIndex] = useState(0);
@@ -15,11 +15,11 @@ export function H2Marquee() {
         return () => clearInterval(interval);
     }, []);
     return (
-        <div className="pl-32">
-            <h2 className="text-6xl flex justify-center items-center">
+        <div className="flex justify-center md:pl-32">
+            <h2 className="text-lg text-center sm:text-4xl md:text-6xl flex md:flex-row flex-col justify-center items-center text-nowrap">
                 No more{'  '}
                 <span
-                    className="inline-block align-baseline relative h-[3.5rem] text-5xl overflow-hidden ml-4"
+                    className="flex flex-col align-baseline relative h-[3.5rem]  md:text-5xl overflow-hidden ml-4"
                     style={{ minWidth: `${longestWordLength + 2}ch` }}
                 >
                     <div
@@ -31,7 +31,7 @@ export function H2Marquee() {
                         {wordList.map((word, i) => (
                             <div
                                 key={i}
-                                className="h-[3.5rem] leading-[3.5rem] text-yellow-400 px-2"
+                                className="h-[3.5rem] leading-[3.5rem] text-purple-800 px-2"
                             >
                                 {word}
                             </div>
