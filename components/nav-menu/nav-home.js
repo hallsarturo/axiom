@@ -121,22 +121,34 @@ export function NavigationMenuHome() {
                         </svg>
                     </SheetTrigger>
                     <SheetContent
-                        side="left"
-                        className="flex flex-col items-center justify-center min-h-screen p-4"
+                        side="top"
+                        className="flex flex-col items-center justify-center min-h-screen w-full p-4 overflow-hidden"
                     >
-                        <SheetHeader className="flex flex-col items-center justify-center w-full">
-                            <SheetTitle className="flex justify-center items-center w-full mb-4">
-                                Home Menu
+                        <div
+                            aria-hidden="true"
+                            className="absolute inset-0 -z-10 transform-gpu overflow-hidden blur-3xl"
+                        >
+                            <div
+                                style={{
+                                    clipPath:
+                                        'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
+                                }}
+                                className="absolute left-0 top-0 w-full h-full bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30"
+                            />
+                        </div>
+                        <SheetHeader className="flex flex-col items-center justify-center w-full text-2xl">
+                            <SheetTitle className="flex justify-center items-center w-full text-5xl mb-12">
+                                AXIOM   
                             </SheetTitle>
-                            <nav className="flex flex-col gap-4 mt-4 items-center justify-center w-full">
+                            <nav className="flex flex-col gap-8 mt-4 items-center justify-center w-full">
                                 <Button
                                     variant="secondary"
                                     size="lg"
-                                    className="w-4/5 mx-auto flex justify-center items-center text-base"
+                                    className="w-1/3 mx-auto flex justify-center items-center py-3 text-[1.5625rem] font-light tracking-tight rounded-xl shadow-lg bg-white/30 dark:bg-background/40 backdrop-blur-md hover:bg-white/50 dark:hover:bg-background/60 transition"
                                 >
                                     <Link
                                         href="/"
-                                        className="w-full text-center text-base"
+                                        className="w-full text-center text-[1.5625rem] font-light"
                                     >
                                         Home
                                     </Link>
@@ -144,11 +156,11 @@ export function NavigationMenuHome() {
                                 <Button
                                     variant="secondary"
                                     size="lg"
-                                    className="w-4/5 mx-auto flex justify-center items-center text-base"
+                                    className="w-1/3 mx-auto flex justify-center items-center py-3 text-[1.5625rem] font-light tracking-tight rounded-xl shadow-lg bg-white/30 dark:bg-background/40 backdrop-blur-md hover:bg-white/50 dark:hover:bg-background/60 transition"
                                 >
                                     <Link
                                         href="#"
-                                        className="w-full text-center text-base"
+                                        className="w-full text-center text-[1.5625rem] font-light"
                                     >
                                         About
                                     </Link>
@@ -156,11 +168,11 @@ export function NavigationMenuHome() {
                                 <Button
                                     variant="secondary"
                                     size="lg"
-                                    className="w-4/5 mx-auto flex justify-center items-center text-base"
+                                    className="w-1/3 mx-auto flex justify-center items-center py-3 text-[1.5625rem] font-light tracking-tight rounded-xl shadow-lg bg-white/30 dark:bg-background/40 backdrop-blur-md hover:bg-white/50 dark:hover:bg-background/60 transition"
                                 >
                                     <Link
                                         href="#"
-                                        className="w-full text-center text-base"
+                                        className="w-full text-center text-[1.5625rem] font-light"
                                     >
                                         Legal
                                     </Link>
@@ -168,11 +180,11 @@ export function NavigationMenuHome() {
                                 <Button
                                     variant="secondary"
                                     size="lg"
-                                    className="w-4/5 mx-auto flex justify-center items-center text-base"
+                                    className=" mx-auto flex justify-center items-center py-3 text-[1.5625rem] font-light tracking-tight rounded-xl shadow-lg bg-white/30 dark:bg-background/40 backdrop-blur-md hover:bg-white/50 dark:hover:bg-background/60 transition"
                                 >
                                     <Link
                                         href="#"
-                                        className="w-full text-center text-base"
+                                        className="w-full text-center text-[1.5625rem] font-light"
                                     >
                                         Terms & Conditions
                                     </Link>
@@ -180,11 +192,11 @@ export function NavigationMenuHome() {
                                 <Button
                                     variant="secondary"
                                     size="lg"
-                                    className="w-4/5 mx-auto flex justify-center items-center text-base"
+                                    className="w-1/3 mx-auto flex justify-center items-center py-3 text-[1.5625rem] font-light tracking-tight rounded-xl shadow-lg bg-white/30 dark:bg-background/40 backdrop-blur-md hover:bg-white/50 dark:hover:bg-background/60 transition"
                                 >
                                     <Link
                                         href="/sign-up"
-                                        className="w-full text-center text-base"
+                                        className="w-full text-center text-[1.5625rem] font-light"
                                     >
                                         Sign Up
                                     </Link>
@@ -192,11 +204,11 @@ export function NavigationMenuHome() {
                                 <Button
                                     variant="secondary"
                                     size="lg"
-                                    className="w-4/5 mx-auto flex justify-center items-center text-base mb-4"
+                                    className="w-1/3 mx-auto flex justify-center items-center py-3 text-[1.5625rem] font-light tracking-tight rounded-xl shadow-lg bg-white/30 dark:bg-background/40 backdrop-blur-md hover:bg-white/50 dark:hover:bg-background/60 transition mb-4"
                                 >
                                     <Link
                                         href="/sign-in"
-                                        className="w-full text-center text-base"
+                                        className="w-full text-center text-[1.5625rem] font-light"
                                     >
                                         Sign In
                                     </Link>

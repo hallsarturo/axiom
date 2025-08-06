@@ -19,7 +19,7 @@ export function H2Marquee() {
             <h2 className="text-4xl text-center sm:text-5xl md:text-6xl flex md:flex-row flex-col justify-center items-center text-nowrap">
                 no more:{' '}
                 <span
-                    className="flex flex-col justify-center text-center relative h-[3.5rem] lg:text-6xl md:text-5xl overflow-hidden ml-10 sm:ml-20 md:ml-0"
+                    className="flex flex-col justify-center text-center relative h-[3.5rem] lg:text-6xl md:text-5xl overflow-hidden ml-15 sm:ml-20 md:ml-0"
                     style={{ minWidth: `${longestWordLength + 2}ch` }}
                 >
                     <div
