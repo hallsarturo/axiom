@@ -5,6 +5,7 @@ import { UserProvider } from '@/components/context/UserProfileContext';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Toaster } from 'sonner';
+import { ModeToggle } from '@/components/ui/themes/mode-toggle';
 
 const geistSans = Geist({
     variable: '--font-geist-sans',
@@ -35,34 +36,45 @@ export default function RootLayout({ children }) {
                         disableTransitionOnChange
                     >
                         <Toaster />
+                        <div className="hidden sm:fixed sm:top-0 sm:right-0 sm:m-4 sm:z-50">
+                            <ModeToggle />
+                        </div>
                         <main>{children}</main>
-                        <footer className="flex flex-row justify-center items-center min-h-35 text-white bg-gradient-to-br  from-slate-950 to-slate-700">
-                            <div className="mr-25">
+                        <footer className="flex flex-col sm:flex-row justify-center items-center min-h-20 sm:min-h-35 w-full px-4 gap-2 p-4 sm:gap-8 text-white bg-gradient-to-br from-slate-950 to-slate-700 text-xs">
+                            <div>
                                 <Button
-                                    className="bg-transparent"
+                                    className="bg-transparent text-xs px-2 py-1"
                                     variant="ghost"
+                                    size="sm"
                                 >
-                                    {/* remember to Link to my website */}
-
-                                    <Link href="https://arturoproal.com">
+                                    <Link
+                                        href="https://arturoproal.com"
+                                        className="text-xs"
+                                    >
                                         Arturo Proal Walls ©
                                     </Link>
                                 </Button>
                             </div>
-                            <div className="mr-25">
+                            <div>
                                 <Button
-                                    className="bg-transparent"
+                                    className="bg-transparent text-xs px-2 py-1"
                                     variant="outline"
+                                    size="xs"
                                 >
-                                    <Link href="/">Buy me a cofee</Link>
+                                    <Link href="/" className="text-xs">
+                                        Buy me a cofee
+                                    </Link>
                                 </Button>
                             </div>
                             <div>
                                 <Button
-                                    className="bg-transparent"
+                                    className="bg-transparent text-xs px-2 py-1"
                                     variant="ghost"
+                                    size="sm"
                                 >
-                                    <Link href="/">Legal</Link>
+                                    <Link href="/" className="text-xs">
+                                        Legal
+                                    </Link>
                                 </Button>
                             </div>
                         </footer>
