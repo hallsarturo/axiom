@@ -20,11 +20,10 @@ import {
     SheetTitle,
     SheetTrigger,
 } from '@/components/ui/sheet';
-import { MobileMenu } from '@/components/nav-menu/mobile-menu';
+import { ModeToggle } from '@/components/ui/themes/mode-toggle';
 import { useRouter } from 'next/navigation';
 import { logoutUser } from '@/lib/actions/actions';
 import { useUser } from '@/components/context/UserProfileContext';
-import { useState } from 'react';
 
 export function NavigationConnected() {
     const router = useRouter();
@@ -43,7 +42,11 @@ export function NavigationConnected() {
             <nav className="">
                 {/* Desktop menu */}
                 <div className="hidden md:block">
-                    <NavigationMenu position="popper" viewport={false} className="min-w-0">
+                    <NavigationMenu
+                        position="popper"
+                        viewport={false}
+                        className="min-w-0"
+                    >
                         <NavigationMenuList className="gap-4">
                             <NavigationMenuItem>
                                 <NavigationMenuLink
@@ -114,6 +117,14 @@ export function NavigationConnected() {
                                     </NavigationMenuLink>
                                 </NavigationMenuContent>
                             </NavigationMenuItem>
+                            <NavigationMenuItem>
+                                <NavigationMenuLink
+                                    asChild
+                                    className={navigationMenuTriggerStyle()}
+                                >
+                                    <ModeToggle />
+                                </NavigationMenuLink>
+                            </NavigationMenuItem>
                         </NavigationMenuList>
                     </NavigationMenu>
                 </div>
@@ -121,7 +132,7 @@ export function NavigationConnected() {
             <nav>
                 {/* Mobile full-screen menu */}
                 <div className="md:hidden">
-                    <Sheet className="md:hidden">
+                    <Sheet className="md:hidden flex flex-col">
                         <SheetTrigger className="cursor-pointer">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -138,16 +149,75 @@ export function NavigationConnected() {
                                 />
                             </svg>
                         </SheetTrigger>
-                        <SheetContent side="top">
-                            <SheetHeader>
-                                <SheetTitle>
-                                    Are you absolutely sure?
+                        <SheetContent
+                            side="left"
+                            className="flex flex-col items-center justify-center min-h-screen p-4"
+                        >
+                            <SheetHeader className="flex flex-col items-center justify-center w-full">
+                                <SheetTitle className="flex justify-center items-center w-full mb-4">
+                                    Menu
                                 </SheetTitle>
-                                <SheetDescription>
-                                    This action cannot be undone. This will
-                                    permanently delete your account and remove
-                                    your data from our servers.
-                                </SheetDescription>
+                                <nav className="flex flex-col gap-4 mt-4 items-center justify-center w-full">
+                                    <Button
+                                        variant="secondary"
+                                        size="lg"
+                                        className="w-4/5 mx-auto flex justify-center items-center text-base"
+                                    >
+                                        <Link
+                                            href="/profile"
+                                            className="w-full text-center text-base"
+                                        >
+                                            Profile
+                                        </Link>
+                                    </Button>
+                                    <Button
+                                        variant="secondary"
+                                        size="lg"
+                                        className="w-4/5 mx-auto flex justify-center items-center text-base"
+                                    >
+                                        <Link
+                                            href="/dashboard"
+                                            className="w-full text-center text-base"
+                                        >
+                                            Dashboard
+                                        </Link>
+                                    </Button>
+                                    <Button
+                                        variant="secondary"
+                                        size="lg"
+                                        className="w-4/5 mx-auto flex justify-center items-center text-base"
+                                    >
+                                        <Link
+                                            href="/saved-posts"
+                                            className="w-full text-center text-base"
+                                        >
+                                            Saved Posts
+                                        </Link>
+                                    </Button>
+                                    <Button
+                                        variant="secondary"
+                                        size="lg"
+                                        className="w-4/5 mx-auto flex justify-center items-center text-base"
+                                    >
+                                        <Link
+                                            href="/feed"
+                                            className="w-full text-center text-base"
+                                        >
+                                            Feed Home
+                                        </Link>
+                                    </Button>
+                                    <Button
+                                        variant="secondary"
+                                        size="lg"
+                                        className="w-4/5 mx-auto flex justify-center items-center text-base mb-4"
+                                        onClick={handleLogout}
+                                    >
+                                        Sign Out
+                                    </Button>
+                                    <div className="w-4/5 mx-auto flex justify-center items-center">
+                                        <ModeToggle />
+                                    </div>
+                                </nav>
                             </SheetHeader>
                         </SheetContent>
                     </Sheet>
