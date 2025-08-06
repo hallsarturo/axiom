@@ -3,7 +3,6 @@
 import * as React from 'react';
 import Link from 'next/link';
 import { CircleCheckIcon, CircleHelpIcon, CircleIcon } from 'lucide-react';
-
 import {
     NavigationMenu,
     NavigationMenuContent,
@@ -13,111 +12,195 @@ import {
     NavigationMenuTrigger,
     navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu';
-
-const components = [
-    {
-        title: 'Alert Dialog',
-        href: '/docs/primitives/alert-dialog',
-        description:
-            'A modal dialog that interrupts the user with important content and expects a response.',
-    },
-    {
-        title: 'Hover Card',
-        href: '/docs/primitives/hover-card',
-        description:
-            'For sighted users to preview content available behind a link.',
-    },
-    {
-        title: 'Progress',
-        href: '/docs/primitives/progress',
-        description:
-            'Displays an indicator showing the completion progress of a task, typically displayed as a progress bar.',
-    },
-    {
-        title: 'Scroll-area',
-        href: '/docs/primitives/scroll-area',
-        description: 'Visually or semantically separates content.',
-    },
-    {
-        title: 'Tabs',
-        href: '/docs/primitives/tabs',
-        description:
-            'A set of layered sections of content—known as tab panels—that are displayed one at a time.',
-    },
-    {
-        title: 'Tooltip',
-        href: '/docs/primitives/tooltip',
-        description:
-            'A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.',
-    },
-];
+import { Button } from '@/components/ui/button';
+import {
+    Sheet,
+    SheetContent,
+    SheetHeader,
+    SheetTitle,
+    SheetTrigger,
+} from '@/components/ui/sheet';
 
 export function NavigationMenuHome() {
     return (
-        <NavigationMenu viewport={false}>
-            <NavigationMenuList>
-                <NavigationMenuItem>
-                    <NavigationMenuLink
-                        asChild
-                        className={navigationMenuTriggerStyle()}
+        <>
+            {/* Desktop menu */}
+            <nav className="hidden md:block">
+                <NavigationMenu
+                    position="popper"
+                    viewport={false}
+                    className="min-w-0"
+                >
+                    <NavigationMenuList className="gap-4">
+                        <NavigationMenuItem>
+                            <NavigationMenuLink
+                                asChild
+                                className={navigationMenuTriggerStyle()}
+                            >
+                                <Link href="/">Home</Link>
+                            </NavigationMenuLink>
+                        </NavigationMenuItem>
+                        <NavigationMenuItem>
+                            <NavigationMenuTrigger>About</NavigationMenuTrigger>
+                            <NavigationMenuContent>
+                                <ul className="grid w-[200px] gap-4">
+                                    <li>
+                                        <NavigationMenuLink asChild>
+                                            <Link
+                                                href="#"
+                                                className="flex-row items-center gap-2"
+                                            >
+                                                <CircleHelpIcon />
+                                                About
+                                            </Link>
+                                        </NavigationMenuLink>
+                                        <NavigationMenuLink asChild>
+                                            <Link
+                                                href="#"
+                                                className="flex-row items-center gap-2"
+                                            >
+                                                <CircleIcon />
+                                                Legal
+                                            </Link>
+                                        </NavigationMenuLink>
+                                        <NavigationMenuLink asChild>
+                                            <Link
+                                                href="#"
+                                                className="flex-row items-center gap-2"
+                                            >
+                                                <CircleCheckIcon />
+                                                Terms & Conditions
+                                            </Link>
+                                        </NavigationMenuLink>
+                                    </li>
+                                </ul>
+                            </NavigationMenuContent>
+                        </NavigationMenuItem>
+                        <NavigationMenuItem>
+                            <NavigationMenuLink
+                                asChild
+                                className={navigationMenuTriggerStyle()}
+                            >
+                                <Link href="/sign-up">Sign Up</Link>
+                            </NavigationMenuLink>
+                        </NavigationMenuItem>
+                        <NavigationMenuItem>
+                            <NavigationMenuLink
+                                asChild
+                                className={navigationMenuTriggerStyle()}
+                            >
+                                <Link href="/sign-in">Sign In</Link>
+                            </NavigationMenuLink>
+                        </NavigationMenuItem>
+                    </NavigationMenuList>
+                </NavigationMenu>
+            </nav>
+            {/* Mobile menu */}
+            <nav className="md:hidden">
+                <Sheet className="md:hidden flex flex-col">
+                    <SheetTrigger className="cursor-pointer">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={1.5}
+                            stroke="currentColor"
+                            className="size-6"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+                            />
+                        </svg>
+                    </SheetTrigger>
+                    <SheetContent
+                        side="left"
+                        className="flex flex-col items-center justify-center min-h-screen p-4"
                     >
-                        <Link href="/">Home</Link>
-                    </NavigationMenuLink>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
-                    <NavigationMenuTrigger>About</NavigationMenuTrigger>
-                    <NavigationMenuContent>
-                        <ul className="grid w-[200px] gap-4">
-                            <li>
-                                <NavigationMenuLink asChild>
+                        <SheetHeader className="flex flex-col items-center justify-center w-full">
+                            <SheetTitle className="flex justify-center items-center w-full mb-4">
+                                Home Menu
+                            </SheetTitle>
+                            <nav className="flex flex-col gap-4 mt-4 items-center justify-center w-full">
+                                <Button
+                                    variant="secondary"
+                                    size="lg"
+                                    className="w-4/5 mx-auto flex justify-center items-center text-base"
+                                >
+                                    <Link
+                                        href="/"
+                                        className="w-full text-center text-base"
+                                    >
+                                        Home
+                                    </Link>
+                                </Button>
+                                <Button
+                                    variant="secondary"
+                                    size="lg"
+                                    className="w-4/5 mx-auto flex justify-center items-center text-base"
+                                >
                                     <Link
                                         href="#"
-                                        className="flex-row items-center gap-2"
+                                        className="w-full text-center text-base"
                                     >
-                                        <CircleHelpIcon />
                                         About
                                     </Link>
-                                </NavigationMenuLink>
-                                <NavigationMenuLink asChild>
+                                </Button>
+                                <Button
+                                    variant="secondary"
+                                    size="lg"
+                                    className="w-4/5 mx-auto flex justify-center items-center text-base"
+                                >
                                     <Link
                                         href="#"
-                                        className="flex-row items-center gap-2"
+                                        className="w-full text-center text-base"
                                     >
-                                        <CircleIcon />
                                         Legal
                                     </Link>
-                                </NavigationMenuLink>
-                                <NavigationMenuLink asChild>
+                                </Button>
+                                <Button
+                                    variant="secondary"
+                                    size="lg"
+                                    className="w-4/5 mx-auto flex justify-center items-center text-base"
+                                >
                                     <Link
                                         href="#"
-                                        className="flex-row items-center gap-2"
+                                        className="w-full text-center text-base"
                                     >
-                                        <CircleCheckIcon />
                                         Terms & Conditions
                                     </Link>
-                                </NavigationMenuLink>
-                            </li>
-                        </ul>
-                    </NavigationMenuContent>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
-                    <NavigationMenuLink
-                        asChild
-                        className={navigationMenuTriggerStyle()}
-                    >
-                        <Link href="/sign-up">Sign Up</Link>
-                    </NavigationMenuLink>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
-                    <NavigationMenuLink
-                        asChild
-                        className={navigationMenuTriggerStyle()}
-                    >
-                        <Link href="/sign-in">Sign In</Link>
-                    </NavigationMenuLink>
-                </NavigationMenuItem>
-            </NavigationMenuList>
-        </NavigationMenu>
+                                </Button>
+                                <Button
+                                    variant="secondary"
+                                    size="lg"
+                                    className="w-4/5 mx-auto flex justify-center items-center text-base"
+                                >
+                                    <Link
+                                        href="/sign-up"
+                                        className="w-full text-center text-base"
+                                    >
+                                        Sign Up
+                                    </Link>
+                                </Button>
+                                <Button
+                                    variant="secondary"
+                                    size="lg"
+                                    className="w-4/5 mx-auto flex justify-center items-center text-base mb-4"
+                                >
+                                    <Link
+                                        href="/sign-in"
+                                        className="w-full text-center text-base"
+                                    >
+                                        Sign In
+                                    </Link>
+                                </Button>
+                            </nav>
+                        </SheetHeader>
+                    </SheetContent>
+                </Sheet>
+            </nav>
+        </>
     );
 }
 

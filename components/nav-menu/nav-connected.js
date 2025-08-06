@@ -155,7 +155,7 @@ export function NavigationConnected() {
                         >
                             <SheetHeader className="flex flex-col items-center justify-center w-full">
                                 <SheetTitle className="flex justify-center items-center w-full mb-4">
-                                    Menu
+                                    Axiom
                                 </SheetTitle>
                                 <nav className="flex flex-col gap-4 mt-4 items-center justify-center w-full">
                                     <Button
