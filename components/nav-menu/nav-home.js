@@ -20,6 +20,7 @@ import {
     SheetTitle,
     SheetTrigger,
 } from '@/components/ui/sheet';
+import { ModeToggle } from '@/components/ui/themes/mode-toggle';
 
 export function NavigationMenuHome() {
     return (
@@ -35,13 +36,15 @@ export function NavigationMenuHome() {
                         <NavigationMenuItem className="bg-transparent">
                             <NavigationMenuLink
                                 asChild
-                                className='bg-transparent'
+                                className="bg-transparent"
                             >
                                 <Link href="/">Home</Link>
                             </NavigationMenuLink>
                         </NavigationMenuItem>
                         <NavigationMenuItem>
-                            <NavigationMenuTrigger className="bg-transparent">About</NavigationMenuTrigger>
+                            <NavigationMenuTrigger className="bg-transparent">
+                                About
+                            </NavigationMenuTrigger>
                             <NavigationMenuContent>
                                 <ul className="grid w-[200px] gap-4">
                                     <li>
@@ -79,7 +82,7 @@ export function NavigationMenuHome() {
                         <NavigationMenuItem>
                             <NavigationMenuLink
                                 asChild
-                                className='bg-transparent'
+                                className="bg-transparent"
                             >
                                 <Link href="/sign-up">Sign Up</Link>
                             </NavigationMenuLink>
@@ -87,10 +90,13 @@ export function NavigationMenuHome() {
                         <NavigationMenuItem>
                             <NavigationMenuLink
                                 asChild
-                                className='bg-transparent'
+                                className="bg-transparent"
                             >
                                 <Link href="/sign-in">Sign In</Link>
                             </NavigationMenuLink>
+                        </NavigationMenuItem>
+                        <NavigationMenuItem className="ml-4">
+                            <ModeToggle />
                         </NavigationMenuItem>
                     </NavigationMenuList>
                 </NavigationMenu>
@@ -195,6 +201,7 @@ export function NavigationMenuHome() {
                                         Sign In
                                     </Link>
                                 </Button>
+                                <ModeToggle />
                             </nav>
                         </SheetHeader>
                     </SheetContent>

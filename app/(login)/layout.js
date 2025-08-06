@@ -1,7 +1,6 @@
 import { Geist, Geist_Mono } from 'next/font/google';
 import '@/app/globals.css';
 import { NavigationMenuHome } from '@/components/nav-menu/nav-home';
-import { ModeToggle } from '@/components/ui/themes/mode-toggle';
 
 const geistSans = Geist({
     variable: '--font-geist-sans',
@@ -16,9 +15,6 @@ const geistMono = Geist_Mono({
 export default function LandingLayout({ children }) {
     return (
         <>
-            <div className="fixed top-0 right-0 m-4 z-50">
-                <ModeToggle />
-            </div>
             <div className="flex full-w justify-center mt-4 shadow-md">
                 <div className="mb-4">
                     <NavigationMenuHome className="" />
