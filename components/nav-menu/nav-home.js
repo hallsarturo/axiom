@@ -20,6 +20,14 @@ import {
     SheetTitle,
     SheetTrigger,
 } from '@/components/ui/sheet';
+import {
+    House,
+    UserRound,
+    Scale,
+    NotebookPen,
+    IdCard,
+    LogIn,
+} from 'lucide-react';
 import { ModeToggle } from '@/components/ui/themes/mode-toggle';
 
 export function NavigationMenuHome() {
@@ -138,14 +146,11 @@ export function NavigationMenuHome() {
                         </div>
                         <SheetHeader className="flex flex-col items-center justify-center w-full text-2xl">
                             <SheetTitle className="flex justify-center items-center w-full text-5xl mb-12">
-                                AXIOM   
+                                AXIOM
                             </SheetTitle>
                             <nav className="flex flex-col gap-8 mt-4 items-center justify-center w-full">
-                                <Button
-                                    variant="secondary"
-                                    size="lg"
-                                    className="w-1/3 mx-auto flex justify-center items-center py-3 text-[1.5625rem] font-light tracking-tight rounded-xl shadow-lg bg-white/30 dark:bg-background/40 backdrop-blur-md hover:bg-white/50 dark:hover:bg-background/60 transition"
-                                >
+                                <Button variant="link" size="lg" className="">
+                                    <House className="mr-4 w-36 h-36" />
                                     <Link
                                         href="/"
                                         className="w-full text-center text-[1.5625rem] font-light"
@@ -153,62 +158,47 @@ export function NavigationMenuHome() {
                                         Home
                                     </Link>
                                 </Button>
-                                <Button
-                                    variant="secondary"
-                                    size="lg"
-                                    className="w-1/3 mx-auto flex justify-center items-center py-3 text-[1.5625rem] font-light tracking-tight rounded-xl shadow-lg bg-white/30 dark:bg-background/40 backdrop-blur-md hover:bg-white/50 dark:hover:bg-background/60 transition"
-                                >
+                                <Button variant="link" size="lg" className="">
+                                    <UserRound className="mr-4 w-36 h-36" />
                                     <Link
                                         href="#"
-                                        className="w-full text-center text-[1.5625rem] font-light"
+                                        className="w-full text-center text-2xl font-light"
                                     >
                                         About
                                     </Link>
                                 </Button>
-                                <Button
-                                    variant="secondary"
-                                    size="lg"
-                                    className="w-1/3 mx-auto flex justify-center items-center py-3 text-[1.5625rem] font-light tracking-tight rounded-xl shadow-lg bg-white/30 dark:bg-background/40 backdrop-blur-md hover:bg-white/50 dark:hover:bg-background/60 transition"
-                                >
+                                <Button variant="link" size="lg" className="">
+                                    <Scale className="mr-4 w-36 h-36" />
                                     <Link
                                         href="#"
-                                        className="w-full text-center text-[1.5625rem] font-light"
+                                        className="w-full text-center text-2xl font-light"
                                     >
                                         Legal
                                     </Link>
                                 </Button>
-                                <Button
-                                    variant="secondary"
-                                    size="lg"
-                                    className=" mx-auto flex justify-center items-center py-3 text-[1.5625rem] font-light tracking-tight rounded-xl shadow-lg bg-white/30 dark:bg-background/40 backdrop-blur-md hover:bg-white/50 dark:hover:bg-background/60 transition"
-                                >
+                                <Button variant="link" size="lg" className=" ">
+                                    <NotebookPen className="mr-4 w-36 h-36" />
                                     <Link
                                         href="#"
-                                        className="w-full text-center text-[1.5625rem] font-light"
+                                        className="w-full text-center text-2xl font-light"
                                     >
                                         Terms & Conditions
                                     </Link>
                                 </Button>
-                                <Button
-                                    variant="secondary"
-                                    size="lg"
-                                    className="w-1/3 mx-auto flex justify-center items-center py-3 text-[1.5625rem] font-light tracking-tight rounded-xl shadow-lg bg-white/30 dark:bg-background/40 backdrop-blur-md hover:bg-white/50 dark:hover:bg-background/60 transition"
-                                >
+                                <Button variant="link" size="lg" className="">
+                                    <IdCard className="mr-4 w-36 h-36" />
                                     <Link
                                         href="/sign-up"
-                                        className="w-full text-center text-[1.5625rem] font-light"
+                                        className="w-full text-center text-2xl font-light"
                                     >
                                         Sign Up
                                     </Link>
                                 </Button>
-                                <Button
-                                    variant="secondary"
-                                    size="lg"
-                                    className="w-1/3 mx-auto flex justify-center items-center py-3 text-[1.5625rem] font-light tracking-tight rounded-xl shadow-lg bg-white/30 dark:bg-background/40 backdrop-blur-md hover:bg-white/50 dark:hover:bg-background/60 transition mb-4"
-                                >
+                                <Button variant="link" size="lg" className="">
+                                    <LogIn className="mr-4 w-36 h-36" />
                                     <Link
                                         href="/sign-in"
-                                        className="w-full text-center text-[1.5625rem] font-light"
+                                        className="w-full text-center text-2xl font-light"
                                     >
                                         Sign In
                                     </Link>

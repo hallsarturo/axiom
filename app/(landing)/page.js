@@ -19,7 +19,7 @@ export default function Home() {
                 />
             </div>
             <div className="flex flex-col  mx-auto max-w-4xl py-32 sm:py-32 lg:py-48">
-                <div className="flex flex-col w-full my-6">
+                <div className="flex flex-col w-full mt-3 mb-16 sm:my-6 md:mt-0">
                     <H2Marquee></H2Marquee>
                 </div>
                 <div className="hidden sm:mb-8 sm:flex sm:justify-center">
@@ -39,13 +39,13 @@ export default function Home() {
                         <h1 className="text-8xl sm:text-9xl md:text-[11rem] font-semibold tracking-tight text-balance text-foreground ">
                             AXIOM
                         </h1>
-                        <p className="ml-40 mt-2 sm:ml-80 md:ml-120">alpha v0.1.0</p>
+                        <p className="ml-50 mt-2 sm:ml-80 md:ml-120">alpha v0.1.0</p>
                     </div>
-                    <p className="mt-8 text-lg font-medium text-pretty text-muted-foreground sm:text-xl/8">
+                    <p className="mt-13 text-lg font-medium text-pretty text-muted-foreground sm:text-xl/8">
                         Knowledge-focused social network for serious
                         intellectuals
                     </p>
-                    <div className="mt-10 flex flex-col gap-8 md:flex-row items-center justify-center gap-x-6">
+                    <div className="mt-20 flex flex-col gap-8 md:flex-row items-center justify-center gap-x-6">
                         <Button href="#" className="">
                             Get started
                         </Button>
