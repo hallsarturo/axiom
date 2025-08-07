@@ -143,19 +143,6 @@ export function PostCard(props) {
     }
 
     // Reaction States
-    const handleLikeToggle = () => {
-        setActiveReaction(activeReaction === 'like' ? null : 'like');
-    };
-    const handleDislikeToggle = () => {
-        setActiveReaction(activeReaction === 'dislike' ? null : 'dislike');
-    };
-    const handleLaughToggle = () => {
-        setActiveReaction(activeReaction === 'laugh' ? null : 'laugh');
-    };
-    const handleAngerToggle = () => {
-        setActiveReaction(activeReaction === 'anger' ? null : 'anger');
-    };
-
     const handleReaction = async (type) => {
         // Optimistically update UI
         await mutate(
@@ -176,14 +163,14 @@ export function PostCard(props) {
         case 'like':
             currentReactionIcon = (
                 <div className="flex flex-row gap-2 align-middle">
-                    <BiSolidLike className="size-5.5" />
+                    <BiSolidLike className="size-5.5 text-primary dark:text-foreground" />
                     <span>{reactionCounts.likes} Likes</span>
                 </div>
             );
             break;
         case 'dislike':
             currentReactionIcon = (
-                <div className="flex flex-row gap-2 align-middle">
+                <div className="flex flex-row gap-2 align-middle text-primary dark:text-foreground">
                     <BiSolidDislike className="size-5.5" />
                     <span>{reactionCounts.dislikes} Dislikes</span>
                 </div>
@@ -191,7 +178,7 @@ export function PostCard(props) {
             break;
         case 'laugh':
             currentReactionIcon = (
-                <div className="flex flex-row gap-2 align-middle">
+                <div className="flex flex-row gap-2 align-middle text-primary dark:text-foreground">
                     <FaLaughBeam className="size-5.5" />
                     <span>{reactionCounts.laughs} Laughs</span>
                 </div>
@@ -199,7 +186,7 @@ export function PostCard(props) {
             break;
         case 'anger':
             currentReactionIcon = (
-                <div className="flex flex-row gap-2 align-middle">
+                <div className="flex flex-row gap-2 align-middle text-primary dark:text-foreground">
                     <FaFaceAngry className="size-5.5" />
                     <span>{reactionCounts.angers} Anger</span>
                 </div>
@@ -283,7 +270,7 @@ export function PostCard(props) {
                         <CollapsibleContent>
                             {part2 ? part2 : null}
                         </CollapsibleContent>
-                        <CollapsibleTrigger className="text-blue-700 font-medium cursor-pointer ml-2">
+                        <CollapsibleTrigger className="text-primary dark:text-foreground font-medium cursor-pointer ml-2">
                             {seeMore ? 'See less' : 'See more'}
                         </CollapsibleTrigger>
                     </Collapsible>
@@ -302,7 +289,7 @@ export function PostCard(props) {
             </ScrollArea>
             <CardFooter className="justify-center">
                 <div className="flex flex-col w-full gap-1.5">
-                    <div className="flex flex-row w-full justify-between text-sm">
+                    <div className="flex flex-row w-full justify-between text-sm text-primary dark:text-foreground">
                         <p>Reactions {props.totalReactions}</p>
                         <p>comments {props.comments}</p>
                         <p>shares {props.shares}</p>
@@ -312,7 +299,7 @@ export function PostCard(props) {
                         <Popover>
                             <PopoverTrigger asChild>
                                 <span>
-                                    <Button variant="ghost">
+                                    <Button variant="ghost" className="text-primary dark:text-foreground">
                                         <AnimatePresence mode="wait">
                                             <motion.div
                                                 key={userReaction}
@@ -344,13 +331,13 @@ export function PostCard(props) {
                                     variant="ghost"
                                 >
                                     {data?.currentUserReaction === 'like' ? (
-                                        <div className="flex flex-row gap-2 align-middle">
-                                            <BiSolidLike />
+                                        <div className="flex flex-row gap-2 align-middle text-primary dark:text-foreground">
+                                            <BiSolidLike className="text-primary dark:text-foreground" />
                                             {reactionCounts.likes}
                                         </div>
                                     ) : (
-                                        <div className="flex flex-row gap-2 align-middle">
-                                            <BiLike />
+                                        <div className="flex flex-row gap-2 align-middle text-primary dark:text-foreground">
+                                            <BiLike className="text-primary dark:text-foreground" />
                                             {reactionCounts.likes}
                                         </div>
                                     )}{' '}
@@ -361,13 +348,13 @@ export function PostCard(props) {
                                     variant="ghost"
                                 >
                                     {data?.currentUserReaction === 'dislike' ? (
-                                        <div className="flex flex-row gap-2 align-middle">
-                                            <BiSolidDislike />
+                                        <div className="flex flex-row gap-2 align-middle text-primary dark:text-foreground">
+                                            <BiSolidDislike className="text-primary dark:text-foreground" />
                                             {reactionCounts.dislikes}
                                         </div>
                                     ) : (
-                                        <div className="flex flex-row gap-2 align-middle">
-                                            <BiDislike />
+                                        <div className="flex flex-row gap-2 align-middle text-primary dark:text-foreground">
+                                            <BiDislike className="text-primary dark:text-foreground" />
                                             {reactionCounts.dislikes}
                                         </div>
                                     )}{' '}
@@ -379,13 +366,13 @@ export function PostCard(props) {
                                     variant="ghost"
                                 >
                                     {data?.currentUserReaction === 'laugh' ? (
-                                        <div className="flex flex-row gap-2 align-middle">
-                                            <FaLaughBeam />
+                                        <div className="flex flex-row gap-2 align-middle text-primary dark:text-foreground">
+                                            <FaLaughBeam className="text-primary dark:text-foreground" />
                                             {reactionCounts.laughs}
                                         </div>
                                     ) : (
-                                        <div className="flex flex-row gap-2 align-middle">
-                                            <FaRegLaughBeam />
+                                        <div className="flex flex-row gap-2 align-middle text-primary dark:text-foreground">
+                                            <FaRegLaughBeam className="text-primary dark:text-foreground" />
                                             {reactionCounts.laughs}
                                         </div>
                                     )}
@@ -396,27 +383,30 @@ export function PostCard(props) {
                                     variant="ghost"
                                 >
                                     {data?.currentUserReaction === 'anger' ? (
-                                        <div className="flex flex-row gap-2 align-middle">
-                                            <FaFaceAngry />
+                                        <div className="flex flex-row gap-2 align-middle text-primary dark:text-foreground">
+                                            <FaFaceAngry className="text-primary dark:text-foreground" />
                                             {reactionCounts.angers}
                                         </div>
                                     ) : (
-                                        <div className="flex flex-row gap-2 align-middle">
-                                            <FaRegAngry />
+                                        <div className="flex flex-row gap-2 align-middle text-primary dark:text-foreground">
+                                            <FaRegAngry className="text-primary dark:text-foreground" />
                                             {reactionCounts.angers}
                                         </div>
                                     )}
                                 </Button>
                             </PopoverContent>
                         </Popover>
-                        <Button variant="ghost">
+                        <Button
+                            variant="ghost"
+                            className="text-primary dark:text-foreground"
+                        >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
                                 viewBox="0 0 24 24"
                                 strokeWidth={1.5}
                                 stroke="currentColor"
-                                className="size-6"
+                                className="size-6 text-primary dark:text-foreground"
                             >
                                 <path
                                     strokeLinecap="round"
@@ -426,14 +416,17 @@ export function PostCard(props) {
                             </svg>
                             Coment
                         </Button>
-                        <Button variant="ghost">
+                        <Button
+                            variant="ghost"
+                            className="text-primary dark:text-foreground"
+                        >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
                                 viewBox="0 0 24 24"
                                 strokeWidth={1.5}
                                 stroke="currentColor"
-                                className="size-6"
+                                className="size-6 text-primary dark:text-foreground"
                             >
                                 <path
                                     strokeLinecap="round"
@@ -442,14 +435,17 @@ export function PostCard(props) {
                                 />
                             </svg>
                         </Button>
-                        <Button variant="ghost">
+                        <Button
+                            variant="ghost"
+                            className="text-primary dark:text-foreground"
+                        >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
                                 viewBox="0 0 24 24"
                                 strokeWidth={1.5}
                                 stroke="currentColor"
-                                className="size-6"
+                                className="size-6 text-primary dark:text-foreground"
                             >
                                 <path
                                     strokeLinecap="round"
