@@ -24,6 +24,7 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from '@/components/ui/popover';
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { FaRegLaughBeam } from 'react-icons/fa';
 import { FaLaughBeam } from 'react-icons/fa';
 import { FaRegAngry } from 'react-icons/fa';
@@ -36,6 +37,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { useUser } from '@/components/context/UserProfileContext';
 import { useEffect, useState } from 'react';
 import useSWR from 'swr';
+import Link from 'next/link';
 import { putReaction } from '@/lib/actions/actions';
 
 const fetchPost = async (postId, token, userId) => {
@@ -216,7 +218,7 @@ export function PostCard(props) {
         <Card className="w-2xl md:max-h-[800px] md:min-w-[680px] flex flex-col h-full">
             <CardHeader>
                 <CardTitle className="leading-4 mb-2 mr-6">
-                    {props.cardTitle}
+                    <Link href={props.identifier}>{props.cardTitle}</Link>
                 </CardTitle>
                 <CardDescription className="flex flex-row items-center gap-6">
                     <Avatar>
@@ -270,32 +272,34 @@ export function PostCard(props) {
                     </div>
                 </CardAction>
             </CardHeader>
-            <CardContent className="flex-1 max-h-[70%] overflow-hidden">
-                <Collapsible
-                    open={seeMore}
-                    onOpenChange={setSeeMore}
-                    className="text-justify mb-3"
-                >
-                    {description ? part1 : null}
-                    <CollapsibleContent>
-                        {part2 ? part2 : null}
-                    </CollapsibleContent>
-                    <CollapsibleTrigger className="text-blue-700 font-medium cursor-pointer ml-2">
-                        {seeMore ? 'See less' : 'See more'}
-                    </CollapsibleTrigger>
-                </Collapsible>
-                <div className="w-full flex justify-center items-center">
-                    {props.imgSrc ? (
-                        <Image
-                            src={props.imgSrc}
-                            width={500}
-                            height={500}
-                            alt="Picture of the author"
-                            className="rounded-t-lg object-cover max-h-[600px] w-full"
-                        ></Image>
-                    ) : null}
-                </div>
-            </CardContent>
+            <ScrollArea className="flex-1 max-h-[800px] overflow-y-auto rounded-lg">
+                <CardContent>
+                    <Collapsible
+                        open={seeMore}
+                        onOpenChange={setSeeMore}
+                        className="text-justify mb-3"
+                    >
+                        {description ? part1 : null}
+                        <CollapsibleContent>
+                            {part2 ? part2 : null}
+                        </CollapsibleContent>
+                        <CollapsibleTrigger className="text-blue-700 font-medium cursor-pointer ml-2">
+                            {seeMore ? 'See less' : 'See more'}
+                        </CollapsibleTrigger>
+                    </Collapsible>
+                    <div className="w-full flex justify-center items-center">
+                        {props.imgSrc ? (
+                            <Image
+                                src={props.imgSrc}
+                                width={500}
+                                height={500}
+                                alt="Picture of the author"
+                                className="rounded-t-lg object-cover max-h-[600px] w-full"
+                            ></Image>
+                        ) : null}
+                    </div>
+                </CardContent>
+            </ScrollArea>
             <CardFooter className="justify-center">
                 <div className="flex flex-col w-full gap-1.5">
                     <div className="flex flex-row w-full justify-between text-sm">

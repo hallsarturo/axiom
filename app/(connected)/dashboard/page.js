@@ -31,12 +31,13 @@ import { Textarea } from '@/components/ui/textarea';
 import { CategoriesBadger } from '@/components/dashboard/categories-badger';
 import { ImageDroper } from '@/components/file-handling/image-droper';
 import { useUser } from '@/components/context/UserProfileContext';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { configFormSchema } from '@/lib/schemas/dashboard-config';
 import { updateUserConfig } from '@/lib/actions/actions';
+import { SkeletonCard } from '@/components/skeletons/skeletonCard';
 
 export default function Dashboard() {
     const { user, refreshUser } = useUser();
@@ -280,19 +281,22 @@ export default function Dashboard() {
                                         name="categories"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel>
+                                                <FormLabel className="text-base/7">
                                                     Interested in:
                                                 </FormLabel>
                                                 <FormControl>
-                                                    <CategoriesBadger
-                                                        className="flex flex-row mt-8"
-                                                        selected={
-                                                            field.value || []
-                                                        }
-                                                        onSelectionChange={
-                                                            field.onChange
-                                                        }
-                                                    />
+                                                    <Suspense fallback={<SkeletonCard />}>
+                                                        <CategoriesBadger
+                                                            className="flex flex-row mt-8"
+                                                            selected={
+                                                                field.value ||
+                                                                []
+                                                            }
+                                                            onSelectionChange={
+                                                                field.onChange
+                                                            }
+                                                        />
+                                                    </Suspense>
                                                 </FormControl>
                                                 <FormMessage />
                                             </FormItem>

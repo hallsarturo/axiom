@@ -6,10 +6,11 @@ import { SkeletonCard } from '@/components/skeletons/skeletonCard';
 
 export default function Feed() {
     return (
-        <div className="flex flex-col h-screen overflow-hidden items-center mt-6">
+        <div className="flex flex-col h-screen overflow-hidden items-center gap-8 mt-6">
             <Suspense fallback={<SkeletonCard />}>
                 <PublishPost className="w-2xl md:max-h-[800px] md:min-w-[680px] flex flex-col h-full" />
             </Suspense>
+    
             <Suspense fallback={<SkeletonCard />}>
                 <FeedComponent />
             </Suspense>

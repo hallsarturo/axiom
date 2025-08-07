@@ -90,7 +90,7 @@ export function NavigationConnected() {
                                     asChild
                                     className={navigationMenuTriggerStyle()}
                                 >
-                                    <Link href="/feed">Feed Home</Link>
+                                    <Link href="/feed">Feed</Link>
                                 </NavigationMenuLink>
                             </NavigationMenuItem>
                             <NavigationMenuItem>
@@ -203,7 +203,7 @@ export function NavigationConnected() {
                                             href="/feed"
                                             className="w-full text-center text-base"
                                         >
-                                            Feed Home
+                                            Feed
                                         </Link>
                                     </Button>
                                     <Button

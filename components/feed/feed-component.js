@@ -8,6 +8,8 @@ import { useVirtualizer } from '@tanstack/react-virtual';
 import { useInView } from 'react-intersection-observer';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Button } from '@/components/ui/button';
+import { SkeletonCard } from '@/components/skeletons/skeletonCard';
 
 export function FeedComponent() {
     const [posts, setPosts] = useState([]);
@@ -185,17 +187,18 @@ export function FeedComponent() {
 
             {/* Error handling UI */}
             {error && (
-                <div className="w-full text-center text-red-500 py-4">
-                    {error}
-                    <button
+                <div className="w-full flex flex-col justify-center items-center text-center text-red-500 py-4 gap-4">
+                    <SkeletonCard />
+                    <span>{error}</span>
+                    <Button
                         onClick={() => {
                             setError(null);
                             fetchData(1);
                         }}
-                        className="ml-2 px-4 py-2 bg-blue-500 text-white rounded-md"
+                        className=""
                     >
                         Retry
-                    </button>
+                    </Button>
                 </div>
             )}
 
@@ -249,8 +252,9 @@ export function FeedComponent() {
                                 >
                                     {isLoaderRow ? (
                                         hasMore ? (
-                                            <div className="py-4 text-center w-full">
-                                                Loading more posts...
+                                            <div className="flex flex-col justify-center items-center g-4 py-4 text-center">
+                                                <SkeletonCard />
+                                                <p>Loading more posts...</p>
                                             </div>
                                         ) : (
                                             <div className="py-4 text-center w-full">
@@ -260,6 +264,10 @@ export function FeedComponent() {
                                     ) : (
                                         <PaperPost
                                             postId={posts[virtualItem.index].id}
+                                            identifier={
+                                                posts[virtualItem.index]
+                                                    .identifier
+                                            }
                                             title={
                                                 posts[virtualItem.index].title
                                             }

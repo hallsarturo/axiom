@@ -6,6 +6,7 @@ export function PaperPost({ ...props }) {
             key={props.id}
             postId={props.postId}
             type="paper"
+            identifier={props.identifier}
             cardTitle={props.title}
             imgSrc={null}
             description={props.description}
