@@ -31,6 +31,8 @@ import {
 import { ModeToggle } from '@/components/ui/themes/mode-toggle';
 
 export function NavigationMenuHome() {
+    const [open, setOpen] = React.useState(false);
+
     return (
         <>
             {/* Desktop menu */}
@@ -111,15 +113,22 @@ export function NavigationMenuHome() {
             </nav>
             {/* Mobile menu */}
             <nav className="md:hidden">
-                <Sheet className="md:hidden flex flex-col">
-                    <SheetTrigger className="cursor-pointer">
+                <Sheet
+                    open={open}
+                    onOpenChange={setOpen}
+                    className="md:hidden flex flex-col"
+                >
+                    <SheetTrigger
+                        className="cursor-pointer"
+                        onClick={() => setOpen(true)}
+                    >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
                             viewBox="0 0 24 24"
                             strokeWidth={1.5}
                             stroke="currentColor"
-                            className="size-6"
+                            className="size-6 text-primary dark:text-foreground"
                         >
                             <path
                                 strokeLinecap="round"
@@ -145,60 +154,90 @@ export function NavigationMenuHome() {
                             />
                         </div>
                         <SheetHeader className="flex flex-col items-center justify-center w-full text-2xl">
-                            <SheetTitle className="flex justify-center items-center w-full text-5xl mb-12">
+                            <SheetTitle className="flex justify-center items-center w-full text-5xl text-primary dark:text-foreground mb-12">
                                 AXIOM
                             </SheetTitle>
                             <nav className="flex flex-col gap-8 mt-4 items-center justify-center w-full">
-                                <Button variant="link" size="lg" className="">
-                                    <House className="mr-4 w-36 h-36" />
+                                <Button
+                                    variant="link"
+                                    size="lg"
+                                    className=""
+                                    onClick={() => setOpen(false)}
+                                >
+                                    <House className="mr-4 w-36 h-36 text-primary dark:text-foreground" />
                                     <Link
                                         href="/"
-                                        className="w-full text-center text-[1.5625rem] font-light"
+                                        className="w-full text-center text-[1.5625rem] font-light text-primary dark:text-foreground"
                                     >
                                         Home
                                     </Link>
                                 </Button>
-                                <Button variant="link" size="lg" className="">
-                                    <UserRound className="mr-4 w-36 h-36" />
+                                <Button
+                                    variant="link"
+                                    size="lg"
+                                    className=""
+                                    onClick={() => setOpen(false)}
+                                >
+                                    <UserRound className="mr-4 w-36 h-36 text-primary dark:text-foreground" />
                                     <Link
                                         href="#"
-                                        className="w-full text-center text-2xl font-light"
+                                        className="w-full text-center text-2xl font-light text-primary dark:text-foreground"
                                     >
                                         About
                                     </Link>
                                 </Button>
-                                <Button variant="link" size="lg" className="">
-                                    <Scale className="mr-4 w-36 h-36" />
+                                <Button
+                                    variant="link"
+                                    size="lg"
+                                    className=""
+                                    onClick={() => setOpen(false)}
+                                >
+                                    <Scale className="mr-4 w-36 h-36 text-primary dark:text-foreground" />
                                     <Link
                                         href="#"
-                                        className="w-full text-center text-2xl font-light"
+                                        className="w-full text-center text-2xl font-light text-primary dark:text-foreground"
                                     >
                                         Legal
                                     </Link>
                                 </Button>
-                                <Button variant="link" size="lg" className=" ">
-                                    <NotebookPen className="mr-4 w-36 h-36" />
+                                <Button
+                                    variant="link"
+                                    size="lg"
+                                    className=" "
+                                    onClick={() => setOpen(false)}
+                                >
+                                    <NotebookPen className="mr-4 w-36 h-36 text-primary dark:text-foreground" />
                                     <Link
                                         href="#"
-                                        className="w-full text-center text-2xl font-light"
+                                        className="w-full text-center text-2xl font-light text-primary dark:text-foreground"
                                     >
                                         Terms & Conditions
                                     </Link>
                                 </Button>
-                                <Button variant="link" size="lg" className="">
-                                    <IdCard className="mr-4 w-36 h-36" />
+                                <Button
+                                    variant="link"
+                                    size="lg"
+                                    className=""
+                                    onClick={() => setOpen(false)}
+                                >
+                                    <IdCard className="mr-4 w-36 h-36 text-primary dark:text-foreground" />
                                     <Link
                                         href="/sign-up"
-                                        className="w-full text-center text-2xl font-light"
+                                        className="w-full text-center text-2xl font-light text-primary dark:text-foreground"
                                     >
                                         Sign Up
                                     </Link>
                                 </Button>
-                                <Button variant="link" size="lg" className="">
-                                    <LogIn className="mr-4 w-36 h-36" />
+                                <Button
+                                    variant="link"
+                                    size="lg"
+                                    className=""
+                                    onClick={() => setOpen(false)}
+                                >
+                                    <LogIn className="mr-4 w-36 h-36 text-primary dark:text-foreground" />
                                     <Link
                                         href="/sign-in"
-                                        className="w-full text-center text-2xl font-light"
+                                        className="w-full text-center text-2xl font-light text-primary dark:text-foreground"
                                     >
                                         Sign In
                                     </Link>

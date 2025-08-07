@@ -31,12 +31,9 @@ export default function Profile() {
                         Personal details.
                     </p>
 
-                    <CardAction
-                        className="flex justify-end"
-                        style={{ marginTop: '-50px', marginBottom: '0px' }}
-                    >
-                        <div className="flex flex-row items-center gap-6">
-                            <div>
+                    <CardAction className="flex justify-end mt-0 mb-0 sm:mt-[-50px]">
+                        <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 w-full sm:w-auto mt-8 md:my-0">
+                            <div className="mb-2 sm:mb-0">
                                 <Badge
                                     variant="secondary"
                                     className="bg-blue-500 text-white dark:bg-blue-600"
@@ -45,7 +42,7 @@ export default function Profile() {
                                     Verified
                                 </Badge>
                             </div>
-                            <Avatar className="w-24 h-24">
+                            <Avatar className="w-20 h-20 sm:w-24 sm:h-24">
                                 <AvatarImage
                                     src={
                                         user
@@ -60,61 +57,61 @@ export default function Profile() {
                 </div>
                 <div className="mt-6 border-t border-border">
                     <dl className="divide-y divide-border">
-                        <div className="px-4 py-6 flex items-start sm:px-0">
-                            <dt className="text-sm/6 font-medium text-foreground min-w-[150px]">
+                        <div className="px-4 py-6 flex flex-col sm:flex-row sm:items-center items-start sm:px-0">
+                            <dt className="text-sm/6 font-bold text-primary dark:text-foreground min-w-[100px] sm:min-w-[150px]">
                                 Full name
                             </dt>
-                            <dd className="ml-12 text-sm/6 text-muted-foreground">
+                            <dd className="mt-2 sm:mt-0 text-sm/6 text-muted-foreground break-words whitespace-normal w-full">
                                 {user ? user.username : 'Margot Foster'}
                             </dd>
                         </div>
-                        <div className="px-4 py-6 flex items-start sm:px-0">
-                            <dt className="text-sm/6 font-medium text-foreground min-w-[150px]">
+                        <div className="px-4 py-6 flex flex-col sm:flex-row sm:items-center items-start sm:px-0">
+                            <dt className="text-sm/6 font-bold text-primary dark:text-foreground min-w-[100px] sm:min-w-[150px]">
                                 Connected accounts:
                             </dt>
-                            <dd className="ml-12 text-sm/6 text-muted-foreground">
+                            <dd className="mt-2 sm:mt-0 text-sm/6 text-muted-foreground w-full">
                                 ORCID, LinkedIN, FaceBook, Google
                             </dd>
                         </div>
-                        <div className="px-4 py-6 flex items-start sm:px-0">
-                            <dt className="text-sm/6 font-medium text-foreground min-w-[150px]">
+                        <div className="px-4 py-6 flex flex-col sm:flex-row sm:items-center items-start sm:px-0">
+                            <dt className="text-sm/6 font-bold text-primary dark:text-foreground min-w-[100px] sm:min-w-[150px]">
                                 Email address
                             </dt>
-                            <dd className="ml-12 text-sm/6 text-muted-foreground">
+                            <dd className="mt-2 sm:mt-0 text-sm/6 text-muted-foreground break-words whitespace-normal w-full">
                                 margotfoster@example.com
                             </dd>
                         </div>
-                        <div className="px-4 py-6 flex items-start sm:px-0">
-                            <dt className="text-sm/6 font-medium text-foreground min-w-[150px]">
+                        <div className="px-4 py-6 flex flex-col sm:flex-row sm:items-center items-start sm:px-0">
+                            <dt className="text-sm/6 font-bold text-primary dark:text-foreground min-w-[100px] sm:min-w-[150px]">
                                 Posts
                             </dt>
-                            <dd className="ml-12 text-sm/6 text-muted-foreground">
+                            <dd className="mt-2 sm:mt-0 text-sm/6 text-muted-foreground w-full">
                                 see posts
                             </dd>
                         </div>
-                        <div className="px-4 py-6 flex items-start sm:px-0">
-                            <dt className="text-sm/6 font-medium text-foreground min-w-[150px]">
+                        <div className="px-4 py-6 flex flex-col sm:flex-row sm:items-center items-start sm:px-0">
+                            <dt className="text-sm/6 font-bold text-primary dark:text-foreground min-w-[100px] sm:min-w-[150px]">
                                 About
                             </dt>
-                            <dd className="ml-12 text-sm/6 text-muted-foreground">
+                            <dd className="mt-2 sm:mt-0 text-sm/6 text-muted-foreground w-full">
                                 {user
                                     ? user.about
                                     : 'Let the community know your areas of expertise'}
                             </dd>
                         </div>
-                        <div className="px-4 py-6 flex items-start sm:px-0">
-                            <dt className="text-sm/6 font-medium text-foreground min-w-[150px]">
+                        <div className="px-4 py-6 flex flex-col sm:flex-row sm:items-center items-start sm:px-0">
+                            <dt className="text-sm/6 font-bold text-primary dark:text-foreground min-w-[100px] sm:min-w-[150px]">
                                 Followers
                             </dt>
-                            <dd className="ml-12 text-sm/6 text-muted-foreground">
+                            <dd className="mt-2 sm:mt-0 text-sm/6 text-muted-foreground w-full">
                                 (155) | Expand Followers
                             </dd>
                         </div>
-                        <div className="px-4 py-6 flex items-start sm:px-0">
-                            <dt className="text-sm/6 font-medium text-foreground min-w-[150px]">
+                        <div className="px-4 py-6 flex flex-col sm:flex-row sm:items-center items-start sm:px-0">
+                            <dt className="text-sm/6 font-bold text-primary dark:text-foreground min-w-[100px] sm:min-w-[150px]">
                                 Following
                             </dt>
-                            <dd className="ml-12 text-sm/6 text-muted-foreground">
+                            <dd className="mt-2 sm:mt-0 text-sm/6 text-muted-foreground w-full">
                                 (24) | Expand Profiles
                             </dd>
                         </div>

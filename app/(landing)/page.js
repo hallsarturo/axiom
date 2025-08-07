@@ -15,7 +15,7 @@ export default function Home() {
                         clipPath:
                             'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
                     }}
-                    className="relative left-[calc(50%-11rem)] aspect-1155/678 w-144.5 -translate-x-1/2 rotate-30 bg-linear-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-30rem)] sm:w-288.75"
+                    className="relative left-[calc(50%-11rem)] aspect-1155/678 w-144.5 -translate-x-1/2 rotate-30 bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-30rem)] sm:w-288.75 dark:from-[#22223b] dark:to-[#4a4e69] dark:opacity-50"
                 />
             </div>
             <div className="flex flex-col  mx-auto max-w-4xl py-32 sm:py-32 lg:py-48">
@@ -39,7 +39,9 @@ export default function Home() {
                         <h1 className="text-8xl sm:text-9xl md:text-[11rem] font-semibold tracking-tight text-balance text-foreground ">
                             AXIOM
                         </h1>
-                        <p className="ml-50 mt-2 sm:ml-80 md:ml-120">alpha v0.1.0</p>
+                        <p className="ml-50 mt-2 sm:ml-80 md:ml-120">
+                            alpha v0.1.0
+                        </p>
                     </div>
                     <p className="mt-13 text-lg font-medium text-pretty text-muted-foreground sm:text-xl/8">
                         Knowledge-focused social network for serious

@@ -14,20 +14,31 @@ import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
     Sheet,
+    SheetClose,
     SheetContent,
     SheetDescription,
     SheetHeader,
     SheetTitle,
     SheetTrigger,
 } from '@/components/ui/sheet';
+import {
+    House,
+    UserRound,
+    Scale,
+    NotebookPen,
+    IdCard,
+    LogIn,
+} from 'lucide-react';
 import { ModeToggle } from '@/components/ui/themes/mode-toggle';
 import { useRouter } from 'next/navigation';
 import { logoutUser } from '@/lib/actions/actions';
 import { useUser } from '@/components/context/UserProfileContext';
+import { useState } from 'react';
 
 export function NavigationConnected() {
     const router = useRouter();
     const { user } = useUser();
+    const [open, setOpen] = useState(false);
 
     const handleLogout = async () => {
         const result = await logoutUser();
@@ -51,30 +62,34 @@ export function NavigationConnected() {
                             <NavigationMenuItem>
                                 <NavigationMenuLink
                                     asChild
-                                    className={navigationMenuTriggerStyle()}
+                                    className={`${navigationMenuTriggerStyle()} text-primary dark:text-foreground font-bold`}
                                 >
-                                    <Link href="/profile">Profile</Link>
+                                    <Button variant="secondary">
+                                        <Link href="/profile">Profile</Link>
+                                    </Button>
                                 </NavigationMenuLink>
                             </NavigationMenuItem>
                             <NavigationMenuItem>
                                 <NavigationMenuLink
                                     asChild
-                                    className={navigationMenuTriggerStyle()}
+                                    className={`${navigationMenuTriggerStyle()} text-primary dark:text-foreground font-bold`}
                                 >
-                                    <Link href="/dashboard">Dashboard</Link>
+                                    <Button variant="secondary">
+                                        <Link href="/dashboard">Dashboard</Link>
+                                    </Button>
                                 </NavigationMenuLink>
                             </NavigationMenuItem>
                             <NavigationMenuItem>
                                 <NavigationMenuLink
                                     asChild
-                                    className={navigationMenuTriggerStyle()}
+                                    className={`${navigationMenuTriggerStyle()} text-primary dark:text-foreground font-bold`}
                                 >
                                     <Link href="/saved-posts">
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
                                             viewBox="0 0 24 24"
                                             fill="currentColor"
-                                            className="size-6"
+                                            className="size-6 text-primary dark:text-foreground"
                                         >
                                             <path
                                                 fillRule="evenodd"
@@ -88,9 +103,11 @@ export function NavigationConnected() {
                             <NavigationMenuItem>
                                 <NavigationMenuLink
                                     asChild
-                                    className={navigationMenuTriggerStyle()}
+                                    className={`${navigationMenuTriggerStyle()} text-primary dark:text-foreground font-bold`}
                                 >
-                                    <Link href="/feed">Feed</Link>
+                                    <Button variant="secondary">
+                                        <Link href="/feed">Feed</Link>
+                                    </Button>
                                 </NavigationMenuLink>
                             </NavigationMenuItem>
                             <NavigationMenuItem>
@@ -131,16 +148,16 @@ export function NavigationConnected() {
             </nav>
             <nav>
                 {/* Mobile full-screen menu */}
-                <div className="md:hidden">
-                    <Sheet className="md:hidden flex flex-col">
-                        <SheetTrigger className="cursor-pointer">
+                <nav className="md:hidden">
+                    <Sheet open={open} onOpenChange={setOpen} className="md:hidden flex flex-col">
+                        <SheetTrigger className="cursor-pointer" onClick={() => setOpen(true)}>
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
                                 viewBox="0 0 24 24"
                                 strokeWidth={1.5}
                                 stroke="currentColor"
-                                className="size-6"
+                                className="size-6 text-primary dark:text-foreground"
                             >
                                 <path
                                     strokeLinecap="round"
@@ -150,78 +167,101 @@ export function NavigationConnected() {
                             </svg>
                         </SheetTrigger>
                         <SheetContent
-                            side="left"
-                            className="flex flex-col items-center justify-center min-h-screen p-4"
+                            side="top"
+                            className="flex flex-col items-center justify-center min-h-screen w-full p-4 overflow-hidden"
                         >
-                            <SheetHeader className="flex flex-col items-center justify-center w-full">
-                                <SheetTitle className="flex justify-center items-center w-full mb-4">
-                                    Axiom
+                            <div
+                                aria-hidden="true"
+                                className="absolute inset-0 -z-10 transform-gpu overflow-hidden blur-3xl"
+                            >
+                                <div
+                                    style={{
+                                        clipPath:
+                                            'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
+                                    }}
+                                    className="absolute left-0 top-0 w-full h-full bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30"
+                                />
+                            </div>
+                            <SheetHeader className="flex flex-col items-center justify-center w-full text-2xl">
+                                <SheetTitle className="flex justify-center items-center w-full text-5xl text-primary dark:text-foreground mb-12">
+                                    AXIOM
                                 </SheetTitle>
-                                <nav className="flex flex-col gap-4 mt-4 items-center justify-center w-full">
+                                <nav className="flex flex-col gap-8 mt-4 items-center justify-center w-full">
                                     <Button
-                                        variant="secondary"
+                                        variant="link"
                                         size="lg"
-                                        className="w-4/5 mx-auto flex justify-center items-center text-base"
+                                        className=""
+                                        onClick={() => setOpen(false)}
                                     >
+                                        <House className="mr-4 w-36 h-36 text-primary dark:text-foreground" />
                                         <Link
                                             href="/profile"
-                                            className="w-full text-center text-base"
+                                            className="w-full text-center text-[1.5625rem] font-light text-primary dark:text-foreground"
                                         >
                                             Profile
                                         </Link>
                                     </Button>
                                     <Button
-                                        variant="secondary"
+                                        variant="link"
                                         size="lg"
-                                        className="w-4/5 mx-auto flex justify-center items-center text-base"
+                                        className=""
+                                        onClick={() => setOpen(false)}
                                     >
+                                        <UserRound className="mr-4 w-36 h-36 text-primary dark:text-foreground" />
                                         <Link
                                             href="/dashboard"
-                                            className="w-full text-center text-base"
+                                            className="w-full text-center text-2xl font-light text-primary dark:text-foreground"
                                         >
                                             Dashboard
                                         </Link>
                                     </Button>
                                     <Button
-                                        variant="secondary"
+                                        variant="link"
                                         size="lg"
-                                        className="w-4/5 mx-auto flex justify-center items-center text-base"
+                                        className=""
+                                        onClick={() => setOpen(false)}
                                     >
+                                        <Scale className="mr-4 w-36 h-36 text-primary dark:text-foreground" />
                                         <Link
                                             href="/saved-posts"
-                                            className="w-full text-center text-base"
+                                            className="w-full text-center text-2xl font-light text-primary dark:text-foreground"
                                         >
                                             Saved Posts
                                         </Link>
                                     </Button>
                                     <Button
-                                        variant="secondary"
+                                        variant="link"
                                         size="lg"
-                                        className="w-4/5 mx-auto flex justify-center items-center text-base"
+                                        className=" "
+                                        onClick={() => setOpen(false)}
                                     >
+                                        <NotebookPen className="mr-4 w-36 h-36 text-primary dark:text-foreground" />
                                         <Link
                                             href="/feed"
-                                            className="w-full text-center text-base"
+                                            className="w-full text-center text-2xl font-light text-primary dark:text-foreground"
                                         >
                                             Feed
                                         </Link>
                                     </Button>
                                     <Button
-                                        variant="secondary"
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            handleLogout();
+                                        }}
+                                        variant="link"
                                         size="lg"
-                                        className="w-4/5 mx-auto flex justify-center items-center text-base mb-4"
-                                        onClick={handleLogout}
+                                        className="text-2xl font-light text-primary dark:text-foreground"
                                     >
+                                        <IdCard className="mr-4 w-36 h-36 text-primary dark:text-foreground" />
                                         Sign Out
                                     </Button>
-                                    <div className="w-4/5 mx-auto flex justify-center items-center">
-                                        <ModeToggle />
-                                    </div>
+
+                                    <ModeToggle />
                                 </nav>
                             </SheetHeader>
                         </SheetContent>
                     </Sheet>
-                </div>
+                </nav>
             </nav>
         </>
     );

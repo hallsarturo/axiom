@@ -105,7 +105,7 @@ export default function Dashboard() {
                                             'Loading user...'
                                         )}
                                     </h1>
-                                    <h2 className="text-base/7 font-semibold text-primary">
+                                    <h2 className="text-base/7 font-bold text-primary dark:text-foreground">
                                         Configuration
                                     </h2>
                                     <p className="mt-1 text-sm/6 text-muted-foreground">
@@ -141,7 +141,7 @@ export default function Dashboard() {
                                                     <FormItem>
                                                         <FormLabel
                                                             htmlFor="about"
-                                                            className="block text-sm/6 font-medium text-foreground md:mb-[-12px]"
+                                                            className="block text-base/7 font-semibold text-primary dark:text-foreground md:mb-[-12px]"
                                                         >
                                                             About
                                                         </FormLabel>
@@ -168,7 +168,7 @@ export default function Dashboard() {
                                         <div className="col-span-full">
                                             <label
                                                 htmlFor="photo"
-                                                className="block text-sm/6 font-medium text-foreground"
+                                                className="block text-base/7 font-semibold text-primary dark:text-foreground"
                                             >
                                                 Photo
                                             </label>
@@ -212,7 +212,7 @@ export default function Dashboard() {
                                         name="degreeLevel"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel className="text-base/7 font-semibold text-primary">
+                                                <FormLabel className="text-base/7 font-semibold text-primary dark:text-foreground">
                                                     Degree level
                                                 </FormLabel>
                                                 <p className="mt-1 text-sm/6 text-muted-foreground">
@@ -281,11 +281,15 @@ export default function Dashboard() {
                                         name="categories"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel className="text-base/7">
+                                                <FormLabel className="text-base/7 font-semibold text-primary dark:text-foreground">
                                                     Interested in:
                                                 </FormLabel>
                                                 <FormControl>
-                                                    <Suspense fallback={<SkeletonCard />}>
+                                                    <Suspense
+                                                        fallback={
+                                                            <SkeletonCard />
+                                                        }
+                                                    >
                                                         <CategoriesBadger
                                                             className="flex flex-row mt-8"
                                                             selected={
