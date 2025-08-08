@@ -175,15 +175,15 @@ export function FeedComponent() {
     }, [hasMore]);
 
     return (
-        <div className="flex justify-center items-center mt-6 w-full">
-            <div className="fixed top-1/3 left-20">
+        <div className="flex justify-center items-center mt-0 w-full">
+            {/* <div className="fixed top-1/3 left-20">
                 <div className="flex flex-col justify-center">
                     <SelectPostType
                         defaultValue={undefined}
                         className="flex justify-center"
                     />
                 </div>
-            </div>
+            </div> */}
 
             {/* Error handling UI */}
             {error && (
