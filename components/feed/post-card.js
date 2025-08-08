@@ -98,12 +98,14 @@ export function PostCard(props) {
               dislikes: data.dislikes,
               laughs: data.laughs,
               angers: data.angers,
+              totalReactions: data.totalReactions,
           }
         : {
               likes: props.likes,
               dislikes: props.dislikes,
               laughs: props.laughs,
               angers: props.angers,
+              totalReactions: props.totalReactions,
           };
 
     // Conditionally render avatar according to Post Type
@@ -200,6 +202,9 @@ export function PostCard(props) {
                 </div>
             );
     }
+
+    // Use SWR data for total reactions
+    const totalReactions = data?.totalReactions ?? props.totalReactions;
 
     return (
         <div className="flex w-full justify-center px-4">
@@ -336,7 +341,7 @@ export function PostCard(props) {
                 <CardFooter className="justify-center">
                     <div className="flex flex-col w-full gap-1.5">
                         <div className="flex flex-row w-full justify-between text-sm text-primary dark:text-foreground flex-wrap">
-                            <p>Reactions {props.totalReactions}</p>
+                            <p>reactions {totalReactions}</p>
                             <p>comments {props.comments}</p>
                             <p>shares {props.shares}</p>
                         </div>
