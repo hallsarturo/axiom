@@ -2,7 +2,7 @@
 
 import { SelectPostType } from '@/components/feed/select-post-type';
 import { PaperPost } from '@/components/feed/paper-post';
-import { getPaperPosts } from '@/lib/actions/actions';
+import { getPaperPosts, getUserPosts, getNewsPosts } from '@/lib/actions/actions';
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { useInView } from 'react-intersection-observer';
@@ -22,7 +22,7 @@ export function FeedComponent() {
     const [loading, setLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
     const [error, setError] = useState(null);
-    const [postType, setPostType] = useState('posts'); // 'all', 'papers', 'posts', 'news'
+    const [postType, setPostType] = useState('papers'); // 'all', 'papers', 'posts', 'news'
 
     // Container ref for virtualizer
     const parentRef = useRef(null);
@@ -223,7 +223,10 @@ export function FeedComponent() {
 
             {/* Initial loading state */}
             {loading && posts.length === 0 && (
-                <div className="w-full text-center py-8">Loading posts...</div>
+                <div className="w-full text-center py-8">
+                    <SkeletonCard />
+                    <div className="w-full text-center py-8">Loading posts...</div>
+                </div>
             )}
 
             {/* Virtualized posts container - FIXED STYLING */}
