@@ -22,6 +22,7 @@ export function FeedComponent() {
     const [loading, setLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
     const [error, setError] = useState(null);
+    const [postType, setPostType] = useState('posts'); // 'all', 'papers', 'posts', 'news'
 
     // Container ref for virtualizer
     const parentRef = useRef(null);
@@ -47,81 +48,94 @@ export function FeedComponent() {
     // Fetch data function with improved error handling
     const fetchData = useCallback(
         async (page = 1) => {
-            // Prevent duplicate fetches
-            if (loadingRef.current || (page > 1 && !hasMoreRef.current)) return;
-
             setLoading(true);
-            console.log(`Fetching page ${page}`);
+            let token = null;
+            if (
+                process.env.NODE_ENV === 'development' &&
+                typeof window !== 'undefined'
+            ) {
+                token = localStorage.getItem('token');
+            }
 
-            try {
-                let token = null;
-                if (
-                    process.env.NODE_ENV === 'development' &&
-                    typeof window !== 'undefined'
-                ) {
-                    token = localStorage.getItem('token');
-                }
+            let result = { success: false, data: { posts: [] } };
 
-                const result = await getPaperPosts(
-                    token,
-                    page,
-                    pagination.pageSize
+            if (postType === 'papers') {
+                result = await getPaperPosts(token, page, pagination.pageSize);
+            } else if (postType === 'posts') {
+                result = await getUserPosts(token, page, pagination.pageSize);
+            } else if (postType === 'news') {
+                result = await getNewsPosts(token, page, pagination.pageSize);
+            } else if (postType === 'all') {
+                const [papers, posts, news] = await Promise.all([
+                    getPaperPosts(token, page, pagination.pageSize),
+                    getUserPosts(token, page, pagination.pageSize),
+                    getNewsPosts(token, page, pagination.pageSize),
+                ]);
+                // Merge and sort by date
+                result = {
+                    success: true,
+                    data: {
+                        posts: [
+                            ...papers.data.paperPosts,
+                            ...posts.data.userPosts,
+                            ...news.data.newsPosts,
+                        ].sort(
+                            (a, b) =>
+                                new Date(b.createdAt) - new Date(a.createdAt)
+                        ),
+                    },
+                };
+            }
+
+            if (result.success) {
+                console.log(
+                    `Loaded ${result.data.paperPosts.length} posts from page ${page}`
                 );
 
-                if (result.success) {
-                    console.log(
-                        `Loaded ${result.data.paperPosts.length} posts from page ${page}`
-                    );
-
-                    // Deduplicate posts when appending
-                    if (page === 1) {
-                        setPosts(result.data.paperPosts);
-                    } else {
-                        setPosts((prev) => {
-                            // Create a Map with post ID as key to deduplicate
-                            const newPosts = [...prev];
-                            const existingIds = new Set(
-                                newPosts.map((post) => post.id)
-                            );
-
-                            // Only add posts that don't exist yet
-                            result.data.paperPosts.forEach((post) => {
-                                if (!existingIds.has(post.id)) {
-                                    newPosts.push(post);
-                                    existingIds.add(post.id);
-                                }
-                            });
-
-                            return newPosts;
-                        });
-                    }
-
-                    // Update pagination info
-                    setPagination({
-                        page: result.data.pagination.page,
-                        pageSize: result.data.pagination.pageSize,
-                        totalPages: result.data.pagination.totalPages,
-                        total: result.data.pagination.total,
-                    });
-
-                    // Check if there are more pages to load
-                    const newHasMore =
-                        result.data.pagination.page <
-                        result.data.pagination.totalPages;
-                    console.log(`Has more pages: ${newHasMore}`);
-                    setHasMore(newHasMore);
+                // Deduplicate posts when appending
+                if (page === 1) {
+                    setPosts(result.data.paperPosts);
                 } else {
-                    console.error('Failed to fetch posts:', result.error);
-                    setError('Failed to load posts');
+                    setPosts((prev) => {
+                        // Create a Map with post ID as key to deduplicate
+                        const newPosts = [...prev];
+                        const existingIds = new Set(
+                            newPosts.map((post) => post.id)
+                        );
+
+                        // Only add posts that don't exist yet
+                        result.data.paperPosts.forEach((post) => {
+                            if (!existingIds.has(post.id)) {
+                                newPosts.push(post);
+                                existingIds.add(post.id);
+                            }
+                        });
+
+                        return newPosts;
+                    });
                 }
-            } catch (error) {
-                console.error('Error loading posts:', error);
-                setError('Network error loading posts');
-            } finally {
-                setLoading(false);
+
+                // Update pagination info
+                setPagination({
+                    page: result.data.pagination.page,
+                    pageSize: result.data.pagination.pageSize,
+                    totalPages: result.data.pagination.totalPages,
+                    total: result.data.pagination.total,
+                });
+
+                // Check if there are more pages to load
+                const newHasMore =
+                    result.data.pagination.page <
+                    result.data.pagination.totalPages;
+                console.log(`Has more pages: ${newHasMore}`);
+                setHasMore(newHasMore);
+            } else {
+                console.error('Failed to fetch posts:', result.error);
+                setError('Failed to load posts');
             }
+            setLoading(false);
         },
-        [pagination.pageSize]
+        [postType, pagination.pageSize]
     ); // ONLY depend on pagination.pageSize
 
     // Initial data load
