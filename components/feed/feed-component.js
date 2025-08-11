@@ -27,7 +27,8 @@ export function FeedComponent() {
     const [loading, setLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
     const [error, setError] = useState(null);
-    const [postType, setPostType] = useState('papers'); // 'all', 'papers', 'posts', 'news'
+    const [postType, setPostType] = useState('all'); // 'all', 'papers', 'posts', 'news'
+    const [cardEstimate, setCardEstimate] = useState(425);
 
     // Container ref for virtualizer
     const parentRef = useRef(null);
@@ -70,12 +71,12 @@ export function FeedComponent() {
                 result = await getUserPosts(token, page, pagination.pageSize);
                 console.log('User Posts response: ', result);
             } else if (postType === 'news') {
-                result = await getNewsPosts(token, page, pagination.pageSize);
+                // result = await getNewsPosts(token, page, pagination.pageSize);
             } else if (postType === 'all') {
                 const [papers, userPosts, newsPosts] = await Promise.all([
                     getPaperPosts(token, page, pagination.pageSize),
                     getUserPosts(token, page, pagination.pageSize),
-                    getNewsPosts(token, page, pagination.pageSize),
+                    // getNewsPosts(token, page, pagination.pageSize),
                 ]);
                 // Merge and sort by date
                 result = {
@@ -84,7 +85,7 @@ export function FeedComponent() {
                         posts: [
                             ...papers.data.paperPosts,
                             ...userPosts.data.userPosts,
-                            ...newsPosts.data.newsPosts,
+                            // ...newsPosts.data.newsPosts,
                         ].sort(
                             (a, b) =>
                                 new Date(b.createdAt) - new Date(a.createdAt)
@@ -100,9 +101,9 @@ export function FeedComponent() {
                 } else if (postType === 'posts') {
                     newPosts = result.data.userPosts;
                 } else if (postType === 'news') {
-                    newPosts = result.data.newsPosts;
+                    newPosts = []; // No news posts, so empty array
                 } else if (postType === 'all') {
-                    newPosts = result.data.posts; // merged and sorted array
+                    newPosts = result.data.posts;
                 }
 
                 if (page === 1) {
@@ -121,20 +122,30 @@ export function FeedComponent() {
                     });
                 }
 
-                // Update pagination info
-                setPagination({
-                    page: result.data.pagination.page,
-                    pageSize: result.data.pagination.pageSize,
-                    totalPages: result.data.pagination.totalPages,
-                    total: result.data.pagination.total,
-                });
+                // Only update pagination if it exists
+                if (result.data.pagination) {
+                    setPagination({
+                        page: result.data.pagination.page,
+                        pageSize: result.data.pagination.pageSize,
+                        totalPages: result.data.pagination.totalPages,
+                        total: result.data.pagination.total,
+                    });
 
-                // Check if there are more pages to load
-                const newHasMore =
-                    result.data.pagination.page <
-                    result.data.pagination.totalPages;
-                console.log(`Has more pages: ${newHasMore}`);
-                setHasMore(newHasMore);
+                    // Check if there are more pages to load
+                    const newHasMore =
+                        result.data.pagination.page <
+                        result.data.pagination.totalPages;
+                    setHasMore(newHasMore);
+                } else {
+                    // For news, set default pagination and hasMore
+                    setPagination((prev) => ({
+                        ...prev,
+                        page: 1,
+                        totalPages: 1,
+                        total: 0,
+                    }));
+                    setHasMore(false);
+                }
             } else {
                 console.error('Failed to fetch posts:', result.error);
                 setError('Failed to load posts');
@@ -177,7 +188,7 @@ export function FeedComponent() {
     const rowVirtualizer = useVirtualizer({
         count: posts.length + (hasMore ? 1 : 0), // +1 for loader row
         getScrollElement: () => viewportRef.current,
-        estimateSize: () => 425, // Adjusted for your card size
+        estimateSize: () => cardEstimate,
         overscan: 3,
     });
 
@@ -193,6 +204,20 @@ export function FeedComponent() {
     useEffect(() => {
         hasMoreRef.current = hasMore;
     }, [hasMore]);
+
+    useEffect(() => {
+        let timeout;
+        function handleResize() {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                setCardEstimate(window.innerWidth < 527 ? 600 : 425);
+                if (rowVirtualizer) rowVirtualizer.measure();
+            }, 100); // 100ms debounce
+        }
+        window.addEventListener('resize', handleResize);
+        handleResize();
+        return () => window.removeEventListener('resize', handleResize);
+    }, [rowVirtualizer]);
 
     return (
         <div className="flex justify-center items-center mt-0 w-full">
@@ -279,7 +304,7 @@ export function FeedComponent() {
                                                 top: 0,
                                                 height: `${virtualItem.size}px`,
                                                 transform: `translateY(${virtualItem.start}px)`,
-                                                padding: '8px 0',
+                                                // padding: '8px 0',
                                             }}
                                         >
                                             {isLoaderRow && posts.length > 0 ? (

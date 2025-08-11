@@ -210,8 +210,9 @@ export function PostCard(props) {
     // Use SWR data for total reactions
     const totalReactions = data?.totalReactions ?? props.totalReactions;
     return (
-        <div className="flex w-full justify-center px-4">
-            {console.log('postId:', props.postId, 'token:', token, 'userId:', user?.id)}
+        <div
+            className={`flex w-full justify-center px-4 ${props.className ?? ''}`}
+        >
             <Card className="max-w-2xl w-full md:max-h-[800px] md:min-w-[680px] flex flex-col h-full">
                 <CardHeader className="relative">
                     <div className="flex flex-col w-full">
