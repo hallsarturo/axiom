@@ -3,7 +3,7 @@ import { PostCard } from '@/components/feed/post-card';
 export function UserPost({ ...props }) {
     return <PostCard
             key={props.id}
-            className="min-h-[500px]"
+            className=""
             postId={props.id}
             type="user"
             cardTitle={props.title}

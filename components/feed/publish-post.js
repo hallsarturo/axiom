@@ -36,7 +36,7 @@ import { publishPost } from '@/lib/actions/actions';
 import { useUser } from '@/components/context/UserProfileContext';
 import { useState } from 'react';
 
-export function PublishPost(props) {
+export function PublishPost({ mutateFeed, ...props }) {
     const { user } = useUser();
     const [open, setOpen] = useState(false);
     const form = useForm({
@@ -69,6 +69,9 @@ export function PublishPost(props) {
                 toast.success('Post published!');
                 setOpen(false); // Close dialog on success
                 form.reset(); // Reset form fields
+                if (mutateFeed) {
+                    mutateFeed(result.data?.post || values); // <-- This triggers SWR to re-fetch the feed
+                }
             } else {
                 toast.error('Error posting');
                 setMessage(`Posting failed: ${result.error}`);

@@ -3,6 +3,7 @@
 import { SelectPostType } from '@/components/feed/select-post-type';
 import { PaperPost } from '@/components/feed/paper-post';
 import { UserPost } from '@/components/feed/user-post';
+import { PublishPost } from '@/components/feed/publish-post';
 import {
     getPaperPosts,
     getUserPosts,
@@ -15,6 +16,17 @@ import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import { SkeletonCard } from '@/components/skeletons/skeletonCard';
+import { toast } from 'sonner';
+import useSWR from 'swr';
+
+const fetchFeed = async (postType, token, page, pageSize) => {
+    // Your logic to fetch posts based on postType
+    // Example:
+    if (postType === 'papers') return getPaperPosts(token, page, pageSize);
+    if (postType === 'posts') return getUserPosts(token, page, pageSize);
+    if (postType === 'news') return getNewsPosts(token, page, pageSize);
+    // ...etc
+};
 
 export function FeedComponent() {
     const [posts, setPosts] = useState([]); // unified feed
@@ -34,6 +46,17 @@ export function FeedComponent() {
     const parentRef = useRef(null);
     // Ref for the scrollable viewport inside ScrollArea
     const viewportRef = useRef(null);
+
+    const token =
+        typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+    const {
+        data,
+        error: swrError,
+        mutate,
+    } = useSWR(
+        ['feed', postType, token, pagination.page, pagination.pageSize],
+        () => fetchFeed(postType, token, pagination.page, pagination.pageSize)
+    );
 
     // Console logging for debugging
     const logState = useCallback(() => {
@@ -55,14 +78,6 @@ export function FeedComponent() {
     const fetchData = useCallback(
         async (page = 1) => {
             setLoading(true);
-            let token = null;
-            if (
-                process.env.NODE_ENV === 'development' &&
-                typeof window !== 'undefined'
-            ) {
-                token = localStorage.getItem('token');
-            }
-
             let result = { success: false, data: { posts: [] } };
 
             if (postType === 'papers') {
@@ -152,13 +167,63 @@ export function FeedComponent() {
             }
             setLoading(false);
         },
-        [postType, pagination.pageSize]
+        [postType, pagination.pageSize, token]
     ); // ONLY depend on pagination.pageSize
 
     // Initial data load
     useEffect(() => {
         fetchData(1);
     }, [fetchData]);
+
+    // Sync SWR data with local state
+    useEffect(() => {
+        if (data && data.success) {
+            let newPosts = [];
+            if (postType === 'papers') {
+                newPosts = data.data.paperPosts;
+            } else if (postType === 'posts') {
+                newPosts = data.data.userPosts;
+            } else if (postType === 'news') {
+                newPosts = [];
+            } else if (postType === 'all') {
+                newPosts = data.data.posts;
+            }
+            // Merge last optimistic post if it's missing from server response
+            if (
+                lastOptimisticPostRef.current &&
+                !newPosts.some((p) => p.id === lastOptimisticPostRef.current.id)
+            ) {
+                newPosts = [lastOptimisticPostRef.current, ...newPosts];
+            } else if (
+                lastOptimisticPostRef.current &&
+                newPosts.some((p) => p.id === lastOptimisticPostRef.current.id)
+            ) {
+                // Clear the ref if the server now includes the post
+                lastOptimisticPostRef.current = null;
+            }
+            setPosts(newPosts);
+
+            if (data.data.pagination) {
+                setPagination({
+                    page: data.data.pagination.page,
+                    pageSize: data.data.pagination.pageSize,
+                    totalPages: data.data.pagination.totalPages,
+                    total: data.data.pagination.total,
+                });
+                setHasMore(
+                    data.data.pagination.page < data.data.pagination.totalPages
+                );
+            } else {
+                setPagination((prev) => ({
+                    ...prev,
+                    page: 1,
+                    totalPages: 1,
+                    total: 0,
+                }));
+                setHasMore(false);
+            }
+        }
+    }, [data, postType]);
 
     // Setup intersection observer with improved options
     const { ref: loadMoreRef, inView } = useInView({
@@ -195,6 +260,7 @@ export function FeedComponent() {
     // Use refs to access latest values without dependencies
     const loadingRef = useRef(false);
     const hasMoreRef = useRef(true);
+    const lastOptimisticPostRef = useRef(null);
 
     // Sync refs with state
     useEffect(() => {
@@ -219,142 +285,171 @@ export function FeedComponent() {
         return () => window.removeEventListener('resize', handleResize);
     }, [rowVirtualizer]);
 
+    function handlePostPublished(newPost) {
+        // Simply trigger a full refresh of the feed
+        toast.success('Post published successfully!');
+
+        // Reset pagination to first page
+        setPagination((prev) => ({
+            ...prev,
+            page: 1,
+        }));
+
+        // Refresh data completely - this is the most reliable approach
+        mutate();
+
+        // Also refresh local data by calling fetchData
+        fetchData(1);
+    }
+
     return (
-        <div className="flex justify-center items-center mt-0 w-full">
-            {/* <div className="fixed top-1/3 left-20">
-                <div className="flex flex-col justify-center">
-                    <SelectPostType
-                        defaultValue={undefined}
-                        className="flex justify-center"
-                    />
-                </div>
-            </div> */}
-
-            {/* Error handling UI */}
-            {error && posts.length === 0 && (
-                <div className="w-full flex flex-col justify-start items-center">
-                    <SkeletonCard className="max-w-[700px] w-full" />
-                    <div className="flex flex-col text-center text-red-500 mt-4 max-w-fit">
-                        <span>{error}</span>
-                        <Button
-                            onClick={() => {
-                                setError(null);
-                                fetchData(1);
-                            }}
-                            className="mt-4"
-                        >
-                            Retry
-                        </Button>
+        <>
+            <div className="flex justify-center">
+                <PublishPost mutateFeed={handlePostPublished} />
+            </div>
+            <div className="flex justify-center items-center mt-0 w-full">
+                {/* <div className="fixed top-1/3 left-20">
+                    <div className="flex flex-col justify-center">
+                        <SelectPostType
+                            defaultValue={undefined}
+                            className="flex justify-center"
+                        />
                     </div>
-                </div>
-            )}
-
-            {/* Loading state */}
-            {loading && posts.length === 0 && (
-                <div className="w-full flex flex-col justify-start items-center pt-8">
-                    <SkeletonCard className="max-w-[700px] w-full" />
-                    <div className="text-center mt-4 w-full">
-                        <span>Loading posts...</span>
-                    </div>
-                </div>
-            )}
-
-            {/* Empty state */}
-            {posts.length === 0 && !loading && !error && (
-                <div className="w-full text-center py-8">No posts found</div>
-            )}
-
-            {/* Virtualized posts container - FIXED STYLING */}
-            {posts.length > 0 && (
-                <ScrollArea className="w-full max-w-[700px] h-[calc(100vh-120px)]">
-                    <div
-                        ref={viewportRef}
-                        className="relative w-full h-full overflow-auto"
-                        style={{
-                            height: '100%',
-                            width: '100%',
-                            scrollbarGutter: 'stable',
-                        }}
-                    >
-                        <div
-                            style={{
-                                height: `${rowVirtualizer.getTotalSize()}px`,
-                                width: '100%',
-                                position: 'relative',
-                            }}
-                        >
-                            {rowVirtualizer
-                                .getVirtualItems()
-                                .map((virtualItem) => {
-                                    const isLoaderRow =
-                                        virtualItem.index >= posts.length;
-
-                                    return (
-                                        <div
-                                            key={
-                                                isLoaderRow
-                                                    ? 'loader'
-                                                    : `post-${posts[virtualItem.index]?.id}-idx-${virtualItem.index}`
-                                            }
-                                            ref={
-                                                isLoaderRow ? loadMoreRef : null
-                                            }
-                                            className="absolute left-0 right-0 flex justify-center"
-                                            style={{
-                                                top: 0,
-                                                height: `${virtualItem.size}px`,
-                                                transform: `translateY(${virtualItem.start}px)`,
-                                                // padding: '8px 0',
-                                            }}
-                                        >
-                                            {isLoaderRow && posts.length > 0 ? (
-                                                hasMore ? (
-                                                    <div className="flex flex-col justify-center items-center py-4 text-center w-full">
-                                                        <SkeletonCard className="max-w-[700px] w-full" />
-                                                        <p>
-                                                            Loading more
-                                                            posts...
-                                                        </p>
-                                                    </div>
-                                                ) : (
-                                                    <div className="py-4 text-center w-full">
-                                                        No more posts to load
-                                                    </div>
-                                                )
-                                            ) : (
-                                                posts[virtualItem.index] && (
-                                                    <div className="flex flex-col gap-2">
-                                                        {posts[
-                                                            virtualItem.index
-                                                        ].type === 'paper' && (
-                                                            <PaperPost
-                                                                {...posts[
-                                                                    virtualItem
-                                                                        .index
-                                                                ]}
-                                                            />
-                                                        )}
-                                                        {posts[
-                                                            virtualItem.index
-                                                        ].type === 'user' && (
-                                                            <UserPost
-                                                                {...posts[
-                                                                    virtualItem
-                                                                        .index
-                                                                ]}
-                                                            />
-                                                        )}
-                                                    </div>
-                                                )
-                                            )}
-                                        </div>
-                                    );
-                                })}
+                </div> */}
+                {/* Error handling UI */}
+                {error && posts.length === 0 && (
+                    <div className="w-full flex flex-col justify-start items-center">
+                        <SkeletonCard className="max-w-[700px] w-full" />
+                        <div className="flex flex-col text-center text-red-500 mt-4 max-w-fit">
+                            <span>{error}</span>
+                            <Button
+                                onClick={() => {
+                                    setError(null);
+                                    fetchData(1);
+                                }}
+                                className="mt-4"
+                            >
+                                Retry
+                            </Button>
                         </div>
                     </div>
-                    <ScrollBar orientation="vertical" />
-                </ScrollArea>
-            )}
-        </div>
+                )}
+                {/* Loading state */}
+                {loading && posts.length === 0 && (
+                    <div className="w-full flex flex-col justify-start items-center pt-8">
+                        <SkeletonCard className="max-w-[700px] w-full" />
+                        <div className="text-center mt-4 w-full">
+                            <span>Loading posts...</span>
+                        </div>
+                    </div>
+                )}
+                {/* Empty state */}
+                {posts.length === 0 && !loading && !error && (
+                    <div className="w-full text-center py-8">
+                        No posts found
+                    </div>
+                )}
+                {/* Virtualized posts container - FIXED STYLING */}
+                {posts.length > 0 && (
+                    <ScrollArea className="w-full max-w-[700px] h-[calc(100vh-120px)]">
+                        <div
+                            ref={viewportRef}
+                            className="relative w-full h-full overflow-auto"
+                            style={{
+                                height: '100%',
+                                width: '100%',
+                                scrollbarGutter: 'stable',
+                            }}
+                        >
+                            <div
+                                style={{
+                                    height: `${rowVirtualizer.getTotalSize()}px`,
+                                    width: '100%',
+                                    position: 'relative',
+                                }}
+                            >
+                                {rowVirtualizer
+                                    .getVirtualItems()
+                                    .map((virtualItem) => {
+                                        const isLoaderRow =
+                                            virtualItem.index >= posts.length;
+                                        return (
+                                            <div
+                                                key={
+                                                    isLoaderRow
+                                                        ? 'loader'
+                                                        : `post-${posts[virtualItem.index]?.id}-idx-${virtualItem.index}`
+                                                }
+                                                ref={
+                                                    isLoaderRow
+                                                        ? loadMoreRef
+                                                        : null
+                                                }
+                                                className="absolute left-0 right-0 flex justify-center"
+                                                style={{
+                                                    top: 0,
+                                                    height: `${virtualItem.size}px`,
+                                                    transform: `translateY(${virtualItem.start}px)`,
+                                                    // padding: '8px 0',
+                                                }}
+                                            >
+                                                {isLoaderRow &&
+                                                posts.length > 0 ? (
+                                                    hasMore ? (
+                                                        <div className="flex flex-col justify-center items-center py-4 text-center w-full">
+                                                            <SkeletonCard className="max-w-[700px] w-full" />
+                                                            <p>
+                                                                Loading more
+                                                                posts...
+                                                            </p>
+                                                        </div>
+                                                    ) : (
+                                                        <div className="py-4 text-center w-full">
+                                                            No more posts to
+                                                            load
+                                                        </div>
+                                                    )
+                                                ) : (
+                                                    posts[
+                                                        virtualItem.index
+                                                    ] && (
+                                                        <div className="flex flex-col gap-2">
+                                                            {posts[
+                                                                virtualItem
+                                                                    .index
+                                                            ].type ===
+                                                                'paper' && (
+                                                                <PaperPost
+                                                                    {...posts[
+                                                                        virtualItem
+                                                                            .index
+                                                                    ]}
+                                                                />
+                                                            )}
+                                                            {posts[
+                                                                virtualItem
+                                                                    .index
+                                                            ].type ===
+                                                                'user' && (
+                                                                <UserPost
+                                                                    {...posts[
+                                                                        virtualItem
+                                                                            .index
+                                                                    ]}
+                                                                />
+                                                            )}
+                                                        </div>
+                                                    )
+                                                )}
+                                            </div>
+                                        );
+                                    })}
+                            </div>
+                        </div>
+                        <ScrollBar orientation="vertical" />
+                    </ScrollArea>
+                )}
+            </div>
+        </>
     );
 }

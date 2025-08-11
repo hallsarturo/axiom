@@ -79,7 +79,7 @@ export default function Dashboard() {
                 : [];
             form.reset({
                 about: user.about || '',
-                degreeLevel: String(user.degreeLevel.id) || '', // dynamic from user or ''
+                degreeLevel: String(user?.degreeLevel?.id) || '', // dynamic from user or ''
                 categories: categoryIds || [], // dynamic from user or []
             });
         }
