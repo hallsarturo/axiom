@@ -4,7 +4,7 @@ export function PaperPost({ ...props }) {
     return (
         <PostCard
             key={props.id}
-            postId={props.postId}
+            postId={props.id}
             type="paper"
             identifier={props.identifier}
             cardTitle={props.title}

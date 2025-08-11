@@ -68,6 +68,7 @@ export function FeedComponent() {
                 result = await getPaperPosts(token, page, pagination.pageSize);
             } else if (postType === 'posts') {
                 result = await getUserPosts(token, page, pagination.pageSize);
+                console.log('User Posts response: ', result);
             } else if (postType === 'news') {
                 result = await getNewsPosts(token, page, pagination.pageSize);
             } else if (postType === 'all') {
@@ -93,30 +94,30 @@ export function FeedComponent() {
             }
 
             if (result.success) {
-                console.log(
-                    `Loaded ${result.data.paperPosts.length} posts from page ${page}`
-                );
+                let newPosts = [];
+                if (postType === 'papers') {
+                    newPosts = result.data.paperPosts;
+                } else if (postType === 'posts') {
+                    newPosts = result.data.userPosts;
+                } else if (postType === 'news') {
+                    newPosts = result.data.newsPosts;
+                } else if (postType === 'all') {
+                    newPosts = result.data.posts; // merged and sorted array
+                }
 
-                // Deduplicate posts when appending
                 if (page === 1) {
-                    setPosts(result.data.paperPosts);
+                    setPosts(newPosts);
                 } else {
                     setPosts((prev) => {
-                        // Create a Map with post ID as key to deduplicate
-                        const newPosts = [...prev];
                         const existingIds = new Set(
-                            newPosts.map((post) => post.id)
+                            prev.map((post) => post.id)
                         );
-
-                        // Only add posts that don't exist yet
-                        result.data.paperPosts.forEach((post) => {
-                            if (!existingIds.has(post.id)) {
-                                newPosts.push(post);
-                                existingIds.add(post.id);
-                            }
-                        });
-
-                        return newPosts;
+                        return [
+                            ...prev,
+                            ...newPosts.filter(
+                                (post) => !existingIds.has(post.id)
+                            ),
+                        ];
                     });
                 }
 
@@ -176,7 +177,7 @@ export function FeedComponent() {
     const rowVirtualizer = useVirtualizer({
         count: posts.length + (hasMore ? 1 : 0), // +1 for loader row
         getScrollElement: () => viewportRef.current,
-        estimateSize: () => 400, // Adjusted for your card size
+        estimateSize: () => 425, // Adjusted for your card size
         overscan: 3,
     });
 
@@ -205,19 +206,31 @@ export function FeedComponent() {
             </div> */}
 
             {/* Error handling UI */}
-            {error && (
-                <div className="w-full flex flex-col justify-center items-center text-center text-red-500 py-4 gap-4">
-                    <SkeletonCard />
-                    <span>{error}</span>
-                    <Button
-                        onClick={() => {
-                            setError(null);
-                            fetchData(1);
-                        }}
-                        className=""
-                    >
-                        Retry
-                    </Button>
+            {error && posts.length === 0 && (
+                <div className="w-full flex flex-col justify-start items-center">
+                    <SkeletonCard className="max-w-[700px] w-full" />
+                    <div className="flex flex-col text-center text-red-500 mt-4 max-w-fit">
+                        <span>{error}</span>
+                        <Button
+                            onClick={() => {
+                                setError(null);
+                                fetchData(1);
+                            }}
+                            className="mt-4"
+                        >
+                            Retry
+                        </Button>
+                    </div>
+                </div>
+            )}
+
+            {/* Loading state */}
+            {loading && posts.length === 0 && (
+                <div className="w-full flex flex-col justify-start items-center pt-8">
+                    <SkeletonCard className="max-w-[700px] w-full" />
+                    <div className="text-center mt-4 w-full">
+                        <span>Loading posts...</span>
+                    </div>
                 </div>
             )}
 
@@ -226,92 +239,97 @@ export function FeedComponent() {
                 <div className="w-full text-center py-8">No posts found</div>
             )}
 
-            {/* Initial loading state */}
-            {loading && posts.length === 0 && (
-                <div className="w-full text-center py-8">
-                    <SkeletonCard />
-                    <div className="w-full text-center py-8">
-                        Loading posts...
-                    </div>
-                </div>
-            )}
-
             {/* Virtualized posts container - FIXED STYLING */}
-            <ScrollArea className="w-full max-w-[700px] h-[calc(100vh-120px)]">
-                <div
-                    ref={viewportRef}
-                    className="relative w-full h-full overflow-auto"
-                    style={{
-                        height: '100%',
-                        width: '100%',
-                        scrollbarGutter: 'stable',
-                    }}
-                >
+            {posts.length > 0 && (
+                <ScrollArea className="w-full max-w-[700px] h-[calc(100vh-120px)]">
                     <div
+                        ref={viewportRef}
+                        className="relative w-full h-full overflow-auto"
                         style={{
-                            height: `${rowVirtualizer.getTotalSize()}px`,
+                            height: '100%',
                             width: '100%',
-                            position: 'relative',
+                            scrollbarGutter: 'stable',
                         }}
                     >
-                        {rowVirtualizer.getVirtualItems().map((virtualItem) => {
-                            const isLoaderRow =
-                                virtualItem.index >= posts.length;
+                        <div
+                            style={{
+                                height: `${rowVirtualizer.getTotalSize()}px`,
+                                width: '100%',
+                                position: 'relative',
+                            }}
+                        >
+                            {rowVirtualizer
+                                .getVirtualItems()
+                                .map((virtualItem) => {
+                                    const isLoaderRow =
+                                        virtualItem.index >= posts.length;
 
-                            return (
-                                <div
-                                    key={
-                                        isLoaderRow
-                                            ? 'loader'
-                                            : `post-${posts[virtualItem.index]?.id}-idx-${virtualItem.index}`
-                                    }
-                                    ref={isLoaderRow ? loadMoreRef : null}
-                                    className="absolute left-0 right-0 flex justify-center"
-                                    style={{
-                                        top: 0,
-                                        height: `${virtualItem.size}px`,
-                                        transform: `translateY(${virtualItem.start}px)`,
-                                        padding: '8px 0',
-                                    }}
-                                >
-                                    {isLoaderRow ? (
-                                        hasMore ? (
-                                            <div className="flex flex-col justify-center items-center g-4 py-4 text-center">
-                                                <SkeletonCard />
-                                                <p>Loading more posts...</p>
-                                            </div>
-                                        ) : (
-                                            <div className="py-4 text-center w-full">
-                                                No more posts to load
-                                            </div>
-                                        )
-                                    ) : (
-                                        <div className="flex flex-col gap-2">
-                                            {posts[virtualItem.index].type ===
-                                                'paper' && (
-                                                <PaperPost
-                                                    {...posts[
-                                                        virtualItem.index
-                                                    ]}
-                                                />
-                                            )}
-                                            {posts[virtualItem.index].type ===
-                                                'user' && (
-                                                <UserPost
-                                                    {...posts[
-                                                        virtualItem.index
-                                                    ]}
-                                                />
+                                    return (
+                                        <div
+                                            key={
+                                                isLoaderRow
+                                                    ? 'loader'
+                                                    : `post-${posts[virtualItem.index]?.id}-idx-${virtualItem.index}`
+                                            }
+                                            ref={
+                                                isLoaderRow ? loadMoreRef : null
+                                            }
+                                            className="absolute left-0 right-0 flex justify-center"
+                                            style={{
+                                                top: 0,
+                                                height: `${virtualItem.size}px`,
+                                                transform: `translateY(${virtualItem.start}px)`,
+                                                padding: '8px 0',
+                                            }}
+                                        >
+                                            {isLoaderRow && posts.length > 0 ? (
+                                                hasMore ? (
+                                                    <div className="flex flex-col justify-center items-center py-4 text-center w-full">
+                                                        <SkeletonCard className="max-w-[700px] w-full" />
+                                                        <p>
+                                                            Loading more
+                                                            posts...
+                                                        </p>
+                                                    </div>
+                                                ) : (
+                                                    <div className="py-4 text-center w-full">
+                                                        No more posts to load
+                                                    </div>
+                                                )
+                                            ) : (
+                                                posts[virtualItem.index] && (
+                                                    <div className="flex flex-col gap-2">
+                                                        {posts[
+                                                            virtualItem.index
+                                                        ].type === 'paper' && (
+                                                            <PaperPost
+                                                                {...posts[
+                                                                    virtualItem
+                                                                        .index
+                                                                ]}
+                                                            />
+                                                        )}
+                                                        {posts[
+                                                            virtualItem.index
+                                                        ].type === 'user' && (
+                                                            <UserPost
+                                                                {...posts[
+                                                                    virtualItem
+                                                                        .index
+                                                                ]}
+                                                            />
+                                                        )}
+                                                    </div>
+                                                )
                                             )}
                                         </div>
-                                    )}
-                                </div>
-                            );
-                        })}
+                                    );
+                                })}
+                        </div>
                     </div>
-                </div>
-                <ScrollBar orientation="vertical" />
-            </ScrollArea>
+                    <ScrollBar orientation="vertical" />
+                </ScrollArea>
+            )}
         </div>
     );
 }

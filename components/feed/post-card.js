@@ -146,14 +146,18 @@ export function PostCard(props) {
 
     // Reaction States
     const handleReaction = async (type) => {
-        // Optimistically update UI
-        await mutate(
-            async () => {
-                await putReaction(token, user.id, props.postId, type);
-                return await fetchPost(props.postId, token, user.id);
-            },
-            { revalidate: true }
-        );
+        try {
+            await mutate(
+                async () => {
+                    console.log('reaction handler clicked');
+                    await putReaction(token, user.id, props.postId, type);
+                    return await fetchPost(props.postId, token, user.id);
+                },
+                { revalidate: true }
+            );
+        } catch (err) {
+            console.error('Reaction error:', err);
+        }
     };
 
     // Use SWR data for user's reaction
@@ -205,9 +209,9 @@ export function PostCard(props) {
 
     // Use SWR data for total reactions
     const totalReactions = data?.totalReactions ?? props.totalReactions;
-
     return (
         <div className="flex w-full justify-center px-4">
+            {console.log('postId:', props.postId, 'token:', token, 'userId:', user?.id)}
             <Card className="max-w-2xl w-full md:max-h-[800px] md:min-w-[680px] flex flex-col h-full">
                 <CardHeader className="relative">
                     <div className="flex flex-col w-full">
