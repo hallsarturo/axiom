@@ -2,7 +2,12 @@
 
 import { SelectPostType } from '@/components/feed/select-post-type';
 import { PaperPost } from '@/components/feed/paper-post';
-import { getPaperPosts, getUserPosts, getNewsPosts } from '@/lib/actions/actions';
+import { UserPost } from '@/components/feed/user-post';
+import {
+    getPaperPosts,
+    getUserPosts,
+    getNewsPosts,
+} from '@/lib/actions/actions';
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import { useInView } from 'react-intersection-observer';
@@ -12,7 +17,7 @@ import { Button } from '@/components/ui/button';
 import { SkeletonCard } from '@/components/skeletons/skeletonCard';
 
 export function FeedComponent() {
-    const [posts, setPosts] = useState([]);
+    const [posts, setPosts] = useState([]); // unified feed
     const [pagination, setPagination] = useState({
         page: 1,
         pageSize: 10, // Smaller page size for faster loading
@@ -66,7 +71,7 @@ export function FeedComponent() {
             } else if (postType === 'news') {
                 result = await getNewsPosts(token, page, pagination.pageSize);
             } else if (postType === 'all') {
-                const [papers, posts, news] = await Promise.all([
+                const [papers, userPosts, newsPosts] = await Promise.all([
                     getPaperPosts(token, page, pagination.pageSize),
                     getUserPosts(token, page, pagination.pageSize),
                     getNewsPosts(token, page, pagination.pageSize),
@@ -77,8 +82,8 @@ export function FeedComponent() {
                     data: {
                         posts: [
                             ...papers.data.paperPosts,
-                            ...posts.data.userPosts,
-                            ...news.data.newsPosts,
+                            ...userPosts.data.userPosts,
+                            ...newsPosts.data.newsPosts,
                         ].sort(
                             (a, b) =>
                                 new Date(b.createdAt) - new Date(a.createdAt)
@@ -171,7 +176,7 @@ export function FeedComponent() {
     const rowVirtualizer = useVirtualizer({
         count: posts.length + (hasMore ? 1 : 0), // +1 for loader row
         getScrollElement: () => viewportRef.current,
-        estimateSize: () => 450, // Adjusted for your card size
+        estimateSize: () => 400, // Adjusted for your card size
         overscan: 3,
     });
 
@@ -225,7 +230,9 @@ export function FeedComponent() {
             {loading && posts.length === 0 && (
                 <div className="w-full text-center py-8">
                     <SkeletonCard />
-                    <div className="w-full text-center py-8">Loading posts...</div>
+                    <div className="w-full text-center py-8">
+                        Loading posts...
+                    </div>
                 </div>
             )}
 
@@ -279,51 +286,24 @@ export function FeedComponent() {
                                             </div>
                                         )
                                     ) : (
-                                        <PaperPost
-                                            postId={posts[virtualItem.index].id}
-                                            identifier={
-                                                posts[virtualItem.index]
-                                                    .identifier
-                                            }
-                                            title={
-                                                posts[virtualItem.index].title
-                                            }
-                                            description={
-                                                posts[virtualItem.index]
-                                                    .description
-                                            }
-                                            author={
-                                                posts[virtualItem.index].author
-                                            }
-                                            createdAt={
-                                                posts[virtualItem.index]
-                                                    .createdAt
-                                            }
-                                            totalReactions={
-                                                posts[virtualItem.index]
-                                                    .totalReactions
-                                            }
-                                            comments={
-                                                posts[virtualItem.index]
-                                                    .comments
-                                            }
-                                            shares={
-                                                posts[virtualItem.index].shares
-                                            }
-                                            likes={
-                                                posts[virtualItem.index].likes
-                                            }
-                                            dislikes={
-                                                posts[virtualItem.index]
-                                                    .dislikes
-                                            }
-                                            angers={
-                                                posts[virtualItem.index].angers
-                                            }
-                                            laughs={
-                                                posts[virtualItem.index].laughs
-                                            }
-                                        />
+                                        <div className="flex flex-col gap-2">
+                                            {posts[virtualItem.index].type ===
+                                                'paper' && (
+                                                <PaperPost
+                                                    {...posts[
+                                                        virtualItem.index
+                                                    ]}
+                                                />
+                                            )}
+                                            {posts[virtualItem.index].type ===
+                                                'user' && (
+                                                <UserPost
+                                                    {...posts[
+                                                        virtualItem.index
+                                                    ]}
+                                                />
+                                            )}
+                                        </div>
                                     )}
                                 </div>
                             );
