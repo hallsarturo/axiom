@@ -19,13 +19,35 @@ import { SkeletonCard } from '@/components/skeletons/skeletonCard';
 import { toast } from 'sonner';
 import useSWR from 'swr';
 
-const fetchFeed = async (postType, token, page, pageSize) => {
-    // Your logic to fetch posts based on postType
-    // Example:
-    if (postType === 'papers') return getPaperPosts(token, page, pageSize);
-    if (postType === 'posts') return getUserPosts(token, page, pageSize);
-    if (postType === 'news') return getNewsPosts(token, page, pageSize);
-    // ...etc
+const fetchFeed = async (postType, token, page, pageSize, timestamp) => {
+    // Your existing logic
+    if (postType === 'papers') {
+        return getPaperPosts(token, page, pageSize, timestamp);
+    }
+    if (postType === 'posts') {
+        return getUserPosts(token, page, pageSize, timestamp);
+    }
+    if (postType === 'news') {
+        return getNewsPosts(token, page, pageSize, timestamp);
+    }
+
+    // For 'all' type, use Promise.all with the timestamp
+    const [papers, userPosts] = await Promise.all([
+        getPaperPosts(token, page, pageSize, timestamp),
+        getUserPosts(token, page, pageSize, timestamp),
+    ]);
+
+    // Merge and sort by date
+    return {
+        success: true,
+        data: {
+            posts: [
+                ...papers.data.paperPosts,
+                ...userPosts.data.userPosts,
+                // ...newsPosts.data.newsPosts,
+            ].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)),
+        },
+    };
 };
 
 export function FeedComponent() {
@@ -53,9 +75,39 @@ export function FeedComponent() {
         data,
         error: swrError,
         mutate,
+        isValidating,
     } = useSWR(
         ['feed', postType, token, pagination.page, pagination.pageSize],
-        () => fetchFeed(postType, token, pagination.page, pagination.pageSize)
+        () => fetchFeed(postType, token, pagination.page, pagination.pageSize),
+        {
+            refreshInterval: 60000, // Refresh every 60 seconds
+            revalidateOnFocus: true,
+            dedupingInterval: 15000,
+            // Force revalidation from server on every refresh interval
+            revalidateIfStale: true,
+            revalidateOnReconnect: true,
+            refreshWhenHidden: false,
+            // This function forces a complete revalidation
+            onSuccess: (data) => {
+                toast.success('Feed updated with latest posts', {
+                    duration: 2000,
+                    position: 'bottom-right',
+                });
+            },
+            // This is the key change - create a custom fetcher wrapper
+            fetcher: async (...args) => {
+                // Add a cache-busting parameter to force fresh data from server
+                const timestamp = new Date().getTime();
+                const result = await fetchFeed(
+                    postType,
+                    token,
+                    pagination.page,
+                    pagination.pageSize,
+                    timestamp // Pass this to add as query param
+                );
+                return result;
+            },
+        }
     );
 
     // Console logging for debugging
@@ -393,6 +445,14 @@ export function FeedComponent() {
                                                     // padding: '8px 0',
                                                 }}
                                             >
+                                                {isValidating && !loading && (
+                                                    <div className="absolute top-2 right-2 animate-pulse">
+                                                        <div className="flex items-center gap-2 text-sm text-muted-foreground bg-background/80 p-2 rounded-md">
+                                                            <div className="size-2 rounded-full bg-primary animate-ping"></div>
+                                                            Updating feed...
+                                                        </div>
+                                                    </div>
+                                                )}
                                                 {isLoaderRow &&
                                                 posts.length > 0 ? (
                                                     hasMore ? (
