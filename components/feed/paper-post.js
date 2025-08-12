@@ -1,6 +1,6 @@
 import { PostCard } from '@/components/feed/post-card';
 
-export function PaperPost({ ...props }) {
+export function PaperPost({ mutateFeed, refreshFeed, ...props }) {
     return (
         <PostCard
             key={props.id}
@@ -19,7 +19,8 @@ export function PaperPost({ ...props }) {
             dislikes={props.dislikes}
             angers={props.angers}
             laughs={props.laughs}
-            
+            mutateFeed={mutateFeed}
+            refreshFeed={refreshFeed}
         ></PostCard>
     );
 }

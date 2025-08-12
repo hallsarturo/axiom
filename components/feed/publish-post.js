@@ -36,6 +36,7 @@ import { publishPost } from '@/lib/actions/actions';
 import { useUser } from '@/components/context/UserProfileContext';
 import { useState } from 'react';
 
+
 export function PublishPost({ mutateFeed, ...props }) {
     const { user } = useUser();
     const [open, setOpen] = useState(false);
@@ -104,7 +105,7 @@ export function PublishPost({ mutateFeed, ...props }) {
     };
 
     return (
-        <div className="sm:min-w-[680px]">
+        <div className="min-w-full sm:min-w-[680px]">
             <div className={`${props.className || ''}`}>
                 <Card className="max-w-[700px] m-4 p-8">
                     <div>

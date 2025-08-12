@@ -25,6 +25,18 @@ import {
     PopoverTrigger,
 } from '@/components/ui/popover';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+import { toast } from 'sonner';
 import { FaRegLaughBeam } from 'react-icons/fa';
 import { FaLaughBeam } from 'react-icons/fa';
 import { FaRegAngry } from 'react-icons/fa';
@@ -38,7 +50,7 @@ import { useUser } from '@/components/context/UserProfileContext';
 import { useEffect, useState } from 'react';
 import useSWR from 'swr';
 import Link from 'next/link';
-import { putReaction } from '@/lib/actions/actions';
+import { putReaction, deleteUserPost } from '@/lib/actions/actions';
 
 const fetchPost = async (postId, token, userId) => {
     if (!postId) throw new Error('No postId provided');
@@ -207,13 +219,45 @@ export function PostCard(props) {
             );
     }
 
+    // Delete user post
+    async function deletePost() {
+        let token = null;
+        if (
+            process.env.NODE_ENV === 'development' &&
+            typeof window !== 'undefined'
+        ) {
+            token = localStorage.getItem('token');
+        }
+
+        try {
+            const result = await deleteUserPost(token, props.postId);
+            if (result.success) {
+                toast.success('Post deleted!');
+                // Call parent feed refresh if available
+                if (props.mutateFeed) {
+                    props.mutateFeed();
+                }
+                
+            } else {
+                // Show backend error if available
+                const errorMsg =
+                    result.error || 'Failed to delete post. Please try again.';
+                toast.error(errorMsg);
+            }
+        } catch (err) {
+            toast.err('something happened...');
+            console.error('deletePost err: ', err);
+        }
+    }
+
     // Use SWR data for total reactions
     const totalReactions = data?.totalReactions ?? props.totalReactions;
+
     return (
         <div
             className={`flex w-full justify-center px-4 ${props.className ?? ''}`}
         >
-            <Card className="max-w-2xl w-full md:max-h-[800px] sm:min-w-[600px] md:min-w-[680px] flex flex-col h-full">
+            <Card className="max-w-2xl w-full md:max-h-[800px] sm:min-w-[650px] md:min-w-[680px] flex flex-col h-full">
                 <CardHeader className="relative">
                     <div className="flex flex-col w-full">
                         {/* CardAction as a row for screens < 455px */}
@@ -256,42 +300,76 @@ export function PostCard(props) {
                         </div>
                         {/* Custom CardAction for screens >= 455px */}
                         <div className="min-[455px]:flex hidden justify-end mt-[-6px] mb-2">
-                            <CardAction className="flex flex-row gap-2">
-                                <Badge className={badge} variant="">
-                                    {props.type}
-                                </Badge>
-                                <div className="cursor-pointer flex-shrink-0">
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        strokeWidth={1.5}
-                                        stroke="currentColor"
-                                        className="size-5"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
-                                        />
-                                    </svg>
+                            <CardAction className="flex flex-row gap-0">
+                                <div className="mr-1">
+                                    <Badge className={badge} variant="">
+                                        {props.type}
+                                    </Badge>
                                 </div>
-                                <div className="cursor-pointer flex-shrink-0">
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        strokeWidth={1.5}
-                                        stroke="currentColor"
-                                        className="size-5"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            d="M6 18 18 6M6 6l12 12"
-                                        />
-                                    </svg>
-                                </div>
+                                <Button variant="ghost" size="sm">
+                                    <div className="cursor-pointer flex-shrink-0">
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            strokeWidth={1.5}
+                                            stroke="currentColor"
+                                            className="size-5"
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
+                                            />
+                                        </svg>
+                                    </div>
+                                </Button>
+                                <AlertDialog>
+                                    <AlertDialogTrigger asChild>
+                                        <Button
+                                            variant="ghost"
+                                            className="cursor-pointer"
+                                            size="sm"
+                                        >
+                                            <div className=" flex-shrink-0">
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    fill="none"
+                                                    viewBox="0 0 24 24"
+                                                    strokeWidth={1.5}
+                                                    stroke="currentColor"
+                                                    className="size-5"
+                                                >
+                                                    <path
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                        d="M6 18 18 6M6 6l12 12"
+                                                    />
+                                                </svg>
+                                            </div>
+                                        </Button>
+                                    </AlertDialogTrigger>
+                                    <AlertDialogContent>
+                                        <AlertDialogHeader>
+                                            <AlertDialogTitle>
+                                                Delete Post. Are you sure?
+                                            </AlertDialogTitle>
+                                            <AlertDialogDescription>
+                                                This action cannot be undone.
+                                            </AlertDialogDescription>
+                                        </AlertDialogHeader>
+                                        <AlertDialogFooter>
+                                            <AlertDialogCancel>
+                                                Cancel
+                                            </AlertDialogCancel>
+                                            <AlertDialogAction
+                                                onClick={deletePost}
+                                            >
+                                                Continue
+                                            </AlertDialogAction>
+                                        </AlertDialogFooter>
+                                    </AlertDialogContent>
+                                </AlertDialog>
                             </CardAction>
                         </div>
                         <CardTitle className="leading-4 mb-2 w-full">

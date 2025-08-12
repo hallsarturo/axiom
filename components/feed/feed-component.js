@@ -89,10 +89,7 @@ export function FeedComponent() {
             refreshWhenHidden: false,
             // This function forces a complete revalidation
             onSuccess: (data) => {
-                toast.success('Feed updated with latest posts', {
-                    duration: 2000,
-                    position: 'bottom-right',
-                });
+                toast.success('Feed updated with latest posts');
             },
             // This is the key change - create a custom fetcher wrapper
             fetcher: async (...args) => {
@@ -485,6 +482,10 @@ export function FeedComponent() {
                                                                         virtualItem
                                                                             .index
                                                                     ]}
+                                                                    mutateFeed={
+                                                                        mutate
+                                                                    }
+                                                                    refreshFeed={fetchData}
                                                                 />
                                                             )}
                                                             {posts[
@@ -497,6 +498,10 @@ export function FeedComponent() {
                                                                         virtualItem
                                                                             .index
                                                                     ]}
+                                                                    mutateFeed={
+                                                                        mutate
+                                                                    }
+                                                                    refreshFeed={fetchData}
                                                                 />
                                                             )}
                                                         </div>

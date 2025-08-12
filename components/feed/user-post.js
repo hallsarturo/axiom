@@ -1,7 +1,8 @@
 import { PostCard } from '@/components/feed/post-card';
 
-export function UserPost({ ...props }) {
-    return <PostCard
+export function UserPost({ mutateFeed, refreshFeed, ...props }) {
+    return (
+        <PostCard
             key={props.id}
             className="min-h-[380px]"
             postId={props.id}
@@ -18,6 +19,8 @@ export function UserPost({ ...props }) {
             dislikes={props.dislikes}
             angers={props.angers}
             laughs={props.laughs}
-            
-        ></PostCard>;
+            mutateFeed={mutateFeed}
+            refreshFeed={refreshFeed}
+        ></PostCard>
+    );
 }
