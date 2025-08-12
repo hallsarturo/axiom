@@ -2,6 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import Image from 'next/image';
 import { H2Marquee } from '@/components/hero-elements/h2-marquee';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { motion } from 'motion/react';
@@ -70,13 +71,21 @@ export default function Home() {
                     <div className="">
                         <motion.h1
                             variants={itemVariants}
-                            className="text-8xl sm:text-9xl md:text-[11rem] font-semibold tracking-tight text-balance text-foreground "
+                            className="text-8xl sm:text-9xl md:text-[11rem] font-semibold tracking-tight text-balance text-foreground"
                         >
-                            AXIOM
+                            <Image
+                                src="/axiom-logo-black-re.png"
+                                width={600}
+                                height={400}
+                                alt="AXIOM logo"
+                                className="mx-auto"
+                                style={{ objectFit: 'contain' }}
+                                priority
+                            />
                         </motion.h1>
                         <motion.p
                             variants={itemVariants}
-                            className="ml-50 mt-2 sm:ml-80 md:ml-120"
+                            className="ml-60 mt-[-25px] sm:mt-[-40px] sm:ml-80 md:ml-130"
                         >
                             alpha v0.1.0
                         </motion.p>
