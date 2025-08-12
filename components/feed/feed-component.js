@@ -89,7 +89,7 @@ export function FeedComponent() {
             refreshWhenHidden: false,
             // This function forces a complete revalidation
             onSuccess: (data) => {
-                toast.success('Feed updated with latest posts');
+                // toast.success('Feed updated with latest posts');
             },
             // This is the key change - create a custom fetcher wrapper
             fetcher: async (...args) => {

@@ -423,7 +423,7 @@ export function PostCard(props) {
                 </ScrollArea>
                 <CardFooter className="justify-center">
                     <div className="flex flex-col w-full gap-1.5">
-                        <div className="flex flex-row w-full justify-between text-sm text-primary dark:text-foreground flex-wrap">
+                        <div className="flex flex-row w-full justify-between text-sm  flex-wrap">
                             <p>reactions {totalReactions}</p>
                             <p>comments {props.comments}</p>
                             <p>shares {props.shares}</p>
