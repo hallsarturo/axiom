@@ -8,7 +8,7 @@ export function UserPost({ mutateFeed, refreshFeed, ...props }) {
             postId={props.id}
             type="user"
             cardTitle={props.title}
-            imgSrc={null}
+            imgSrc={props.imgSrc}
             description={props.description}
             author={props.author}
             createdAt={props.createdAt}

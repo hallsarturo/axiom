@@ -237,7 +237,6 @@ export function PostCard(props) {
                 if (props.mutateFeed) {
                     props.mutateFeed();
                 }
-                
             } else {
                 // Show backend error if available
                 const errorMsg =
@@ -255,7 +254,7 @@ export function PostCard(props) {
 
     return (
         <div
-            className={`flex w-full justify-center px-4 ${props.className ?? ''}`}
+            className={`flex w-full justify-center mb-4 px-4 ${props.className ?? ''}`}
         >
             <Card className="max-w-2xl w-full md:max-h-[800px] sm:min-w-[650px] md:min-w-[680px] flex flex-col h-full">
                 <CardHeader className="relative">

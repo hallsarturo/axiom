@@ -30,12 +30,12 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useDropzone } from 'react-dropzone';
 import { useForm } from 'react-hook-form';
 import { userPostSchema } from '@/lib/schemas/posts';
 import { publishPost } from '@/lib/actions/actions';
 import { useUser } from '@/components/context/UserProfileContext';
 import { useState } from 'react';
-
 
 export function PublishPost({ mutateFeed, ...props }) {
     const { user } = useUser();
@@ -88,21 +88,34 @@ export function PublishPost({ mutateFeed, ...props }) {
 
     // Handle form submission manually with better debugging
     const handleSubmitClick = async () => {
-        console.log('Submit button clicked');
-
-        // Debug validation errors
-        console.log('Form errors:', form.formState.errors);
+        setMessage('');
         const values = form.getValues();
-        console.log('Form values:', values);
+        const result = userPostSchema.safeParse(values);
 
-        // If there are no validation errors, call onSubmit directly
-        if (Object.keys(form.formState.errors).length === 0) {
-            console.log('Manually calling onSubmit with:', values);
-            onSubmit(values);
-        } else {
-            console.log('Validation failed:', form.formState.errors);
+        if (!result.success) {
+            setMessage(result.error.issues[0].message); // Show first error
+            return;
+        }
+
+        setIsSubmitting(true);
+        try {
+            await onSubmit(values);
+        } catch (err) {
+            setMessage('Posting failed: ' + err?.message);
+        } finally {
+            setIsSubmitting(false);
         }
     };
+
+    // Dropzone setup
+    const { getRootProps, getInputProps, acceptedFiles, isDragActive } =
+        useDropzone({
+            accept: { 'image/*': [] },
+            maxFiles: 1,
+            onDrop: (files) => {
+                form.setValue('image', files[0]);
+            },
+        });
 
     return (
         <div className="min-w-full sm:min-w-[680px]">
@@ -159,7 +172,7 @@ export function PublishPost({ mutateFeed, ...props }) {
                                 </DialogTrigger>
 
                                 {/* Dialog content with form inside */}
-                                <DialogContent className="flex flex-col justify-between min-h-2/3">
+                                <DialogContent className="flex flex-col items-center min-h-2/3">
                                     <DialogHeader>
                                         <DialogTitle className="text-primary dark:text-foreground font-bold">
                                             Publish a Post
@@ -170,7 +183,7 @@ export function PublishPost({ mutateFeed, ...props }) {
                                     {/* Form inside the dialog content */}
                                     <Form {...form}>
                                         {/* Remove onSubmit from form element to prevent potential conflicts */}
-                                        <div className="space-y-4">
+                                        <div className="flex flex-col w-full justify-center space-y-4">
                                             <FormField
                                                 control={form.control}
                                                 name="title"
@@ -203,7 +216,72 @@ export function PublishPost({ mutateFeed, ...props }) {
                                                                 placeholder="Content"
                                                                 rows="10"
                                                                 {...field}
+                                                                className=""
                                                             />
+                                                        </FormControl>
+                                                        <FormMessage />
+                                                    </FormItem>
+                                                )}
+                                            />
+                                            <FormField
+                                                control={form.control}
+                                                name="image"
+                                                render={({ field }) => (
+                                                    <FormItem>
+                                                        <FormLabel>
+                                                            Image
+                                                        </FormLabel>
+                                                        <FormControl>
+                                                            <div
+                                                                {...getRootProps()}
+                                                                className={`flex border-2 border-dashed rounded p-4 w-full cursor-pointer gap-4 ${
+                                                                    isDragActive
+                                                                        ? 'border-blue-400 bg-blue-50'
+                                                                        : 'border-gray-300'
+                                                                }`}
+                                                            >
+                                                                <input
+                                                                    {...getInputProps()}
+                                                                />
+                                                                {field.value ? (
+                                                                    <div className="flex items-center gap-2 text-sm">
+                                                                        <span>
+                                                                            Selected:{' '}
+                                                                            {
+                                                                                field
+                                                                                    .value
+                                                                                    .name
+                                                                            }
+                                                                        </span>
+                                                                    </div>
+                                                                ) : (
+                                                                    <div className="text-sm text-gray-500">
+                                                                        Drag &
+                                                                        drop an
+                                                                        image
+                                                                        here, or
+                                                                        click to
+                                                                        select
+                                                                    </div>
+                                                                )}
+                                                                <Button
+                                                                    type="button"
+                                                                    variant="secondary"
+                                                                    size="sm"
+                                                                    className="text-xs"
+                                                                    onClick={(
+                                                                        e
+                                                                    ) => {
+                                                                        e.stopPropagation();
+                                                                        form.setValue(
+                                                                            'image',
+                                                                            null
+                                                                        );
+                                                                    }}
+                                                                >
+                                                                    Remove
+                                                                </Button>
+                                                            </div>
                                                         </FormControl>
                                                         <FormMessage />
                                                     </FormItem>
