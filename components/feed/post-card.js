@@ -213,7 +213,7 @@ export function PostCard(props) {
         <div
             className={`flex w-full justify-center px-4 ${props.className ?? ''}`}
         >
-            <Card className="max-w-2xl w-full md:max-h-[800px] md:min-w-[680px] flex flex-col h-full">
+            <Card className="max-w-2xl w-full md:max-h-[800px] sm:min-w-[600px] md:min-w-[680px] flex flex-col h-full">
                 <CardHeader className="relative">
                     <div className="flex flex-col w-full">
                         {/* CardAction as a row for screens < 455px */}

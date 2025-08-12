@@ -339,7 +339,7 @@ export function FeedComponent() {
 
     function handlePostPublished(newPost) {
         // Simply trigger a full refresh of the feed
-        toast.success('Post published successfully!');
+        toast.success('Post published!');
 
         // Reset pagination to first page
         setPagination((prev) => ({
@@ -355,10 +355,11 @@ export function FeedComponent() {
     }
 
     return (
-        <>
-            <div className="flex justify-center">
+        <div className="flex flex-col justify-center">
+            <div className="flex w-full justify-center">
                 <PublishPost mutateFeed={handlePostPublished} />
             </div>
+
             <div className="flex justify-center items-center mt-0 w-full">
                 {/* <div className="fixed top-1/3 left-20">
                     <div className="flex flex-col justify-center">
@@ -403,7 +404,7 @@ export function FeedComponent() {
                 )}
                 {/* Virtualized posts container - FIXED STYLING */}
                 {posts.length > 0 && (
-                    <ScrollArea className="w-full max-w-[700px] h-[calc(100vh-120px)]">
+                    <ScrollArea className="w-full h-[calc(100vh-120px)]">
                         <div
                             ref={viewportRef}
                             className="relative w-full h-full overflow-auto"
@@ -445,14 +446,14 @@ export function FeedComponent() {
                                                     // padding: '8px 0',
                                                 }}
                                             >
-                                                {isValidating && !loading && (
+                                                {/* {isValidating && !loading && (
                                                     <div className="absolute top-2 right-2 animate-pulse">
                                                         <div className="flex items-center gap-2 text-sm text-muted-foreground bg-background/80 p-2 rounded-md">
                                                             <div className="size-2 rounded-full bg-primary animate-ping"></div>
                                                             Updating feed...
                                                         </div>
                                                     </div>
-                                                )}
+                                                )} */}
                                                 {isLoaderRow &&
                                                 posts.length > 0 ? (
                                                     hasMore ? (
@@ -510,6 +511,6 @@ export function FeedComponent() {
                     </ScrollArea>
                 )}
             </div>
-        </>
+        </div>
     );
 }

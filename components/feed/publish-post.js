@@ -66,7 +66,7 @@ export function PublishPost({ mutateFeed, ...props }) {
             const result = await publishPost(token, values);
 
             if (result.success) {
-                toast.success('Post published!');
+                //toast.success('Post published!');
                 setOpen(false); // Close dialog on success
                 form.reset(); // Reset form fields
                 if (mutateFeed) {
@@ -104,8 +104,8 @@ export function PublishPost({ mutateFeed, ...props }) {
     };
 
     return (
-        <>
-            <div className={`w-full ${props.className || ''}`}>
+        <div className="sm:min-w-[680px]">
+            <div className={`${props.className || ''}`}>
                 <Card className="max-w-[700px] m-4 p-8">
                     <div>
                         <div className="flex flex-row gap-4 mb-3 items-center sm:items-start">
@@ -136,7 +136,8 @@ export function PublishPost({ mutateFeed, ...props }) {
                                 <DialogTrigger asChild>
                                     <Button
                                         variant="secondary"
-                                        className="text-xs px-3 py-1 h-8 flex items-center justify-center w-fit mb-2"
+                                        className="text-xs px-3 mt-2 py-1 h-8 flex items-center justify-center w-fit mb-2"
+                                        disabled={true}
                                     >
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
@@ -152,7 +153,7 @@ export function PublishPost({ mutateFeed, ...props }) {
                                                 d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
                                             />
                                         </svg>
-                                        <span>Share a post</span>
+                                        <span>Upload a paper</span>
                                     </Button>
                                 </DialogTrigger>
 
@@ -263,6 +264,6 @@ export function PublishPost({ mutateFeed, ...props }) {
                     </div>
                 </Card>
             </div>
-        </>
+        </div>
     );
 }
