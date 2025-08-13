@@ -71,7 +71,7 @@ export function FeedComponent() {
     const [loading, setLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
     const [error, setError] = useState(null);
-    const [postType, setPostType] = useState('papers'); // 'all', 'papers', 'userPosts', 'news'
+    const [postType, setPostType] = useState('userPosts'); // 'all', 'papers', 'userPosts', 'news'
 
     // Callback to set postType when dialog opens
     const handleDialogOpen = (open) => {

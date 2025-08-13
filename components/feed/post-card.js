@@ -409,6 +409,7 @@ export function PostCard(props) {
                             </CollapsibleTrigger>
                         </Collapsible>
                         <div className="w-full flex justify-center items-center">
+                            {console.log('props.imgSrc: ', props.imgSrc)}
                             {props.imgSrc ? (
                                 <Image
                                     src={props.imgSrc}

@@ -37,6 +37,9 @@ import { publishPost } from '@/lib/actions/actions';
 import { useUser } from '@/components/context/UserProfileContext';
 import { useState } from 'react';
 
+const ACCEPTED_FORMATS = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif'];
+const MAX_IMAGE_SIZE_MB = 1;
+
 export function PublishPost({ mutateFeed, onDialogOpenChange, ...props }) {
     const { user } = useUser();
     const [open, setOpen] = useState(false);
@@ -110,10 +113,28 @@ export function PublishPost({ mutateFeed, onDialogOpenChange, ...props }) {
     // Dropzone setup
     const { getRootProps, getInputProps, acceptedFiles, isDragActive } =
         useDropzone({
-            accept: { 'image/*': [] },
+            accept: ACCEPTED_FORMATS.reduce((acc, type) => {
+                acc[type] = [];
+                return acc;
+            }, {}),
             maxFiles: 1,
             onDrop: (files) => {
-                form.setValue('image', files[0]);
+                const file = files[0];
+                if (!file) return;
+                if (!ACCEPTED_FORMATS.includes(file.type)) {
+                    setMessage(
+                        'Invalid image format. Allowed: PNG, JPG, JPEG, GIF'
+                    );
+                    form.setValue('image', null);
+                    return;
+                }
+                if (file.size > MAX_IMAGE_SIZE_MB * 1024 * 1024) {
+                    setMessage('Image size must be less than 1MB');
+                    form.setValue('image', null);
+                    return;
+                }
+                setMessage('');
+                form.setValue('image', file);
             },
         });
 
