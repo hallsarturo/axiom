@@ -128,9 +128,11 @@ export function FeedComponent() {
                         result.data.pagination.totalPages ?? prev.totalPages,
                     total: result.data.pagination.total ?? prev.total,
                 }));
-                // Use backend totalPages for hasMore
+                // Fix: also check if newPosts.length < PAGE_SIZE
                 setHasMore(
-                    nextPage < (result.data.pagination.totalPages ?? nextPage)
+                    nextPage <
+                        (result.data.pagination.totalPages ?? nextPage) &&
+                        newPosts.length === PAGE_SIZE
                 );
             } else {
                 setError('Failed to load posts');
@@ -171,6 +173,22 @@ export function FeedComponent() {
         mutate();
     }
 
+    function handleFeedRefresh() {
+        // Reset local posts and pagination, then re-fetch
+        setPosts([]);
+        setPagination({
+            page: 1,
+            pageSize: PAGE_SIZE,
+            totalPages: 1,
+            total: 0,
+        });
+        setHasMore(true);
+        setError(null);
+        mutate(); // SWR re-fetch
+        // Optionally, trigger initial load
+        loadMoreItems(0, PAGE_SIZE - 1);
+    }
+
     // Render each row
     const Row = ({ index, style }) => {
         if (!isItemLoaded(index)) {
@@ -186,14 +204,14 @@ export function FeedComponent() {
                 {post.type === 'paper' && (
                     <PaperPost
                         {...post}
-                        mutateFeed={mutate}
+                        mutateFeed={handleFeedRefresh}
                         refreshFeed={loadMoreItems}
                     />
                 )}
                 {post.type === 'user' && (
                     <UserPost
                         {...post}
-                        mutateFeed={mutate}
+                        mutateFeed={handleFeedRefresh}
                         refreshFeed={loadMoreItems}
                     />
                 )}
