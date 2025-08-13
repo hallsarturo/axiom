@@ -11,6 +11,7 @@ import {
 } from '@/lib/actions/actions';
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
+import { useInView } from 'react-intersection-observer';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
@@ -285,6 +286,29 @@ export function FeedComponent() {
     //     }
     // }, [data, postType]);
 
+    // Setup intersection observer
+    const { ref: loadMoreRef, inView } = useInView({
+        threshold: 0.6,
+        rootMargin: '150px 0px',
+        triggerOnce: false,
+        root: viewportRef.current,
+    });
+
+    // Only trigger on inView transition (false -> true)
+    const wasInViewRef = useRef(false);
+    useEffect(() => {
+        if (inView && !wasInViewRef.current) {
+            wasInViewRef.current = true;
+            if (!loading && hasMore) {
+                const nextPage = pagination.page + 1;
+                console.log(`🔄 FETCH NEXT PAGE (transition): ${nextPage}`);
+                fetchData(nextPage);
+            }
+        } else if (!inView && wasInViewRef.current) {
+            wasInViewRef.current = false;
+        }
+    }, [inView, loading, hasMore, pagination.page, fetchData]);
+
     // Setup virtualizer with improved config
     const rowVirtualizer = useVirtualizer({
         count: posts.length + (hasMore ? 1 : 0),
@@ -293,14 +317,12 @@ export function FeedComponent() {
         overscan: 3,
     });
 
-    // Refs to hold latest values (avoid stale closures)
+    // Use refs to access latest values without dependencies
     const loadingRef = useRef(false);
     const hasMoreRef = useRef(true);
-    const pageRef = useRef(1);
-    const lastLoadAtRef = useRef(0);
-    const autoFillCountRef = useRef(0);
-    const userScrolledRef = useRef(false);
+    const lastOptimisticPostRef = useRef(null);
 
+    // Sync refs with state
     useEffect(() => {
         loadingRef.current = loading;
     }, [loading]);
@@ -310,61 +332,18 @@ export function FeedComponent() {
     }, [hasMore]);
 
     useEffect(() => {
-        pageRef.current = pagination.page;
-    }, [pagination.page]);
-
-    // Scroll-based loader with cooldown and threshold
-    useEffect(() => {
-        const el = viewportRef.current;
-        if (!el) return;
-
-        let ticking = false;
-        const THRESHOLD_PX = 400; // distance from bottom to trigger
-        const COOLDOWN_MS = 800; // avoid burst loads
-
-        const onScroll = () => {
-            userScrolledRef.current = true;
-            if (ticking) return;
-            ticking = true;
-            requestAnimationFrame(() => {
-                ticking = false;
-                if (loadingRef.current || !hasMoreRef.current) return;
-
-                const { scrollTop, scrollHeight, clientHeight } = el;
-                const distanceFromBottom = scrollHeight - (scrollTop + clientHeight);
-                if (distanceFromBottom <= THRESHOLD_PX) {
-                    const now = Date.now();
-                    if (now - lastLoadAtRef.current < COOLDOWN_MS) return;
-                    lastLoadAtRef.current = now;
-                    const nextPage = pageRef.current + 1;
-                    // console.log(`🔄 Scroll trigger -> page ${nextPage}`);
-                    fetchData(nextPage);
-                }
-            });
-        };
-
-        el.addEventListener('scroll', onScroll, { passive: true });
-        return () => el.removeEventListener('scroll', onScroll);
-    }, [fetchData]);
-
-    // Optional: small, bounded auto-fill so first render isn’t empty
-    useEffect(() => {
-        const el = viewportRef.current;
-        if (!el) return;
-        if (loadingRef.current || !hasMoreRef.current) return;
-        if (userScrolledRef.current) return; // only before first user scroll
-
-        // If content doesn’t fill the viewport, fetch up to 2 more pages
-        const needsMore =
-            el.scrollHeight <= el.clientHeight + 50 && autoFillCountRef.current < 2;
-
-        if (needsMore) {
-            autoFillCountRef.current += 1;
-            const nextPage = pageRef.current + 1;
-            // console.log(`🔄 Auto-fill -> page ${nextPage}`);
-            fetchData(nextPage);
+        let timeout;
+        function handleResize() {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                setCardEstimate(window.innerWidth < 527 ? 600 : 425);
+                if (rowVirtualizer) rowVirtualizer.measure();
+            }, 100); // 100ms debounce
         }
-    }, [posts.length, fetchData]);
+        window.addEventListener('resize', handleResize);
+        handleResize();
+        return () => window.removeEventListener('resize', handleResize);
+    }, [rowVirtualizer]);
 
     function handlePostPublished(newPost) {
         // Simply trigger a full refresh of the feed
@@ -517,6 +496,7 @@ export function FeedComponent() {
                                                 {isLoaderRow &&
                                                 posts.length > 0 ? (
                                                     <div
+                                                        ref={loadMoreRef} // attach ONLY here
                                                         className="py-6 w-full bg-red-100 dark:bg-red-900/30"
                                                         style={{
                                                             height: '100px',
