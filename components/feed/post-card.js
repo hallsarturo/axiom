@@ -122,8 +122,8 @@ export function PostCard(props) {
 
     // Conditionally render avatar according to Post Type
     let avatarSrc = null;
-    if (props.type === 'post') {
-        avatarSrc = user ? user.photoUrl : null;
+    if (props.type === 'user') {
+        avatarSrc = props.avatarPic;
     } else if (props.type === 'paper') {
         avatarSrc = props.magazineImg;
     } else if (props.type === 'news') {
@@ -381,6 +381,7 @@ export function PostCard(props) {
                             </Link>
                         </CardTitle>
                         <CardDescription className="flex flex-row items-center gap-6 w-full mt-2">
+                            {console.log('Avatar src: ', avatarSrc)}
                             <Avatar>
                                 <AvatarImage src={avatarSrc} />
                                 <AvatarFallback>CN</AvatarFallback>

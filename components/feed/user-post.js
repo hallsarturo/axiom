@@ -1,4 +1,5 @@
 import { PostCard } from '@/components/feed/post-card';
+import { normalizeImageUrl } from '@/lib/utils/image';
 
 export function UserPost({ mutateFeed, refreshFeed, ...props }) {
     return (
@@ -6,9 +7,10 @@ export function UserPost({ mutateFeed, refreshFeed, ...props }) {
             key={props.id}
             className="min-h-[380px]"
             postId={props.id}
+            avatarPic={normalizeImageUrl(props.authorProfilePic)}
             type="user"
             cardTitle={props.title}
-            imgSrc={props.imgSrc}
+            imgSrc={normalizeImageUrl(props.imgSrc)}
             description={props.description}
             author={props.author}
             createdAt={props.createdAt}

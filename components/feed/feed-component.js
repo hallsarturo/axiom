@@ -61,7 +61,7 @@ export function FeedComponent() {
     const [loading, setLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
     const [error, setError] = useState(null);
-    const [postType, setPostType] = useState('all'); // 'all', 'papers', 'posts', 'news'
+    const [postType, setPostType] = useState('posts'); // 'all', 'papers', 'posts', 'news'
     const [cardEstimate, setCardEstimate] = useState(425);
 
     // Container ref for virtualizer
