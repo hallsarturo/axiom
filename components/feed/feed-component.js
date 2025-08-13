@@ -72,6 +72,7 @@ export function FeedComponent() {
     const [hasMore, setHasMore] = useState(true);
     const [error, setError] = useState(null);
     const [postType, setPostType] = useState('userPosts'); // 'all', 'papers', 'userPosts', 'news'
+    const [pendingRefresh, setPendingRefresh] = useState(false);
 
     // Callback to set postType when dialog opens
     const handleDialogOpen = (open) => {
@@ -173,12 +174,32 @@ export function FeedComponent() {
         // Only depend on posts.length, hasMore, loading, error, loadMoreItems
     }, [posts.length, hasMore, loading, error, loadMoreItems]);
 
-    // Handle instant post publication
     function handlePostPublished(newPost) {
         toast.success('Post published!');
         setPosts((prev) => [newPost, ...prev]);
         mutate();
+        setPendingRefresh(true); // Set flag to trigger delayed refresh
     }
+
+    useEffect(() => {
+        if (pendingRefresh) {
+            const timer = setTimeout(() => {
+                // Reset feed state before loading
+                setPosts([]);
+                setPagination({
+                    page: 1,
+                    pageSize: PAGE_SIZE,
+                    totalPages: 1,
+                    total: 0,
+                });
+                setHasMore(true);
+                setError(null);
+                loadMoreItems(0, PAGE_SIZE - 1);
+                setPendingRefresh(false);
+            }, 2000);
+            return () => clearTimeout(timer);
+        }
+    }, [pendingRefresh, loadMoreItems]);
 
     function handleFeedRefresh() {
         // Reset local posts and pagination, then re-fetch
