@@ -24,7 +24,7 @@ const fetchFeed = async (postType, token, page, pageSize, timestamp) => {
     if (postType === 'papers') {
         return getPaperPosts(token, page, pageSize, timestamp);
     }
-    if (postType === 'posts') {
+    if (postType === 'userPosts') {
         return getUserPosts(token, page, pageSize, timestamp);
     }
     if (postType === 'news') {
@@ -71,7 +71,17 @@ export function FeedComponent() {
     const [loading, setLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
     const [error, setError] = useState(null);
-    const [postType, setPostType] = useState('papers'); // 'all', 'papers', 'posts', 'news'
+    const [postType, setPostType] = useState('papers'); // 'all', 'papers', 'userPosts', 'news'
+
+    // Callback to set postType when dialog opens
+    const handleDialogOpen = (open) => {
+        if (open) {
+            if (postType !== 'userPosts') {
+                toast.info('Switched to user posts mode');
+                setPostType('userPosts');
+            }
+        }
+    };
     const token =
         typeof window !== 'undefined' ? localStorage.getItem('token') : null;
 
@@ -98,7 +108,7 @@ export function FeedComponent() {
                 const newPosts =
                     postType === 'papers'
                         ? result.data.paperPosts
-                        : postType === 'posts'
+                        : postType === 'userPosts'
                           ? result.data.userPosts
                           : postType === 'news'
                             ? []
@@ -194,7 +204,10 @@ export function FeedComponent() {
     return (
         <div className="flex flex-col justify-center">
             <div className="flex w-full justify-center">
-                <PublishPost mutateFeed={handlePostPublished} />
+                <PublishPost
+                    mutateFeed={handlePostPublished}
+                    onDialogOpenChange={handleDialogOpen}
+                />
             </div>
             <div className="flex justify-center items-center mt-0 w-full">
                 {/* <div className="fixed top-1/3 left-20">

@@ -37,7 +37,7 @@ import { publishPost } from '@/lib/actions/actions';
 import { useUser } from '@/components/context/UserProfileContext';
 import { useState } from 'react';
 
-export function PublishPost({ mutateFeed, ...props }) {
+export function PublishPost({ mutateFeed, onDialogOpenChange, ...props }) {
     const { user } = useUser();
     const [open, setOpen] = useState(false);
     const form = useForm({
@@ -133,7 +133,11 @@ export function PublishPost({ mutateFeed, ...props }) {
                                 <Input
                                     placeholder="Share something thoughtful"
                                     className="w-full text-sm sm:text-base cursor-pointer"
-                                    onClick={() => setOpen(true)}
+                                    onClick={() => {
+                                        setOpen(true);
+                                        if (onDialogOpenChange)
+                                            onDialogOpenChange(true);
+                                    }}
                                 />
                             </div>
                         </div>
@@ -144,6 +148,8 @@ export function PublishPost({ mutateFeed, ...props }) {
                                 onOpenChange={(newOpen) => {
                                     if (isSubmitting) return; // Prevent closing during submission
                                     setOpen(newOpen);
+                                    if (onDialogOpenChange)
+                                        onDialogOpenChange(newOpen);
                                 }}
                             >
                                 {/* Trigger buttons outside form */}
