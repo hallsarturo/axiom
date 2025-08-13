@@ -73,8 +73,8 @@ export function PublishPost({ mutateFeed, onDialogOpenChange, ...props }) {
                 //toast.success('Post published!');
                 setOpen(false); // Close dialog on success
                 form.reset(); // Reset form fields
-                if (mutateFeed) {
-                    mutateFeed(result.data?.post || values); // <-- This triggers SWR to re-fetch the feed
+                if (mutateFeed && result.data?.post) {
+                    mutateFeed(result.data?.post ); // <-- This triggers SWR to re-fetch the feed
                 }
             } else {
                 toast.error('Error posting');
