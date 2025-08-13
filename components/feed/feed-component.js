@@ -19,8 +19,8 @@ import { SkeletonCard } from '@/components/skeletons/skeletonCard';
 import { toast } from 'sonner';
 import useSWR from 'swr';
 
+// 1. Create a better combined pagination tracker for 'all' post type
 const fetchFeed = async (postType, token, page, pageSize, timestamp) => {
-    // Your existing logic
     if (postType === 'papers') {
         return getPaperPosts(token, page, pageSize, timestamp);
     }
@@ -31,23 +31,134 @@ const fetchFeed = async (postType, token, page, pageSize, timestamp) => {
         return getNewsPosts(token, page, pageSize, timestamp);
     }
 
-    // For 'all' type, use Promise.all with the timestamp
-    const [papers, userPosts] = await Promise.all([
-        getPaperPosts(token, page, pageSize, timestamp),
-        getUserPosts(token, page, pageSize, timestamp),
-    ]);
+    // For 'all' type, use a simpler approach
+    if (postType === 'all') {
+        // Get stored pagination state
+        const storedPaginations =
+            typeof window !== 'undefined'
+                ? JSON.parse(localStorage.getItem('feedPaginations') || '{}')
+                : {};
 
-    // Merge and sort by date
-    return {
-        success: true,
-        data: {
-            posts: [
-                ...papers.data.paperPosts,
-                ...userPosts.data.userPosts,
-                // ...newsPosts.data.newsPosts,
-            ].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)),
-        },
-    };
+        // Default to fetching both types on first page
+        let paperResults = { data: { paperPosts: [] } };
+        let userResults = { data: { userPosts: [] } };
+
+        if (page === 1) {
+            // First page: get both types
+            [paperResults, userResults] = await Promise.all([
+                getPaperPosts(token, 1, pageSize, timestamp),
+                getUserPosts(token, 1, pageSize, timestamp),
+            ]);
+
+            // Store initial state
+            if (typeof window !== 'undefined') {
+                localStorage.setItem(
+                    'feedPaginations',
+                    JSON.stringify({
+                        lastType: 'paper',
+                        paperPage: 1,
+                        userPage: 1,
+                        paperHasMore:
+                            paperResults.data.paperPosts?.length >= pageSize,
+                        userHasMore:
+                            userResults.data.userPosts?.length >= pageSize,
+                    })
+                );
+            }
+        } else {
+            // For subsequent pages, alternate between types if both have more content
+            const lastType = storedPaginations.lastType || 'paper';
+            const paperHasMore = storedPaginations.paperHasMore !== false;
+            const userHasMore = storedPaginations.userHasMore !== false;
+
+            let nextType = 'paper'; // Default to papers if we don't know
+
+            // If both have more, alternate
+            if (paperHasMore && userHasMore) {
+                nextType = lastType === 'paper' ? 'user' : 'paper';
+            }
+            // Otherwise use the one that has more
+            else if (paperHasMore) {
+                nextType = 'paper';
+            } else if (userHasMore) {
+                nextType = 'user';
+            }
+
+            // Fetch the next batch based on type
+            if (nextType === 'paper') {
+                const paperPage = storedPaginations.paperPage || 1;
+                paperResults = await getPaperPosts(
+                    token,
+                    paperPage,
+                    pageSize,
+                    timestamp
+                );
+
+                if (typeof window !== 'undefined') {
+                    localStorage.setItem(
+                        'feedPaginations',
+                        JSON.stringify({
+                            ...storedPaginations,
+                            lastType: 'paper',
+                            paperPage: paperPage + 1,
+                            paperHasMore:
+                                paperResults.data.paperPosts?.length >=
+                                pageSize,
+                        })
+                    );
+                }
+            } else {
+                const userPage = storedPaginations.userPage || 1;
+                userResults = await getUserPosts(
+                    token,
+                    userPage,
+                    pageSize,
+                    timestamp
+                );
+
+                if (typeof window !== 'undefined') {
+                    localStorage.setItem(
+                        'feedPaginations',
+                        JSON.stringify({
+                            ...storedPaginations,
+                            lastType: 'user',
+                            userPage: userPage + 1,
+                            userHasMore:
+                                userResults.data.userPosts?.length >= pageSize,
+                        })
+                    );
+                }
+            }
+        }
+
+        // Combine results
+        const combinedPosts = [
+            ...(paperResults.data.paperPosts || []),
+            ...(userResults.data.userPosts || []),
+        ].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+        // Get current storage to check if we have more content
+        const currentStorage =
+            typeof window !== 'undefined'
+                ? JSON.parse(localStorage.getItem('feedPaginations') || '{}')
+                : {};
+
+        const hasMore =
+            currentStorage.paperHasMore || currentStorage.userHasMore;
+
+        return {
+            success: true,
+            data: {
+                posts: combinedPosts,
+                pagination: {
+                    page,
+                    pageSize,
+                    totalPages: hasMore ? 1000 : page, // Large number if more content
+                    total: combinedPosts.length,
+                },
+            },
+        };
+    }
 };
 
 export function FeedComponent() {
@@ -98,9 +209,9 @@ export function FeedComponent() {
                 const result = await fetchFeed(
                     postType,
                     token,
-                    pagination.page,
+                    args[2], // Use the page parameter from SWR key
                     pagination.pageSize,
-                    timestamp // Pass this to add as query param
+                    timestamp
                 );
                 return result;
             },
@@ -130,7 +241,13 @@ export function FeedComponent() {
             let result = { success: false, data: { posts: [] } };
 
             if (postType === 'papers') {
-                result = await getPaperPosts(token, page, pagination.pageSize);
+                const timestamp = new Date().getTime(); // Add cache busting
+                result = await getPaperPosts(
+                    token,
+                    page,
+                    pagination.pageSize,
+                    timestamp
+                );
             } else if (postType === 'posts') {
                 result = await getUserPosts(token, page, pagination.pageSize);
                 console.log('User Posts response: ', result);
@@ -188,18 +305,35 @@ export function FeedComponent() {
 
                 // Only update pagination if it exists
                 if (result.data.pagination) {
-                    setPagination({
-                        page: result.data.pagination.page,
-                        pageSize: result.data.pagination.pageSize,
-                        totalPages: result.data.pagination.totalPages,
-                        total: result.data.pagination.total,
-                    });
+                    setPagination((prevPagination) => {
+                        // Store the new pagination info
+                        const newPagination = {
+                            ...prevPagination,
+                            page: page,
+                            pageSize: result.data.pagination.pageSize,
+                            totalPages: Math.max(
+                                2,
+                                result.data.pagination.totalPages
+                            ), // Force at least 2 pages
+                            total: result.data.pagination.total,
+                        };
 
-                    // Check if there are more pages to load
-                    const newHasMore =
-                        result.data.pagination.page <
-                        result.data.pagination.totalPages;
-                    setHasMore(newHasMore);
+                        // IMPORTANT: Always keep hasMore true until we get fewer posts than requested
+                        const gotFullPage =
+                            newPosts.length >= pagination.pageSize;
+                        const debugInfo = {
+                            newPostsLength: newPosts.length,
+                            pageSize: pagination.pageSize,
+                            gotFullPage,
+                            currentPage: page,
+                            apiTotalPages: result.data.pagination.totalPages,
+                        };
+                        console.log('🔍 DEBUG hasMore calculation:', debugInfo);
+                        // FORCE hasMore to true for testing if we got a full page
+                        setHasMore(gotFullPage);
+
+                        return newPagination;
+                    });
                 } else {
                     // For news, set default pagination and hasMore
                     setPagination((prev) => ({
@@ -237,66 +371,48 @@ export function FeedComponent() {
             } else if (postType === 'all') {
                 newPosts = data.data.posts;
             }
-            // Merge last optimistic post if it's missing from server response
-            if (
-                lastOptimisticPostRef.current &&
-                !newPosts.some((p) => p.id === lastOptimisticPostRef.current.id)
-            ) {
-                newPosts = [lastOptimisticPostRef.current, ...newPosts];
-            } else if (
-                lastOptimisticPostRef.current &&
-                newPosts.some((p) => p.id === lastOptimisticPostRef.current.id)
-            ) {
-                // Clear the ref if the server now includes the post
-                lastOptimisticPostRef.current = null;
-            }
+
+            // Only update posts - don't touch pagination here
             setPosts(newPosts);
 
-            if (data.data.pagination) {
-                setPagination({
-                    page: data.data.pagination.page,
-                    pageSize: data.data.pagination.pageSize,
-                    totalPages: data.data.pagination.totalPages,
-                    total: data.data.pagination.total,
-                });
-                setHasMore(
-                    data.data.pagination.page < data.data.pagination.totalPages
-                );
-            } else {
-                setPagination((prev) => ({
-                    ...prev,
-                    page: 1,
-                    totalPages: 1,
-                    total: 0,
-                }));
-                setHasMore(false);
-            }
+            // Don't update pagination or hasMore states here at all
+            // This lets your fetchData function control pagination
         }
     }, [data, postType]);
 
     // Setup intersection observer with improved options
     const { ref: loadMoreRef, inView } = useInView({
-        threshold: 0,
-        rootMargin: '500px 0px', // Increased margin to detect earlier
+        threshold: 0.5, // Much higher threshold - element needs to be half visible
+        rootMargin: '0px', // No margin
         triggerOnce: false,
+        root: viewportRef.current,
     });
 
     // Debug logging for intersection observer
     useEffect(() => {
         if (inView) {
-            console.log('Loader is in view, should load more if available');
-            logState();
-        }
-    }, [inView, logState]);
+            console.log('⚠️ LOADER IN VIEW - State:', {
+                loading,
+                hasMore,
+                currentPage: pagination.page,
+                totalPages: pagination.totalPages,
+                inView,
+            });
 
-    // Load more when the end is reached
-    useEffect(() => {
-        if (inView && !loading && hasMore) {
-            const nextPage = pagination.page + 1;
-            console.log(`Loading next page: ${nextPage}`);
-            fetchData(nextPage);
+            if (!loading && hasMore) {
+                const nextPage = pagination.page + 1;
+                console.log(`🔄 FETCHING NEXT PAGE: ${nextPage}`);
+                fetchData(nextPage);
+            }
         }
-    }, [inView, loading, hasMore, pagination.page, fetchData]);
+    }, [
+        inView,
+        loading,
+        hasMore,
+        pagination.page,
+        pagination.totalPages,
+        fetchData,
+    ]);
 
     // Setup virtualizer with improved config
     const rowVirtualizer = useVirtualizer({
@@ -351,6 +467,51 @@ export function FeedComponent() {
         fetchData(1);
     }
 
+    // Log when component renders
+    useEffect(() => {
+        console.log('FeedComponent rendering:', {
+            postsCount: posts.length,
+            currentPage: pagination.page,
+            totalPages: pagination.totalPages,
+            hasMore,
+            loading,
+            postType,
+        });
+    }, [
+        posts.length,
+        pagination.page,
+        pagination.totalPages,
+        hasMore,
+        loading,
+        postType,
+    ]);
+
+    // Track fetchData calls
+    const fetchDataWithLogging = useCallback(
+        async (page) => {
+            console.log(`📥 fetchData CALLED with page: ${page}`);
+            const result = await fetchData(page);
+            console.log(`📤 fetchData COMPLETED for page: ${page}`);
+            return result;
+        },
+        [fetchData]
+    );
+
+    // Add this to reset pagination when changing post type
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            localStorage.removeItem('feedPaginations');
+        }
+        setPagination({
+            page: 1,
+            pageSize: 10,
+            totalPages: 1,
+            total: 0,
+        });
+        setHasMore(true);
+        fetchData(1);
+    }, [postType, fetchData]);
+
     return (
         <div className="flex flex-col justify-center">
             <div className="flex w-full justify-center">
@@ -401,7 +562,7 @@ export function FeedComponent() {
                 )}
                 {/* Virtualized posts container - FIXED STYLING */}
                 {posts.length > 0 && (
-                    <ScrollArea className="w-full h-[calc(100vh-120px)]">
+                    <ScrollArea className="w-full h-[calc(100vh-150px)]">
                         <div
                             ref={viewportRef}
                             className="relative w-full h-full overflow-auto"
@@ -453,20 +614,40 @@ export function FeedComponent() {
                                                 )} */}
                                                 {isLoaderRow &&
                                                 posts.length > 0 ? (
-                                                    hasMore ? (
-                                                        <div className="flex flex-col justify-center items-center py-4 text-center w-full">
-                                                            <SkeletonCard className="max-w-[700px] w-full" />
-                                                            <p>
-                                                                Loading more
-                                                                posts...
-                                                            </p>
-                                                        </div>
-                                                    ) : (
-                                                        <div className="py-4 text-center w-full">
-                                                            No more posts to
-                                                            load
-                                                        </div>
-                                                    )
+                                                    <div
+                                                        ref={loadMoreRef} // ONLY reference here, remove from parent div
+                                                        className="py-6 w-full bg-red-100 dark:bg-red-900/30"
+                                                        style={{
+                                                            height: '100px', // Much smaller height to prevent triggering too early
+                                                            border: '2px dashed red',
+                                                            margin: '10px 0',
+                                                        }}
+                                                    >
+                                                        {hasMore ? (
+                                                            <div className="flex flex-col justify-center items-center">
+                                                                <p className="text-base font-bold">
+                                                                    Loading more
+                                                                    posts...
+                                                                </p>
+                                                                <p className="text-sm">
+                                                                    hasMore:{' '}
+                                                                    {hasMore
+                                                                        ? 'true'
+                                                                        : 'false'}
+                                                                    , loading:{' '}
+                                                                    {loading
+                                                                        ? 'true'
+                                                                        : 'false'}
+                                                                </p>
+                                                            </div>
+                                                        ) : (
+                                                            <div className="py-2 text-center w-full">
+                                                                <p className="font-bold">
+                                                                    End of feed
+                                                                </p>
+                                                            </div>
+                                                        )}
+                                                    </div>
                                                 ) : (
                                                     posts[
                                                         virtualItem.index
@@ -485,7 +666,9 @@ export function FeedComponent() {
                                                                     mutateFeed={
                                                                         mutate
                                                                     }
-                                                                    refreshFeed={fetchData}
+                                                                    refreshFeed={
+                                                                        fetchData
+                                                                    }
                                                                 />
                                                             )}
                                                             {posts[
@@ -501,7 +684,9 @@ export function FeedComponent() {
                                                                     mutateFeed={
                                                                         mutate
                                                                     }
-                                                                    refreshFeed={fetchData}
+                                                                    refreshFeed={
+                                                                        fetchData
+                                                                    }
                                                                 />
                                                             )}
                                                         </div>
