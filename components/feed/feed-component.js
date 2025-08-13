@@ -97,49 +97,56 @@ export function FeedComponent() {
         async (startIndex, stopIndex) => {
             if (loading || !hasMore) return;
             setLoading(true);
-            const nextPage = Math.floor(startIndex / PAGE_SIZE) + 1;
-            const result = await fetchFeed(
-                postType,
-                token,
-                nextPage,
-                PAGE_SIZE
-            );
-            if (result.success) {
-                const newPosts =
-                    postType === 'papers'
-                        ? result.data.paperPosts
-                        : postType === 'userPosts'
-                          ? result.data.userPosts
-                          : postType === 'news'
-                            ? []
-                            : result.data.posts;
+            try {
+                // Preload up to 3 pages at once
+                const requests = [];
+                for (
+                    let page = Math.floor(startIndex / PAGE_SIZE) + 1;
+                    page <= Math.floor(stopIndex / PAGE_SIZE) + 1;
+                    page++
+                ) {
+                    requests.push(fetchFeed(postType, token, page, PAGE_SIZE));
+                }
+                const results = await Promise.all(requests);
+                let allNewPosts = [];
+                let lastPagination = pagination;
+                results.forEach((result) => {
+                    if (result.success) {
+                        const newPosts =
+                            postType === 'papers'
+                                ? result.data.paperPosts
+                                : postType === 'userPosts'
+                                  ? result.data.userPosts
+                                  : postType === 'news'
+                                    ? []
+                                    : result.data.posts;
+                        allNewPosts = [...allNewPosts, ...newPosts];
+                        lastPagination = result.data.pagination;
+                    }
+                });
                 setPosts((prev) => {
                     const existingIds = new Set(prev.map((p) => p.id));
                     return [
                         ...prev,
-                        ...newPosts.filter((p) => !existingIds.has(p.id)),
+                        ...allNewPosts.filter((p) => !existingIds.has(p.id)),
                     ];
                 });
                 setPagination((prev) => ({
                     ...prev,
-                    page: nextPage,
-                    pageSize: result.data.pagination.pageSize ?? prev.pageSize,
-                    totalPages:
-                        result.data.pagination.totalPages ?? prev.totalPages,
-                    total: result.data.pagination.total ?? prev.total,
+                    ...lastPagination,
                 }));
-                // Fix: also check if newPosts.length < PAGE_SIZE
                 setHasMore(
-                    nextPage <
-                        (result.data.pagination.totalPages ?? nextPage) &&
-                        newPosts.length === PAGE_SIZE
+                    lastPagination.page <
+                        (lastPagination.totalPages ?? lastPagination.page) &&
+                        allNewPosts.length > 0
                 );
-            } else {
-                setError('Failed to load posts');
+            } catch (err) {
+                setError('Network error');
+                setHasMore(true); // Allow retry
             }
             setLoading(false);
         },
-        [loading, hasMore, postType, token]
+        [loading, hasMore, postType, token, pagination]
     );
 
     // InfiniteLoader config
