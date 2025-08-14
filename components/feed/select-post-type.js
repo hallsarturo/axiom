@@ -13,7 +13,7 @@ export function SelectPostType({ defaultValue, className }) {
                 <SelectValue placeholder="Post Type" />
             </SelectTrigger>
             <SelectContent>
-                <SelectItem value="all">All</SelectItem>
+                {/* <SelectItem value="all">All</SelectItem> */}
                 <SelectItem value="papers">Papers</SelectItem>
                 <SelectItem value="posts">Posts</SelectItem>
                 <SelectItem value="news">News</SelectItem>

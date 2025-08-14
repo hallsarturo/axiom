@@ -22,13 +22,14 @@ import {
     SheetTrigger,
 } from '@/components/ui/sheet';
 import {
-    House,
+    Home,
     UserRound,
     Scale,
     NotebookPen,
     IdCard,
     LogIn,
 } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 import { ModeToggle } from '@/components/ui/themes/mode-toggle';
 import { useRouter } from 'next/navigation';
 import { logoutUser } from '@/lib/actions/actions';
@@ -37,20 +38,14 @@ import { useState } from 'react';
 
 const menuItems = [
     {
-        label: 'Other members',
-        href: '/profile',
-        icon: null,
+        label: 'Feed',
+        href: '/feed',
+        icon: Home,
         button: true,
     },
     {
-        label: 'Profile',
-        href: '/profile',
-        icon: null,
-        button: true,
-    },
-    {
-        label: 'Dashboard',
-        href: '/dashboard',
+        label: 'Echo metter',
+        href: '#',
         icon: null,
         button: true,
     },
@@ -74,8 +69,8 @@ const menuItems = [
         button: false,
     },
     {
-        label: 'Feed',
-        href: '/feed',
+        label: 'Contrast',
+        href: '/profile',
         icon: null,
         button: true,
     },
@@ -83,10 +78,17 @@ const menuItems = [
 
 const mobileMenuItems = [
     {
+        label: 'Feed',
+        href: '/feed',
+        icon: (
+            <NotebookPen className="mr-4 w-36 h-36 text-primary dark:text-foreground" />
+        ),
+    },
+    {
         label: 'Profile',
         href: '/profile',
         icon: (
-            <House className="mr-4 w-36 h-36 text-primary dark:text-foreground" />
+            <Home className="mr-4 w-36 h-36 text-primary dark:text-foreground" />
         ),
     },
     {
@@ -101,13 +103,6 @@ const mobileMenuItems = [
         href: '/saved-posts',
         icon: (
             <Scale className="mr-4 w-36 h-36 text-primary dark:text-foreground" />
-        ),
-    },
-    {
-        label: 'Feed',
-        href: '/feed',
-        icon: (
-            <NotebookPen className="mr-4 w-36 h-36 text-primary dark:text-foreground" />
         ),
     },
 ];
@@ -140,10 +135,10 @@ export function NavigationConnected() {
                                 <NavigationMenuItem key={idx}>
                                     <NavigationMenuLink
                                         asChild
-                                        className={`${navigationMenuTriggerStyle()} text-primary dark:text-foreground font-bold`}
+                                        className={`${navigationMenuTriggerStyle()} text-primary dark:text-foreground font-medium`}
                                     >
                                         {item.button ? (
-                                            <Button variant="secondary">
+                                            <Button variant="primary">
                                                 <Link href={item.href}>
                                                     {item.label}
                                                 </Link>
@@ -156,30 +151,48 @@ export function NavigationConnected() {
                                     </NavigationMenuLink>
                                 </NavigationMenuItem>
                             ))}
-                            <NavigationMenuItem>
-                                <NavigationMenuTrigger>
-                                    <Avatar>
-                                        <AvatarImage
-                                            src={user ? user.photoUrl : null}
-                                        />
-                                        <AvatarFallback>CN</AvatarFallback>
-                                    </Avatar>
-                                </NavigationMenuTrigger>
-                                <NavigationMenuContent className="">
-                                    <NavigationMenuLink
-                                        asChild
-                                        className="flex flex-col justify-center items-center w-[150px]"
-                                    >
-                                        <Button
-                                            variant="link"
-                                            className="w-32 mx-auto"
-                                            onClick={handleLogout}
+                            <div className="flex justify-end">
+                                <NavigationMenuItem>
+                                    <NavigationMenuTrigger className="text-primary dark:text-foreground">
+                                        <Badge className="h-5 min-w-5 rounded-full px-1 font-mono tabular-nums cursor-pointer">
+                                            8
+                                        </Badge>
+                                    </NavigationMenuTrigger>
+                                </NavigationMenuItem>
+                                <NavigationMenuItem className="">
+                                    <NavigationMenuTrigger className="text-primary font-medium dark:text-foreground cursor-pointer">
+                                        <Avatar>
+                                            <AvatarImage
+                                                src={
+                                                    user ? user.photoUrl : null
+                                                }
+                                            />
+                                            <AvatarFallback>CN</AvatarFallback>
+                                        </Avatar>
+                                    </NavigationMenuTrigger>
+                                    <NavigationMenuContent className="">
+                                        <NavigationMenuLink className="cursor-default text-center">
+                                            <p>
+                                                {user
+                                                    ? user?.displayName
+                                                    : null}
+                                            </p>
+                                        </NavigationMenuLink>
+                                        <NavigationMenuLink
+                                            asChild
+                                            className="flex flex-col justify-center items-center w-[150px]"
                                         >
-                                            Sign Out
-                                        </Button>
-                                    </NavigationMenuLink>
-                                </NavigationMenuContent>
-                            </NavigationMenuItem>
+                                            <Button
+                                                variant="link"
+                                                className="w-32 mx-auto"
+                                                onClick={handleLogout}
+                                            >
+                                                Sign Out
+                                            </Button>
+                                        </NavigationMenuLink>
+                                    </NavigationMenuContent>
+                                </NavigationMenuItem>
+                            </div>
                             <NavigationMenuItem>
                                 <NavigationMenuLink
                                     asChild
