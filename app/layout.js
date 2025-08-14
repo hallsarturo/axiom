@@ -38,7 +38,7 @@ export default function RootLayout({ children }) {
 
                         <main className="flex-1">{children}</main>
 
-                        <footer className="relative z-10 flex flex-col sm:flex-row justify-center items-center min-h-20 sm:min-h-35 w-full px-4 gap-2 p-4 sm:gap-8 text-white bg-gradient-to-br from-slate-950 to-slate-700 text-xs">
+                        <footer className="relative z-10 flex flex-col sm:flex-row justify-center items-center min-h-20 sm:min-h-35 w-full px-4 gap-2 p-4 sm:gap-8 text-white bg-gradient-to-b from-violet-600 to-violet-900 dark:from-zinc-900 dark:to-zinc-950 text-xs">
                             <div>
                                 <Button
                                     className="bg-transparent text-xs px-2 py-1"
