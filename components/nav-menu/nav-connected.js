@@ -35,6 +35,83 @@ import { logoutUser } from '@/lib/actions/actions';
 import { useUser } from '@/components/context/UserProfileContext';
 import { useState } from 'react';
 
+const menuItems = [
+    {
+        label: 'Other members',
+        href: '/profile',
+        icon: null,
+        button: true,
+    },
+    {
+        label: 'Profile',
+        href: '/profile',
+        icon: null,
+        button: true,
+    },
+    {
+        label: 'Dashboard',
+        href: '/dashboard',
+        icon: null,
+        button: true,
+    },
+    {
+        label: 'Saved Posts',
+        href: '/saved-posts',
+        icon: (
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="size-6 text-primary dark:text-foreground"
+            >
+                <path
+                    fillRule="evenodd"
+                    d="M6.32 2.577a49.255 49.255 0 0 1 11.36 0c1.497.174 2.57 1.46 2.57 2.93V21a.75.75 0 0 1-1.085.67L12 18.089l-7.165 3.583A.75.75 0 0 1 3.75 21V5.507c0-1.47 1.073-2.756 2.57-2.93Z"
+                    clipRule="evenodd"
+                />
+            </svg>
+        ),
+        button: false,
+    },
+    {
+        label: 'Feed',
+        href: '/feed',
+        icon: null,
+        button: true,
+    },
+];
+
+const mobileMenuItems = [
+    {
+        label: 'Profile',
+        href: '/profile',
+        icon: (
+            <House className="mr-4 w-36 h-36 text-primary dark:text-foreground" />
+        ),
+    },
+    {
+        label: 'Dashboard',
+        href: '/dashboard',
+        icon: (
+            <UserRound className="mr-4 w-36 h-36 text-primary dark:text-foreground" />
+        ),
+    },
+    {
+        label: 'Saved Posts',
+        href: '/saved-posts',
+        icon: (
+            <Scale className="mr-4 w-36 h-36 text-primary dark:text-foreground" />
+        ),
+    },
+    {
+        label: 'Feed',
+        href: '/feed',
+        icon: (
+            <NotebookPen className="mr-4 w-36 h-36 text-primary dark:text-foreground" />
+        ),
+    },
+];
+
 export function NavigationConnected() {
     const router = useRouter();
     const { user } = useUser();
@@ -59,67 +136,26 @@ export function NavigationConnected() {
                         className="min-w-0"
                     >
                         <NavigationMenuList className="gap-4">
-                            <NavigationMenuItem>
-                                <NavigationMenuLink
-                                    asChild
-                                    className={`${navigationMenuTriggerStyle()} text-primary dark:text-foreground font-bold`}
-                                >
-                                    <Button variant="secondary">
-                                        <Link href="/profile">Other members</Link>
-                                    </Button>
-                                </NavigationMenuLink>
-                            </NavigationMenuItem>
-                            <NavigationMenuItem>
-                                <NavigationMenuLink
-                                    asChild
-                                    className={`${navigationMenuTriggerStyle()} text-primary dark:text-foreground font-bold`}
-                                >
-                                    <Button variant="secondary">
-                                        <Link href="/profile">Profile</Link>
-                                    </Button>
-                                </NavigationMenuLink>
-                            </NavigationMenuItem>
-                            <NavigationMenuItem>
-                                <NavigationMenuLink
-                                    asChild
-                                    className={`${navigationMenuTriggerStyle()} text-primary dark:text-foreground font-bold`}
-                                >
-                                    <Button variant="secondary">
-                                        <Link href="/dashboard">Dashboard</Link>
-                                    </Button>
-                                </NavigationMenuLink>
-                            </NavigationMenuItem>
-                            <NavigationMenuItem>
-                                <NavigationMenuLink
-                                    asChild
-                                    className={`${navigationMenuTriggerStyle()} text-primary dark:text-foreground font-bold`}
-                                >
-                                    <Link href="/saved-posts">
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            viewBox="0 0 24 24"
-                                            fill="currentColor"
-                                            className="size-6 text-primary dark:text-foreground"
-                                        >
-                                            <path
-                                                fillRule="evenodd"
-                                                d="M6.32 2.577a49.255 49.255 0 0 1 11.36 0c1.497.174 2.57 1.46 2.57 2.93V21a.75.75 0 0 1-1.085.67L12 18.089l-7.165 3.583A.75.75 0 0 1 3.75 21V5.507c0-1.47 1.073-2.756 2.57-2.93Z"
-                                                clipRule="evenodd"
-                                            />
-                                        </svg>
-                                    </Link>
-                                </NavigationMenuLink>
-                            </NavigationMenuItem>
-                            <NavigationMenuItem>
-                                <NavigationMenuLink
-                                    asChild
-                                    className={`${navigationMenuTriggerStyle()} text-primary dark:text-foreground font-bold`}
-                                >
-                                    <Button variant="secondary">
-                                        <Link href="/feed">Feed</Link>
-                                    </Button>
-                                </NavigationMenuLink>
-                            </NavigationMenuItem>
+                            {menuItems.map((item, idx) => (
+                                <NavigationMenuItem key={idx}>
+                                    <NavigationMenuLink
+                                        asChild
+                                        className={`${navigationMenuTriggerStyle()} text-primary dark:text-foreground font-bold`}
+                                    >
+                                        {item.button ? (
+                                            <Button variant="secondary">
+                                                <Link href={item.href}>
+                                                    {item.label}
+                                                </Link>
+                                            </Button>
+                                        ) : (
+                                            <Link href={item.href}>
+                                                {item.icon}
+                                            </Link>
+                                        )}
+                                    </NavigationMenuLink>
+                                </NavigationMenuItem>
+                            ))}
                             <NavigationMenuItem>
                                 <NavigationMenuTrigger>
                                     <Avatar>
@@ -159,8 +195,15 @@ export function NavigationConnected() {
             <nav>
                 {/* Mobile full-screen menu */}
                 <nav className="md:hidden">
-                    <Sheet open={open} onOpenChange={setOpen} className="md:hidden flex flex-col">
-                        <SheetTrigger className="cursor-pointer" onClick={() => setOpen(true)}>
+                    <Sheet
+                        open={open}
+                        onOpenChange={setOpen}
+                        className="md:hidden flex flex-col"
+                    >
+                        <SheetTrigger
+                            className="cursor-pointer"
+                            onClick={() => setOpen(true)}
+                        >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
@@ -197,62 +240,23 @@ export function NavigationConnected() {
                                     AXIOM
                                 </SheetTitle>
                                 <nav className="flex flex-col gap-8 mt-4 items-center justify-center w-full">
-                                    <Button
-                                        variant="link"
-                                        size="lg"
-                                        className=""
-                                        onClick={() => setOpen(false)}
-                                    >
-                                        <House className="mr-4 w-36 h-36 text-primary dark:text-foreground" />
-                                        <Link
-                                            href="/profile"
-                                            className="w-full text-center text-[1.5625rem] font-light text-primary dark:text-foreground"
+                                    {mobileMenuItems.map((item, idx) => (
+                                        <Button
+                                            key={idx}
+                                            variant="link"
+                                            size="lg"
+                                            className=""
+                                            onClick={() => setOpen(false)}
                                         >
-                                            Profile
-                                        </Link>
-                                    </Button>
-                                    <Button
-                                        variant="link"
-                                        size="lg"
-                                        className=""
-                                        onClick={() => setOpen(false)}
-                                    >
-                                        <UserRound className="mr-4 w-36 h-36 text-primary dark:text-foreground" />
-                                        <Link
-                                            href="/dashboard"
-                                            className="w-full text-center text-2xl font-light text-primary dark:text-foreground"
-                                        >
-                                            Dashboard
-                                        </Link>
-                                    </Button>
-                                    <Button
-                                        variant="link"
-                                        size="lg"
-                                        className=""
-                                        onClick={() => setOpen(false)}
-                                    >
-                                        <Scale className="mr-4 w-36 h-36 text-primary dark:text-foreground" />
-                                        <Link
-                                            href="/saved-posts"
-                                            className="w-full text-center text-2xl font-light text-primary dark:text-foreground"
-                                        >
-                                            Saved Posts
-                                        </Link>
-                                    </Button>
-                                    <Button
-                                        variant="link"
-                                        size="lg"
-                                        className=" "
-                                        onClick={() => setOpen(false)}
-                                    >
-                                        <NotebookPen className="mr-4 w-36 h-36 text-primary dark:text-foreground" />
-                                        <Link
-                                            href="/feed"
-                                            className="w-full text-center text-2xl font-light text-primary dark:text-foreground"
-                                        >
-                                            Feed
-                                        </Link>
-                                    </Button>
+                                            {item.icon}
+                                            <Link
+                                                href={item.href}
+                                                className="w-full text-center text-2xl font-light text-primary dark:text-foreground"
+                                            >
+                                                {item.label}
+                                            </Link>
+                                        </Button>
+                                    ))}
                                     <Button
                                         onClick={(e) => {
                                             e.preventDefault();
@@ -265,7 +269,6 @@ export function NavigationConnected() {
                                         <IdCard className="mr-4 w-36 h-36 text-primary dark:text-foreground" />
                                         Sign Out
                                     </Button>
-
                                     <ModeToggle />
                                 </nav>
                             </SheetHeader>

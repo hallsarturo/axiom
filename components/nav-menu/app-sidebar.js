@@ -45,7 +45,7 @@ export function AppSidebar() {
     <Sidebar >
       <SidebarContent className="bg-white dark:bg-background">
         <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
+          <SidebarGroupLabel>Menu</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
