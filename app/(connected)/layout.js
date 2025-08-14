@@ -2,6 +2,7 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import '@/app/globals.css';
 import { NavigationConnected } from '@/components/nav-menu/nav-connected';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+import { PostTypeProvider } from '@/components/context/post-type-provider';
 import { AppSidebar } from '@/components/nav-menu/app-sidebar';
 
 const geistSans = Geist({
@@ -16,21 +17,23 @@ const geistMono = Geist_Mono({
 
 export default function ConnectedLayout({ children }) {
     return (
-        <SidebarProvider>
-            <div className="flex min-h-screen w-full">
-                <AppSidebar />
-                <div className="flex flex-col flex-1 w-full">
-                    <div className="flex items-center my-2">
-                        <SidebarTrigger className="text-primary dark:text-foreground"/>
-                        <div className="flex justify-center w-full">
-                            <NavigationConnected />
+        <PostTypeProvider>
+            <SidebarProvider>
+                <div className="flex min-h-screen w-full">
+                    <AppSidebar />
+                    <div className="flex flex-col flex-1 w-full">
+                        <div className="flex items-center my-2">
+                            <SidebarTrigger className="text-primary dark:text-foreground" />
+                            <div className="flex justify-center w-full">
+                                <NavigationConnected />
+                            </div>
                         </div>
+                        <main className="flex-1 w-full bg-muted px-4 pb-4">
+                            {children}
+                        </main>
                     </div>
-                    <main className="flex-1 w-full bg-muted px-4 pb-4">
-                        {children}
-                    </main>
                 </div>
-            </div>
-        </SidebarProvider>
+            </SidebarProvider>
+        </PostTypeProvider>
     );
 }
