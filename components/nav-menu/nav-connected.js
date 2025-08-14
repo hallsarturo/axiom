@@ -31,6 +31,7 @@ import {
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { ModeToggle } from '@/components/ui/themes/mode-toggle';
+import { SearchBar } from '@/components/nav-menu/search-bar';
 import { usePathname } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 import { logoutUser } from '@/lib/actions/actions';
@@ -132,6 +133,9 @@ export function NavigationConnected() {
                         className="min-w-0"
                     >
                         <NavigationMenuList className="gap-4">
+                            <NavigationMenuItem>
+                                <SearchBar />
+                            </NavigationMenuItem>
                             {menuItems.map((item, idx) => (
                                 <NavigationMenuItem key={idx}>
                                     <NavigationMenuLink
