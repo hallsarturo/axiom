@@ -17,15 +17,19 @@ const geistMono = Geist_Mono({
 export default function ConnectedLayout({ children }) {
     return (
         <SidebarProvider>
-            <AppSidebar />
-            <div className="bg-muted min-h-screen">
-                <div className="fixed top-0 left-0 w-screen  z-40 bg-white dark:bg-background shadow-md border-b flex justify-center pt-4 pb-4 px-2 sm:px-4"></div>
-
-                <main className="pt-17 pb-4">
-                    <SidebarTrigger />
-                    <NavigationConnected />
-                    {children}
-                </main>
+            <div className="flex min-h-screen w-full">
+                <AppSidebar />
+                <div className="flex flex-col flex-1 w-full">
+                    <div className="flex items-center my-2">
+                        <SidebarTrigger />
+                        <div className="flex justify-center w-full">
+                            <NavigationConnected />
+                        </div>
+                    </div>
+                    <main className="flex-1 w-full bg-muted px-4 pb-4">
+                        {children}
+                    </main>
+                </div>
             </div>
         </SidebarProvider>
     );
