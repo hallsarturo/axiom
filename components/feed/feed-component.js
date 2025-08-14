@@ -248,7 +248,7 @@ export function FeedComponent() {
     };
 
     return (
-        <div className="flex flex-col justify-center">
+        <div className="flex flex-col items-start justify-center">
             <div className="flex w-full justify-center">
                 <PublishPost
                     mutateFeed={handlePostPublished}

@@ -35,7 +35,12 @@ export default function RootLayout({ children }) {
                         disableTransitionOnChange
                     >
                         <Toaster richColors />
-                        <main className="flex-1">{children}</main>
+                       
+                            <main className="flex-1">
+                              
+                                {children}
+                            </main>
+                        
                         <footer className="relative z-10 flex flex-col sm:flex-row justify-center items-center min-h-20 sm:min-h-35 w-full px-4 gap-2 p-4 sm:gap-8 text-white bg-gradient-to-br from-slate-950 to-slate-700 text-xs">
                             <div>
                                 <Button
