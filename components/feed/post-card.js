@@ -51,6 +51,7 @@ import { useEffect, useState } from 'react';
 import useSWR from 'swr';
 import Link from 'next/link';
 import { putReaction, deleteUserPost } from '@/lib/actions/actions';
+import { normalizeImageUrl } from '@/lib/utils/image';
 
 const fetchPost = async (postId, token, userId) => {
     if (!postId) throw new Error('No postId provided');
@@ -123,11 +124,11 @@ export function PostCard(props) {
     // Conditionally render avatar according to Post Type
     let avatarSrc = null;
     if (props.type === 'user') {
-        avatarSrc = props.avatarPic;
+        avatarSrc = normalizeImageUrl(props.avatarPic);
     } else if (props.type === 'paper') {
-        avatarSrc = props.magazineImg;
+        avatarSrc = normalizeImageUrl(props.magazineImg);
     } else if (props.type === 'news') {
-        avatarSrc = props.agencyImg;
+        avatarSrc = normalizeImageUrl(props.agencyImg);
     }
 
     // Conditionally rendering Post Type Badge
@@ -381,7 +382,7 @@ export function PostCard(props) {
                             </Link>
                         </CardTitle>
                         <CardDescription className="flex flex-row items-center gap-6 w-full mt-2">
-                            {/* {console.log('Avatar src: ', avatarSrc)} */}
+                            {console.log('Avatar src: ', avatarSrc)}
                             <Avatar>
                                 <AvatarImage src={avatarSrc} />
                                 <AvatarFallback>CN</AvatarFallback>

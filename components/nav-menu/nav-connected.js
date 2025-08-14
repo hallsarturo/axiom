@@ -65,6 +65,16 @@ export function NavigationConnected() {
                                     className={`${navigationMenuTriggerStyle()} text-primary dark:text-foreground font-bold`}
                                 >
                                     <Button variant="secondary">
+                                        <Link href="/profile">Other members</Link>
+                                    </Button>
+                                </NavigationMenuLink>
+                            </NavigationMenuItem>
+                            <NavigationMenuItem>
+                                <NavigationMenuLink
+                                    asChild
+                                    className={`${navigationMenuTriggerStyle()} text-primary dark:text-foreground font-bold`}
+                                >
+                                    <Button variant="secondary">
                                         <Link href="/profile">Profile</Link>
                                     </Button>
                                 </NavigationMenuLink>
