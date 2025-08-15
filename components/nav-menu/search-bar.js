@@ -1,6 +1,6 @@
 'use client';
 
-import { CheckIcon, ChevronsUpDownIcon } from 'lucide-react';
+import { CheckIcon, ChevronsUpDownIcon, Search } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import {
@@ -17,31 +17,9 @@ import {
     PopoverTrigger,
 } from '@/components/ui/popover';
 import { Input } from '@/components/ui/input';
+import { Separator } from '@/components/ui/separator';
 import { getSearchResults } from '@/lib/actions/actions';
-import { useState, useEffect } from 'react';
-
-const frameworks = [
-    {
-        value: 'next.js',
-        label: 'Next.js',
-    },
-    {
-        value: 'sveltekit',
-        label: 'SvelteKit',
-    },
-    {
-        value: 'nuxt.js',
-        label: 'Nuxt.js',
-    },
-    {
-        value: 'remix',
-        label: 'Remix',
-    },
-    {
-        value: 'astro',
-        label: 'Astro',
-    },
-];
+import { useState, useEffect, Fragment } from 'react';
 
 export function SearchBar() {
     const [open, setOpen] = useState(false);
@@ -56,71 +34,85 @@ export function SearchBar() {
             setOpen(false);
             return;
         }
-        setOpen(true); // Open popover when search starts
+        setOpen(true);
         const timer = setTimeout(async () => {
             setLoading(true);
             const data = await getSearchResults(query);
             setResults(data.data?.results || []);
             setLoading(false);
-        }, 300); // debounce 300ms
+        }, 300); // debouncer
         return () => clearTimeout(timer);
     }, [query]);
 
     return (
-        <div>
-            <div className="flex">
-                <Input
-                    placeholder="Search..."
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                />
-            </div>
-            <Popover open={open} onOpenChange={setOpen}>
-                <PopoverTrigger asChild>
-                    {/* Optional: You can use a Button or leave empty if you want only input to trigger */}
-                    <div />
-                </PopoverTrigger>
-                <PopoverContent className="w-[300px] p-0">
-                    <Command>
-                        <CommandInput
-                            value={query}
-                            onValueChange={setQuery}
-                            placeholder="Type to search..."
-                        />
-                        <CommandList>
-                            {loading && (
-                                <div className="p-4 text-center text-muted-foreground">
-                                    Loading...
-                                </div>
-                            )}
-                            <CommandEmpty>No results found.</CommandEmpty>
-                            <CommandGroup>
-                                {results.map((res) => (
+        <Popover open={open} onOpenChange={setOpen}>
+            <PopoverTrigger asChild>
+                <Button
+                    variant="ghost"
+                    className="text-primary dark:text-foreground"
+                    size="icon"
+                >
+                    <Search />
+                </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-[300px] p-0">
+                <Command>
+                    <CommandInput
+                        value={query}
+                        onValueChange={(val) => {
+                            setOpen(true);
+                            setQuery(val);
+                        }}
+                        placeholder="Type to search..."
+                        className="w-full"
+                    />
+                    <CommandList>
+                        {loading && (
+                            <div className="p-4 text-center text-muted-foreground">
+                                Loading...
+                            </div>
+                        )}
+                        <CommandEmpty>No results found.</CommandEmpty>
+                        <CommandGroup>
+                            {results.map((res, idx) => (
+                                <Fragment key={res.key}>
                                     <CommandItem
-                                        key={res.value}
-                                        value={res.value}
+                                        value={
+                                            res.type === 'user'
+                                                ? res.username
+                                                : res.title
+                                        }
                                         onSelect={() => {
-                                            setValue(res.value);
+                                            setValue(
+                                                res.type === 'user'
+                                                    ? res.username
+                                                    : res.title
+                                            );
                                             setOpen(false);
-                                            // TODO: Show detailed view for res
                                         }}
                                     >
                                         <CheckIcon
                                             className={cn(
                                                 'mr-2 h-4 w-4',
-                                                value === res.value
+                                                value ===
+                                                    (res.type === 'user'
+                                                        ? res.username
+                                                        : res.title)
                                                     ? 'opacity-100'
                                                     : 'opacity-0'
                                             )}
                                         />
-                                        {res.label}
+                                        {res.type === 'user'
+                                            ? res.username
+                                            : res.title}
                                     </CommandItem>
-                                ))}
-                            </CommandGroup>
-                        </CommandList>
-                    </Command>
-                </PopoverContent>
-            </Popover>
-        </div>
+                                    {/* <Separator className="my-1" /> */}
+                                </Fragment>
+                            ))}
+                        </CommandGroup>
+                    </CommandList>
+                </Command>
+            </PopoverContent>
+        </Popover>
     );
 }

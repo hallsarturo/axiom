@@ -59,7 +59,7 @@ const menuItems = [
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 fill="currentColor"
-                className="size-6 text-primary dark:text-foreground"
+                className="size-4 text-primary dark:text-foreground"
             >
                 <path
                     fillRule="evenodd"
@@ -69,6 +69,7 @@ const menuItems = [
             </svg>
         ),
         button: false,
+       
     },
     {
         label: 'Contrast',
@@ -143,7 +144,7 @@ export function NavigationConnected() {
                                         className={`${navigationMenuTriggerStyle()} text-primary dark:text-foreground font-medium`}
                                     >
                                         {item.button ? (
-                                            <Button variant="primary">
+                                            <Button variant="primary" className="">
                                                 <Link href={item.href}>
                                                     {item.label}
                                                 </Link>
