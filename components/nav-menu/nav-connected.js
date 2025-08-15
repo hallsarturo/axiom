@@ -28,6 +28,7 @@ import {
     NotebookPen,
     IdCard,
     LogIn,
+    LogOut,
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { ModeToggle } from '@/components/ui/themes/mode-toggle';
@@ -46,8 +47,8 @@ const menuItems = [
         button: true,
     },
     {
-        label: 'Echo metter',
-        href: '#',
+        label: 'Echo meter',
+        href: '/echo-meter',
         icon: null,
         button: true,
     },
@@ -69,7 +70,6 @@ const menuItems = [
             </svg>
         ),
         button: false,
-       
     },
     {
         label: 'Contrast',
@@ -144,7 +144,10 @@ export function NavigationConnected() {
                                         className={`${navigationMenuTriggerStyle()} text-primary dark:text-foreground font-medium`}
                                     >
                                         {item.button ? (
-                                            <Button variant="primary" className="">
+                                            <Button
+                                                variant="primary"
+                                                asChild
+                                            >
                                                 <Link href={item.href}>
                                                     {item.label}
                                                 </Link>
@@ -188,13 +191,30 @@ export function NavigationConnected() {
                                             asChild
                                             className="flex flex-col justify-center items-center w-[150px]"
                                         >
-                                            <Button
-                                                variant="link"
-                                                className="w-32 mx-auto"
-                                                onClick={handleLogout}
-                                            >
-                                                Sign Out
-                                            </Button>
+                                            {user ? (
+                                                <Button
+                                                    variant="link"
+                                                    className="w-32 mx-auto"
+                                                    onClick={handleLogout}
+                                                >
+                                                    <div className="flex gap-4">
+                                                        <LogOut className="text-primary dark:text-foreground" />
+                                                        Sign Out
+                                                    </div>
+                                                </Button>
+                                            ) : (
+                                                <Button
+                                                    variant="link"
+                                                    className="w-32 mx-auto"
+                                                >
+                                                    <div className="flex  gap-4 ">
+                                                        <LogIn className="text-primary dark:text-foreground" />
+                                                        <Link href="/sign-in">
+                                                            Sign In
+                                                        </Link>
+                                                    </div>
+                                                </Button>
+                                            )}
                                         </NavigationMenuLink>
                                     </NavigationMenuContent>
                                 </NavigationMenuItem>
