@@ -14,6 +14,8 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { useUser } from '@/components/context/UserProfileContext';
+import { useEffect, useState } from 'react';
+import { useParams } from 'next/navigation';
 
 export default function Profile() {
     const { user } = useUser();

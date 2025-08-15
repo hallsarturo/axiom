@@ -24,47 +24,49 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { SelectPostType } from '@/components/feed/select-post-type';
+import { useUser } from '@/components/context/UserProfileContext';
 import { usePathname } from 'next/navigation';
 
-// Menu items.
-const mainMenuItems = [
-    {
-        title: 'Feed',
-        url: '/feed',
-        icon: Rss,
-    },
-    {
-        title: 'Profile',
-        url: '/profile',
-        icon: UserRoundPen,
-    },
-    {
-        title: 'Followers',
-        url: '#',
-        icon: UserRoundCheck,
-    },
-    {
-        title: 'Following',
-        url: '#',
-        icon: Users,
-    },
-    {
-        title: 'Settings',
-        url: '/dashboard',
-        icon: Settings,
-    },
-];
-
-// Feed options
-const feedOptions = [
-    {
-        title: 'PostType',
-        icon: Newspaper,
-    },
-];
-
 export function AppSidebar() {
+    const { user } = useUser();
     const pathname = usePathname();
+
+    const mainMenuItems = [
+        {
+            title: 'Feed',
+            url: '/feed',
+            icon: Rss,
+        },
+        {
+            title: 'Profile',
+            url: user ? `/profile/${user.id}` : '/profile',
+            icon: UserRoundPen,
+        },
+        {
+            title: 'Followers',
+            url: '#',
+            icon: UserRoundCheck,
+        },
+        {
+            title: 'Following',
+            url: '#',
+            icon: Users,
+        },
+        {
+            title: 'Settings',
+            url: '/dashboard',
+            icon: Settings,
+        },
+    ];
+
+    // Feed options
+    const feedOptions = [
+        {
+            title: 'PostType',
+            icon: Newspaper,
+        },
+    ];
+
     return (
         <Sidebar>
             <SidebarContent className="bg-white dark:bg-background">
