@@ -24,6 +24,8 @@ export function RadarChart({ data }) {
                     dotSize={8}
                     dotColor={{ theme: 'background' }}
                     dotBorderWidth={2}
+                    colors={{ scheme: 'purple_red' }}
+                    fillOpacity={1}
                     blendMode="multiply"
                     legends={[
                         {
@@ -48,6 +50,8 @@ export function RadarChart({ data }) {
                     dotSize={6}
                     dotColor={{ theme: 'background' }}
                     dotBorderWidth={2}
+                    colors={{ scheme: 'purple_red' }}
+                    fillOpacity={1}
                     blendMode="multiply"
                     legends={[
                         {
