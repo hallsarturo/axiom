@@ -144,10 +144,7 @@ export function NavigationConnected() {
                                         className={`${navigationMenuTriggerStyle()} text-primary dark:text-foreground font-medium`}
                                     >
                                         {item.button ? (
-                                            <Button
-                                                variant="primary"
-                                                asChild
-                                            >
+                                            <Button variant="primary" asChild>
                                                 <Link href={item.href}>
                                                     {item.label}
                                                 </Link>
@@ -194,10 +191,10 @@ export function NavigationConnected() {
                                             {user ? (
                                                 <Button
                                                     variant="link"
-                                                    className="w-32 mx-auto"
+                                                    className="w-32 mx-auto flex gap-4 items-center"
                                                     onClick={handleLogout}
                                                 >
-                                                    <div className="flex gap-4">
+                                                    <div className="flex items-center gap-4">
                                                         <LogOut className="text-primary dark:text-foreground" />
                                                         Sign Out
                                                     </div>
@@ -206,13 +203,17 @@ export function NavigationConnected() {
                                                 <Button
                                                     variant="link"
                                                     className="w-32 mx-auto"
+                                                    asChild
                                                 >
-                                                    <div className="flex  gap-4 ">
-                                                        <LogIn className="text-primary dark:text-foreground" />
-                                                        <Link href="/sign-in">
+                                                    <Link
+                                                        href="/sign-in"
+                                                        className="flex gap-4 items-center"
+                                                    >
+                                                        <div className="flex items-center gap-4">
+                                                            <LogIn className="text-primary dark:text-foreground" />
                                                             Sign In
-                                                        </Link>
-                                                    </div>
+                                                        </div>
+                                                    </Link>
                                                 </Button>
                                             )}
                                         </NavigationMenuLink>
