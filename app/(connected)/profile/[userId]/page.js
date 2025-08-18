@@ -6,6 +6,7 @@ import {
     BadgeCheckIcon,
     CheckIcon,
     UserPlus,
+    UserMinus,
 } from 'lucide-react';
 import {
     Card,
@@ -19,6 +20,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { toast } from 'sonner';
 import { useUser } from '@/components/context/UserProfileContext';
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
@@ -26,6 +28,7 @@ import {
     getUserProfileById,
     getFollowersById,
     getFollowingsById,
+    putFollower,
 } from '@/lib/actions/actions';
 
 export default function Profile() {
@@ -35,6 +38,8 @@ export default function Profile() {
     const [followers, setFollowers] = useState([]);
     const [followersCount, setFollowersCount] = useState(0);
     const [following, setFollowing] = useState([]);
+    const [followingCount, setFollowingCount] = useState(0);
+    const [isFollowing, setIsFollowing] = useState();
 
     useEffect(() => {
         async function fetchProfile() {
@@ -72,14 +77,45 @@ export default function Profile() {
     useEffect(() => {
         async function fetchFollowings() {
             const result = await getFollowingsById(userId);
-            if (result && result.followers) {
-                setFollowing(result.followers.totalFollowers);
+            if (result && Array.isArray(result.following)) {
+                setFollowing(result.following);
+                setFollowingCount(
+                    result.totalFollowing ?? result.following.length
+                );
+                if (user && user.id && result.following.includes(user.id)) {
+                    setIsFollowing(true);
+                } else {
+                    setIsFollowing(false);
+                }
             } else {
                 setFollowing(null);
             }
         }
-        fetchFollowings();
-    }, [userId]);
+        if (user && user.id) {
+            fetchFollowings();
+        }
+    }, [userId, user]);
+
+    // Handle following targets
+    const handleFollowingButton = async () => {
+        const currentUserId = user.id;
+        const targetUserId = userId;
+        let token = null;
+
+        if (process.env.NODE_ENV === 'development') {
+            token = localStorage.getItem('token');
+        } else {
+            token = null;
+        }
+
+        const result = await putFollower(token, targetUserId);
+        if (result && result.message === 'Unfollowed user.') {
+            toast.success(`following user`);
+        }
+        if (result && result.message === 'Followed user.') {
+            toast.success(`unfollowed user`);
+        }
+    };
 
     return (
         <div className="mx-auto my-12 max-w-4xl bg-muted">
@@ -114,8 +150,13 @@ export default function Profile() {
                             </Avatar>
                         </div>
                     </CardAction>
-                    {isOwnProfile ? null : (
-                        <Button>
+                    {!isOwnProfile && isFollowing ? (
+                        <Button onClick={handleFollowingButton}>
+                            {' '}
+                            <UserMinus /> Unfollow
+                        </Button>
+                    ) : (
+                        <Button onClick={handleFollowingButton}>
                             {' '}
                             <UserPlus /> Follow
                         </Button>
@@ -172,7 +213,7 @@ export default function Profile() {
                                 Followers
                             </dt>
                             <dd className="mt-2 sm:mt-0 text-sm/6 text-muted-foreground w-full">
-                                {followersCount } | Expand Followers
+                                {followersCount} | See Followers
                             </dd>
                         </div>
                         <div className="px-4 py-6 flex flex-col sm:flex-row sm:items-center items-start sm:px-0">
@@ -180,7 +221,7 @@ export default function Profile() {
                                 Following
                             </dt>
                             <dd className="mt-2 sm:mt-0 text-sm/6 text-muted-foreground w-full">
-                                (24) | Expand Profiles
+                                {followingCount} | See Followers
                             </dd>
                         </div>
                     </dl>
