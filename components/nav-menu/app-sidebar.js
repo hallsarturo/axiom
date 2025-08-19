@@ -11,6 +11,7 @@ import {
     Search,
     Settings,
     Newspaper,
+    Library,
 } from 'lucide-react';
 
 import {
@@ -41,6 +42,11 @@ export function AppSidebar() {
             title: 'Profile',
             url: user ? `/profile/${user.id}` : '/profile',
             icon: UserRoundPen,
+        },
+        {
+            title: 'My Posts',
+            url: user ? `/my-posts/${user.id}` : '/my-posts',
+            icon: Library,
         },
         {
             title: 'Followers',
