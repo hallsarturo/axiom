@@ -30,25 +30,44 @@ import {
     getFollowingsById,
     putFollower,
 } from '@/lib/actions/actions';
+import useSWR from 'swr';
+
+const fetchFollowers = async (userId) => {
+    const result = await getFollowersById(userId);
+    return result || { followers: [], totalFollowers: 0 };
+};
+
+const fetchFollowings = async (userId) => {
+    const result = await getFollowingsById(userId);
+    return result || { following: [], totalFollowing: 0 };
+};
 
 export default function Profile() {
     const { userId } = useParams();
-    const [profileInfo, setProfileInfo] = useState(null);
     const { user } = useUser();
+    const [profileInfo, setProfileInfo] = useState(null);
     const [followers, setFollowers] = useState([]);
     const [followersCount, setFollowersCount] = useState(0);
     const [following, setFollowing] = useState([]);
     const [followingCount, setFollowingCount] = useState(0);
-    const [isFollowing, setIsFollowing] = useState();
+
+    // SWR hooks for followers and following
+    const {
+        data: followersData,
+        mutate: mutateFollowers,
+        isLoading: loadingFollowers,
+    } = useSWR(['followers', userId], () => fetchFollowers(userId));
+
+    const {
+        data: followingData,
+        mutate: mutateFollowing,
+        isLoading: loadingFollowing,
+    } = useSWR(['following', userId], () => fetchFollowings(userId));
 
     useEffect(() => {
         async function fetchProfile() {
             const result = await getUserProfileById(userId);
-            if (result && result.user) {
-                setProfileInfo(result.user);
-            } else {
-                setProfileInfo(null);
-            }
+            setProfileInfo(result?.user || null);
         }
         fetchProfile();
     }, [userId]);
@@ -56,65 +75,30 @@ export default function Profile() {
     // Check if this is the user's profile or not
     const isOwnProfile = user && user.id && String(user.id) === String(userId);
 
-    // Followers
-    useEffect(() => {
-        async function fetchFollowers() {
-            const result = await getFollowersById(userId);
-            if (result && Array.isArray(result.followers)) {
-                setFollowers(result.followers);
-                setFollowersCount(
-                    result.totalFollowers ?? result.followers.length
-                );
-            } else {
-                setFollowers([]);
-                setFollowersCount(0);
-            }
-        }
-        fetchFollowers();
-    }, [userId]);
-
-    // Following
-    useEffect(() => {
-        async function fetchFollowings() {
-            const result = await getFollowingsById(userId);
-            if (result && Array.isArray(result.following)) {
-                setFollowing(result.following);
-                setFollowingCount(
-                    result.totalFollowing ?? result.following.length
-                );
-                if (user && user.id && result.following.includes(user.id)) {
-                    setIsFollowing(true);
-                } else {
-                    setIsFollowing(false);
-                }
-            } else {
-                setFollowing(null);
-            }
-        }
-        if (user && user.id) {
-            fetchFollowings();
-        }
-    }, [userId, user]);
+    // Check if current user is following
+    const isFollowing =
+        followersData?.followers.some(
+            (f) => String(f.id) === String(user?.id)
+        ) ?? false;
 
     // Handle following targets
-    const handleFollowingButton = async () => {
-        const currentUserId = user.id;
-        const targetUserId = userId;
+    const handleFollow = async () => {
+        if (!user || !user.id) return;
         let token = null;
-
         if (process.env.NODE_ENV === 'development') {
             token = localStorage.getItem('token');
+        }
+        const result = await putFollower(token, userId);
+        if (result?.message === 'Unfollowed user.') {
+            toast.success(`User unfollowed`);
+        } else if (result?.message === 'Followed user.') {
+            toast.success(`User followed`);
         } else {
-            token = null;
+            toast.error('Action failed');
         }
-
-        const result = await putFollower(token, targetUserId);
-        if (result && result.message === 'Unfollowed user.') {
-            toast.success(`following user`);
-        }
-        if (result && result.message === 'Followed user.') {
-            toast.success(`unfollowed user`);
-        }
+        // SWR refresh
+        mutateFollowers();
+        mutateFollowing();
     };
 
     return (
@@ -150,15 +134,21 @@ export default function Profile() {
                             </Avatar>
                         </div>
                     </CardAction>
-                    {!isOwnProfile && isFollowing ? (
-                        <Button onClick={handleFollowingButton}>
-                            {' '}
-                            <UserMinus /> Unfollow
-                        </Button>
-                    ) : (
-                        <Button onClick={handleFollowingButton}>
-                            {' '}
-                            <UserPlus /> Follow
+                    {!isOwnProfile && (
+                        <Button
+                            onClick={handleFollow}
+                            variant={isFollowing ? 'secondary' : 'default'}
+                            className={`${isFollowing ? 'text-primary dark:text-foreground' : ''} `}
+                        >
+                            {isFollowing ? (
+                                <>
+                                    <UserMinus /> Unfollow
+                                </>
+                            ) : (
+                                <>
+                                    <UserPlus /> Follow
+                                </>
+                            )}
                         </Button>
                     )}
                 </div>
@@ -213,7 +203,7 @@ export default function Profile() {
                                 Followers
                             </dt>
                             <dd className="mt-2 sm:mt-0 text-sm/6 text-muted-foreground w-full">
-                                {followersCount} | See Followers
+                                {followersData?.totalFollowers ?? 0} | See Followers
                             </dd>
                         </div>
                         <div className="px-4 py-6 flex flex-col sm:flex-row sm:items-center items-start sm:px-0">
@@ -221,7 +211,7 @@ export default function Profile() {
                                 Following
                             </dt>
                             <dd className="mt-2 sm:mt-0 text-sm/6 text-muted-foreground w-full">
-                                {followingCount} | See Followers
+                                {followingData?.totalFollowing ?? 0} | See Followers
                             </dd>
                         </div>
                     </dl>
