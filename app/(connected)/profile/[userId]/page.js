@@ -23,13 +23,16 @@ import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { useUser } from '@/components/context/UserProfileContext';
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import {
     getUserProfileById,
     getFollowersById,
     getFollowingsById,
     putFollower,
+    getPostsById,
 } from '@/lib/actions/actions';
+import { timeAgo } from '@/lib/utils/date';
 import useSWR from 'swr';
 
 const fetchFollowers = async (userId) => {
@@ -50,6 +53,7 @@ export default function Profile() {
     const [followersCount, setFollowersCount] = useState(0);
     const [following, setFollowing] = useState([]);
     const [followingCount, setFollowingCount] = useState(0);
+    const [totalPosts, setTotalPosts] = useState();
 
     // SWR hooks for followers and following
     const {
@@ -70,6 +74,15 @@ export default function Profile() {
             setProfileInfo(result?.user || null);
         }
         fetchProfile();
+    }, [userId]);
+
+    // Get user's total posts count
+    useEffect(() => {
+        async function fetchPosts() {
+            const result = await getPostsById(userId);
+            setTotalPosts(result?.totalCount);
+        }
+        fetchPosts();
     }, [userId]);
 
     // Check if this is the user's profile or not
@@ -170,6 +183,16 @@ export default function Profile() {
                         </div>
                         <div className="px-4 py-6 flex flex-col sm:flex-row sm:items-center items-start sm:px-0">
                             <dt className="text-sm/6 font-bold text-primary dark:text-foreground min-w-[100px] sm:min-w-[150px]">
+                                Member since:
+                            </dt>
+                            <dd className="mt-2 sm:mt-0 text-sm/6 text-muted-foreground w-full">
+                                {profileInfo
+                                    ? timeAgo(profileInfo.createdAt)
+                                    : null}
+                            </dd>
+                        </div>
+                        <div className="px-4 py-6 flex flex-col sm:flex-row sm:items-center items-start sm:px-0">
+                            <dt className="text-sm/6 font-bold text-primary dark:text-foreground min-w-[100px] sm:min-w-[150px]">
                                 Connected accounts:
                             </dt>
                             <dd className="mt-2 sm:mt-0 text-sm/6 text-muted-foreground w-full">
@@ -181,7 +204,7 @@ export default function Profile() {
                                 Email address
                             </dt>
                             <dd className="mt-2 sm:mt-0 text-sm/6 text-muted-foreground break-words whitespace-normal w-full">
-                                margotfoster@example.com
+                                {profileInfo ? profileInfo.email : null}
                             </dd>
                         </div>
                         <div className="px-4 py-6 flex flex-col sm:flex-row sm:items-center items-start sm:px-0">
@@ -189,7 +212,7 @@ export default function Profile() {
                                 Posts
                             </dt>
                             <dd className="mt-2 sm:mt-0 text-sm/6 text-muted-foreground w-full">
-                                (12) | see posts
+                                {totalPosts ? totalPosts : null} | see posts
                             </dd>
                         </div>
                         <div className="px-4 py-6 flex flex-col sm:flex-row sm:items-center items-start sm:px-0">
@@ -207,8 +230,8 @@ export default function Profile() {
                                 Followers
                             </dt>
                             <dd className="mt-2 sm:mt-0 text-sm/6 text-muted-foreground w-full">
-                                {followersData?.totalFollowers ?? 0} | See
-                                Followers
+                                {followersData?.totalFollowers ?? 0} |{' '}
+                                <Link href="">see followers</Link>
                             </dd>
                         </div>
                         <div className="px-4 py-6 flex flex-col sm:flex-row sm:items-center items-start sm:px-0">
@@ -217,7 +240,7 @@ export default function Profile() {
                             </dt>
                             <dd className="mt-2 sm:mt-0 text-sm/6 text-muted-foreground w-full">
                                 {followingData?.totalFollowings ?? 0} | See
-                                Followers
+                                Followings
                             </dd>
                         </div>
                     </dl>
