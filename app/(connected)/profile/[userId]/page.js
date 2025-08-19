@@ -39,7 +39,7 @@ const fetchFollowers = async (userId) => {
 
 const fetchFollowings = async (userId) => {
     const result = await getFollowingsById(userId);
-    return result || { following: [], totalFollowing: 0 };
+    return result || { following: [], totalFollowings: 0 };
 };
 
 export default function Profile() {
@@ -111,7 +111,10 @@ export default function Profile() {
                     <p className="mt-1 max-w-2xl text-sm/6 text-muted-foreground">
                         Personal details.
                     </p>
-                    <CardAction className="flex justify-end mt-0 mb-0 sm:mt-[-50px]">
+                    <h3 className="text-2xl pt-4">
+                        {profileInfo ? profileInfo.username : 'Margot Foster'}
+                    </h3>
+                    <CardAction className="flex justify-end mt-0 mb-0 sm:mt-[-70px]">
                         <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 w-full sm:w-auto mt-8 md:my-0">
                             <div className="mb-2 sm:mb-0">
                                 <Badge
@@ -134,6 +137,7 @@ export default function Profile() {
                             </Avatar>
                         </div>
                     </CardAction>
+
                     {!isOwnProfile && (
                         <Button
                             onClick={handleFollow}
@@ -203,7 +207,8 @@ export default function Profile() {
                                 Followers
                             </dt>
                             <dd className="mt-2 sm:mt-0 text-sm/6 text-muted-foreground w-full">
-                                {followersData?.totalFollowers ?? 0} | See Followers
+                                {followersData?.totalFollowers ?? 0} | See
+                                Followers
                             </dd>
                         </div>
                         <div className="px-4 py-6 flex flex-col sm:flex-row sm:items-center items-start sm:px-0">
@@ -211,7 +216,8 @@ export default function Profile() {
                                 Following
                             </dt>
                             <dd className="mt-2 sm:mt-0 text-sm/6 text-muted-foreground w-full">
-                                {followingData?.totalFollowing ?? 0} | See Followers
+                                {followingData?.totalFollowings ?? 0} | See
+                                Followers
                             </dd>
                         </div>
                     </dl>
