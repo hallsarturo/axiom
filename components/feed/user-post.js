@@ -6,6 +6,7 @@ export function UserPost({ mutateFeed, refreshFeed, ...props }) {
         <PostCard
             key={props.id}
             className="min-h-[380px]"
+            userId={props.userId}
             postId={props.id}
             avatarPic={normalizeImageUrl(props.authorProfilePic)}
             type="user"

@@ -389,7 +389,12 @@ export function PostCard(props) {
                                 <AvatarFallback>CN</AvatarFallback>
                             </Avatar>
                             <div>
-                                <p className="font-medium text-primary dark:text-foreground">{props.author}</p>
+                                <p className="font-medium text-primary dark:text-foreground">
+                                    {' '}
+                                    <Link href={`/profile/${props.userId}`}>
+                                        {props.author}
+                                    </Link>{' '}
+                                </p>
                                 <p>{formatDate(props.createdAt)}</p>
                             </div>
                         </CardDescription>
