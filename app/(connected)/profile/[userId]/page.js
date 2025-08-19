@@ -117,7 +117,7 @@ export default function Profile() {
     return (
         <div className="mx-auto my-12 max-w-4xl bg-muted">
             <Card className="m-4 p-8">
-                <div className="px-4 sm:px-0">
+                <div className="px-4 sm:px-0 ">
                     <h3 className="text-base/7 font-semibold text-primary">
                         Profile information
                     </h3>
@@ -141,9 +141,9 @@ export default function Profile() {
                             <Avatar className="w-20 h-20 sm:w-24 sm:h-24">
                                 <AvatarImage
                                     src={
-                                        profileInfo
-                                            ? profileInfo.photoUrl
-                                            : 'https://github.com/shadcn.png'
+                                        profileInfo?.photoUrl ||
+                                        profileInfo?.userProfilePic ||
+                                        'https://github.com/shadcn.png'
                                     }
                                 />
                                 <AvatarFallback>CN</AvatarFallback>
