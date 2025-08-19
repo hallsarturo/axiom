@@ -213,7 +213,9 @@ export default function Profile() {
                             </dt>
                             <dd className="mt-2 sm:mt-0 text-sm/6 text-muted-foreground w-full">
                                 {totalPosts ? totalPosts : null} |{' '}
-                                <Link href={`/my-posts/${userId}`}>see posts</Link>
+                                <Link href={`/my-posts/${userId}`}>
+                                    see posts
+                                </Link>
                             </dd>
                         </div>
                         <div className="px-4 py-6 flex flex-col sm:flex-row sm:items-center items-start sm:px-0">
@@ -232,7 +234,9 @@ export default function Profile() {
                             </dt>
                             <dd className="mt-2 sm:mt-0 text-sm/6 text-muted-foreground w-full">
                                 {followersData?.totalFollowers ?? 0} |{' '}
-                                <Link href="">see followers</Link>
+                                <Link href={`/followers/${userId}`}>
+                                    see followers
+                                </Link>
                             </dd>
                         </div>
                         <div className="px-4 py-6 flex flex-col sm:flex-row sm:items-center items-start sm:px-0">
@@ -240,8 +244,10 @@ export default function Profile() {
                                 Following
                             </dt>
                             <dd className="mt-2 sm:mt-0 text-sm/6 text-muted-foreground w-full">
-                                {followingData?.totalFollowings ?? 0} | See
-                                Followings
+                                {followingData?.totalFollowings ?? 0} |{' '}
+                                <Link href={`/following/${userId}`}>
+                                    see followings
+                                </Link>
                             </dd>
                         </div>
                     </dl>
