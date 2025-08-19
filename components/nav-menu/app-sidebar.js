@@ -45,17 +45,17 @@ export function AppSidebar() {
         },
         {
             title: 'My Posts',
-            url: user ? `/my-posts/${user.id}` : '/my-posts',
+            url: user ? `/my-posts/${user.id}` : '/#',
             icon: Library,
         },
         {
             title: 'Followers',
-            url: '#',
+            url: user ? `/followers/${user.id}` : '#',
             icon: UserRoundCheck,
         },
         {
             title: 'Following',
-            url: '#',
+            url: user ? `/following/${user.id}` : '#',
             icon: Users,
         },
         {

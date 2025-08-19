@@ -212,7 +212,8 @@ export default function Profile() {
                                 Posts
                             </dt>
                             <dd className="mt-2 sm:mt-0 text-sm/6 text-muted-foreground w-full">
-                                {totalPosts ? totalPosts : null} | see posts
+                                {totalPosts ? totalPosts : null} |{' '}
+                                <Link href={`/my-posts/${userId}`}>see posts</Link>
                             </dd>
                         </div>
                         <div className="px-4 py-6 flex flex-col sm:flex-row sm:items-center items-start sm:px-0">
