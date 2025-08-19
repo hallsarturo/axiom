@@ -52,6 +52,7 @@ import useSWR from 'swr';
 import Link from 'next/link';
 import { putReaction, deleteUserPost } from '@/lib/actions/actions';
 import { normalizeImageUrl } from '@/lib/utils/image';
+import { formatDate } from '@/lib/utils/date';
 
 const fetchPost = async (postId, token, userId) => {
     if (!postId) throw new Error('No postId provided');
@@ -388,8 +389,8 @@ export function PostCard(props) {
                                 <AvatarFallback>CN</AvatarFallback>
                             </Avatar>
                             <div>
-                                <p>{props.author}</p>
-                                <p>{props.createdAt}</p>
+                                <p className="font-medium text-primary dark:text-foreground">{props.author}</p>
+                                <p>{formatDate(props.createdAt)}</p>
                             </div>
                         </CardDescription>
                     </div>
