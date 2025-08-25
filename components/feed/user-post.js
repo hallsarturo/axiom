@@ -1,4 +1,4 @@
-import { PostCard } from '@/components/feed/post-card';
+import { PostCard } from '@/components/feed/post-card/post-card';
 import { normalizeImageUrl } from '@/lib/utils/image';
 
 export function UserPost({ mutateFeed, refreshFeed, ...props }) {
