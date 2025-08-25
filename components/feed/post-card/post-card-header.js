@@ -49,10 +49,53 @@ export function PostCardHeader({
                                 {type}
                             </Badge>
                         </div>
-                        {/* ...other icons/buttons... */}
+                        {/* Example: More Options Icon */}
+                        <button
+                            className="cursor-pointer mx-2"
+                            title="More options"
+                        >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                strokeWidth={1.5}
+                                stroke="currentColor"
+                                className="size-5 text-primary dark:text-foreground"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
+                                />
+                            </svg>
+                        </button>
+                        {/* Example: Edit Icon */}
+                        <button
+                            className="cursor-pointer mx-2"
+                            title="Edit post"
+                        >
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                strokeWidth={1.5}
+                                stroke="currentColor"
+                                className="size-5 text-primary dark:text-foreground"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M16.862 3.487a2.25 2.25 0 0 1 3.182 3.182l-9.197 9.197a4.5 4.5 0 0 1-1.591 1.02l-3.01 1.003 1.003-3.01a4.5 4.5 0 0 1 1.02-1.591l9.197-9.197Z"
+                                />
+                            </svg>
+                        </button>
+                        {/* Delete Dialog */}
                         <AlertDialog>
                             <AlertDialogTrigger asChild>
-                                <button className="cursor-pointer">
+                                <button
+                                    className="cursor-pointer"
+                                    title="Delete post"
+                                >
                                     {/* ...delete icon... */}
                                 </button>
                             </AlertDialogTrigger>

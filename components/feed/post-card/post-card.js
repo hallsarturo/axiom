@@ -43,6 +43,12 @@ import Link from 'next/link';
 import { putReaction, deleteUserPost } from '@/lib/actions/actions';
 import { normalizeImageUrl } from '@/lib/utils/image';
 import { formatDate } from '@/lib/utils/date';
+import {
+    getAvatarSrc,
+    getBadgeColor,
+    splitDescription,
+    getCurrentReactionIcon,
+} from '@/lib/utils/post-card';
 
 const fetchPost = async (postId, token, userId) => {
     if (!postId) throw new Error('No postId provided');
@@ -112,41 +118,22 @@ export function PostCard(props) {
               totalReactions: props.totalReactions,
           };
 
-    // Conditionally render avatar according to Post Type
-    let avatarSrc = null;
-    if (props.type === 'user') {
-        avatarSrc = normalizeImageUrl(props.avatarPic);
-    } else if (props.type === 'paper') {
-        avatarSrc = normalizeImageUrl(props.magazineImg);
-    } else if (props.type === 'news') {
-        avatarSrc = normalizeImageUrl(props.agencyImg);
-    }
-
-    // Conditionally rendering Post Type Badge
-    let badge;
-    if (props.type === 'paper') {
-        badge = 'bg-green-500';
-    } else if (props.type === 'news') {
-        badge = 'bg-red-400';
-    } else {
-        badge = 'bg-blue-500';
-    }
-
-    // Break/Hide description if longer than 250 chars
+    const avatarSrc = getAvatarSrc(
+        props.type,
+        props.avatarPic,
+        props.magazineImg,
+        props.agencyImg,
+        normalizeImageUrl
+    );
+    const badge = getBadgeColor(props.type);
     const description = props.description;
-    let part1 = description;
-    let part2 = '';
-
-    if (description && description.length > 250) {
-        const splitIndex = description.lastIndexOf(' ', 250);
-        if (splitIndex !== -1) {
-            part1 = description.slice(0, splitIndex);
-            part2 = description.slice(splitIndex + 1);
-        } else {
-            part1 = description.slice(0, 250);
-            part2 = description.slice(250);
-        }
-    }
+    const [part1, part2] = splitDescription(description);
+    // Use SWR data for user's reaction
+    const userReaction = data?.currentUserReaction;
+    const currentReactionIcon = getCurrentReactionIcon(
+        userReaction,
+        reactionCounts
+    );
 
     // Reaction States
     const handleReaction = async (type) => {
@@ -163,53 +150,6 @@ export function PostCard(props) {
             console.error('Reaction error:', err);
         }
     };
-
-    // Use SWR data for user's reaction
-    const userReaction = data?.currentUserReaction;
-
-    // Modify Trigger Reaction icon
-    let currentReactionIcon;
-    switch (userReaction) {
-        case 'like':
-            currentReactionIcon = (
-                <div className="flex flex-row gap-2 align-middle">
-                    <BiSolidLike className="size-5.5 text-primary dark:text-foreground" />
-                    <span>{reactionCounts.likes} Likes</span>
-                </div>
-            );
-            break;
-        case 'dislike':
-            currentReactionIcon = (
-                <div className="flex flex-row gap-2 align-middle text-primary dark:text-foreground">
-                    <BiSolidDislike className="size-5.5" />
-                    <span>{reactionCounts.dislikes} Dislikes</span>
-                </div>
-            );
-            break;
-        case 'laugh':
-            currentReactionIcon = (
-                <div className="flex flex-row gap-2 align-middle text-primary dark:text-foreground">
-                    <FaLaughBeam className="size-5.5" />
-                    <span>{reactionCounts.laughs} Laughs</span>
-                </div>
-            );
-            break;
-        case 'anger':
-            currentReactionIcon = (
-                <div className="flex flex-row gap-2 align-middle text-primary dark:text-foreground">
-                    <FaFaceAngry className="size-5.5" />
-                    <span>{reactionCounts.angers} Anger</span>
-                </div>
-            );
-            break;
-        default:
-            currentReactionIcon = (
-                <div className="flex flex-row gap-2 align-middle">
-                    <BiLike className="size-5.5" />
-                    <span>{reactionCounts.likes} Likes</span>
-                </div>
-            );
-    }
 
     // Delete user post
     async function deletePost() {
