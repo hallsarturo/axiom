@@ -4,6 +4,8 @@ import { Button } from '@/components/ui/button';
 import { PostCardReactions } from './post-card-reactions';
 import { FaRegComment, FaRegBookmark } from 'react-icons/fa';
 import { IoShareSocialOutline } from 'react-icons/io5';
+import { toast } from 'sonner';
+import { putBookmarkByPostId } from '@/lib/actions/actions';
 
 export function PostCardFooter({
     totalReactions,
@@ -13,7 +15,24 @@ export function PostCardFooter({
     reactionCounts,
     currentReactionIcon,
     handleReaction,
+    postId,
+    userId,
 }) {
+    const handleBookmark = async (userId, postId) => {
+        let token = null;
+        if (
+            process.env.NODE_ENV === 'development' &&
+            typeof window !== 'undefined'
+        ) {
+            token = localStorage.getItem('token');
+        }
+        const res = await putBookmarkByPostId(token, userId, postId);
+        if (!res.ok) {
+            toast.error('Could not bookmark post');
+        }
+        toast.success('Post bookmarked');
+    };
+
     return (
         <CardFooter className="justify-center">
             <div className="flex flex-col w-full gap-1.5">
@@ -40,6 +59,9 @@ export function PostCardFooter({
                     <Button
                         variant="ghost"
                         className="text-primary dark:text-foreground"
+                        onClick={() => {
+                            handleBookmark(userId, postId);
+                        }}
                     >
                         <FaRegBookmark className="size-5.5" />
                     </Button>

@@ -213,6 +213,8 @@ export function PostCard(props) {
                     reactionCounts={reactionCounts}
                     currentReactionIcon={currentReactionIcon}
                     handleReaction={handleReaction}
+                    postId={props.postId}
+                    userId={user?.id}
                 />
             </Card>
         </div>
