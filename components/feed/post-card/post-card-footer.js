@@ -27,10 +27,13 @@ export function PostCardFooter({
             token = localStorage.getItem('token');
         }
         const res = await putBookmarkByPostId(token, userId, postId);
-        if (!res.ok) {
+        if (res.status === 200) {
+            toast.success('bookmark removed');
+        } else if (res.status === 201) {
+            toast.success('Post bookmarked');
+        } else if (res.status === 500) {
             toast.error('Could not bookmark post');
         }
-        toast.success('Post bookmarked');
     };
 
     return (
