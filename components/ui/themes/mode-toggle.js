@@ -3,47 +3,25 @@
 import * as React from 'react';
 import { Moon, Sun } from 'lucide-react';
 import { useTheme } from 'next-themes';
-
-import { Button } from '@/components/ui/button';
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+import { Switch } from '@/components/ui/switch';
 
 export function ModeToggle() {
-    const { setTheme } = useTheme();
+    const { theme, setTheme } = useTheme();
+
+    // Determine checked state: true for dark, false for light
+    const checked = theme === 'dark';
 
     return (
-        <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="icon">
-                    <Sun className="h-[1.2rem] w-[1.2rem] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90 text-primary dark:text-foreground" />
-                    <Moon className="absolute h-[1.2rem] w-[1.2rem] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0 text-primary dark:text-foreground" />
-                    <span className="sr-only">Toggle theme</span>
-                </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-                <DropdownMenuItem
-                    onClick={() => setTheme('light')}
-                    className="text-primary dark:text-foreground cursor-pointer"
-                >
-                    Light
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                    onClick={() => setTheme('dark')}
-                    className="text-primary dark:text-foreground cursor-pointer"
-                >
-                    Dark
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                    onClick={() => setTheme('system')}
-                    className="text-primary dark:text-foreground cursor-pointer"
-                >
-                    System
-                </DropdownMenuItem>
-            </DropdownMenuContent>
-        </DropdownMenu>
+        <div className="flex items-center sm:ml-7 gap-2">
+            <Sun className="h-3.5 w-3.5 text-primary dark:text-foreground" />
+            <Switch
+                checked={checked}
+                onCheckedChange={(isChecked) =>
+                    setTheme(isChecked ? 'dark' : 'light')
+                }
+                aria-label="Toggle theme"
+            />
+            <Moon className="h-3.5 w-3.5 text-primary dark:text-foreground" />
+        </div>
     );
 }

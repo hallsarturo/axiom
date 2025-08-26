@@ -130,7 +130,13 @@ export function PostCardHeader({
                     </Avatar>
                     <div>
                         <p className="font-medium text-primary dark:text-foreground">
-                            <Link href={`/profile/${userId}`}>{author}</Link>
+                            {type === 'user' ? (
+                                <Link href={`/profile/${userId}`}>
+                                    {author}
+                                </Link>
+                            ) : (
+                                author
+                            )}
                         </p>
                         <p>{formatDate(createdAt)}</p>
                     </div>

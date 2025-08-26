@@ -173,7 +173,7 @@ export function NavigationConnected() {
                                     </NavigationMenuItem>
                                 );
                             })}
-                            <div className="flex justify-end">
+                            <div className="flex justify-end ml-7">
                                 <NavigationMenuItem>
                                     <NavigationMenuTrigger className="text-primary dark:text-foreground">
                                         <Badge className="h-5 min-w-5 rounded-full px-1 font-mono tabular-nums cursor-pointer">
