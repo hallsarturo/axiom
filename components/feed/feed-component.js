@@ -225,12 +225,10 @@ export function FeedComponent() {
             <div
                 id="scrollableDiv"
                 style={{
-                    height: 700,
+                    height: '80vh', // More responsive than fixed px
                     overflow: 'auto',
-                    display: 'flex',
-                    flexDirection: 'column-reverse',
                 }}
-                className="flex justify-center items-center pt-0 w-full"
+                className="flex justify-center items-start pt-0 w-full"
             >
                 {/* Error handling UI */}
                 {error && posts.length === 0 && (
@@ -291,7 +289,7 @@ export function FeedComponent() {
                                 <b>No more posts</b>
                             </p>
                         }
-                   
+                        scrollableTarget="scrollableDiv"
                         className="w-full flex flex-col gap-2"
                     >
                         {posts.map((post, index) => (
