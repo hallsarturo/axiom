@@ -1,48 +1,22 @@
 'use client';
 
-import { Card, CardContent, CardFooter } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import Image from 'next/image';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Separator } from '@/components/ui/separator';
-import { Button } from '@/components/ui/button';
 import {
     Collapsible,
     CollapsibleContent,
     CollapsibleTrigger,
 } from '@/components/ui/collapsible';
-import { Badge } from '@/components/ui/badge';
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from '@/components/ui/popover';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
 import { toast } from 'sonner';
-import { FaLaughBeam } from 'react-icons/fa';
-import { FaFaceAngry } from 'react-icons/fa6';
-import { BiLike, BiSolidLike, BiSolidDislike } from 'react-icons/bi';
-import { PostCardReactions } from '@/components/feed/post-card/post-card-reactions';
 import { PostCardHeader } from '@/components/feed/post-card/post-card-header';
 import { PostCardFooter } from '@/components/feed/post-card/post-card-footer';
 import { Comments } from '@/components/feed/post-card/post-card-comments';
 import { useUser } from '@/components/context/UserProfileContext';
 import { useEffect, useState } from 'react';
 import useSWR from 'swr';
-import Link from 'next/link';
 import { putReaction, deleteUserPost } from '@/lib/actions/actions';
 import { normalizeImageUrl } from '@/lib/utils/image';
-import { formatDate } from '@/lib/utils/date';
 import {
     getAvatarSrc,
     getBadgeColor,

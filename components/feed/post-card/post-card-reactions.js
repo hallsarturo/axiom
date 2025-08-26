@@ -9,6 +9,7 @@ import { BiLike, BiSolidLike, BiDislike, BiSolidDislike } from 'react-icons/bi';
 import { FaRegLaughBeam, FaLaughBeam } from 'react-icons/fa';
 import { FaRegAngry } from 'react-icons/fa';
 import { FaFaceAngry } from 'react-icons/fa6';
+import { requireAuth } from '@/hooks/useRequireAuth';
 
 export function PostCardReactions({
     userReaction,
@@ -23,6 +24,14 @@ export function PostCardReactions({
                     <Button
                         variant="ghost"
                         className="text-primary dark:text-foreground"
+                        onClick={(e) => {
+                            if (!requireAuth()) {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                return;
+                            }
+                           
+                        }}
                     >
                         <AnimatePresence mode="wait">
                             <motion.div
