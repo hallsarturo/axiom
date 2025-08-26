@@ -33,11 +33,11 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { ModeToggle } from '@/components/ui/themes/mode-toggle';
 import { SearchBar } from '@/components/nav-menu/search-bar';
-import { usePathname } from 'next/navigation';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { logoutUser } from '@/lib/actions/actions';
 import { useUser } from '@/components/context/UserProfileContext';
 import { useState } from 'react';
+import { useParams } from 'next/navigation';
 
 const menuItems = [
     {
@@ -114,6 +114,7 @@ export function NavigationConnected() {
     const router = useRouter();
     const { user } = useUser();
     const [open, setOpen] = useState(false);
+    const pathname = usePathname();
 
     const handleLogout = async () => {
         const result = await logoutUser();
@@ -137,26 +138,41 @@ export function NavigationConnected() {
                             <NavigationMenuItem>
                                 <SearchBar />
                             </NavigationMenuItem>
-                            {menuItems.map((item, idx) => (
-                                <NavigationMenuItem key={idx}>
-                                    <NavigationMenuLink
-                                        asChild
-                                        className={`${navigationMenuTriggerStyle()} text-primary dark:text-foreground font-medium`}
-                                    >
-                                        {item.button ? (
-                                            <Button variant="primary" asChild>
+                            {menuItems.map((item, idx) => {
+                                const isActive = pathname === item.href;
+                                return (
+                                    <NavigationMenuItem key={idx}>
+                                        <NavigationMenuLink
+                                            asChild
+                                            className={
+                                                `${navigationMenuTriggerStyle()} font-medium ` +
+                                                (isActive
+                                                    ? 'bg-accent text-accent-foreground dark:bg-accent dark:text-accent-foreground'
+                                                    : 'text-primary dark:text-foreground')
+                                            }
+                                        >
+                                            {item.button ? (
+                                                <Button
+                                                    variant={
+                                                        isActive
+                                                            ? 'accent'
+                                                            : 'primary'
+                                                    }
+                                                    asChild
+                                                >
+                                                    <Link href={item.href}>
+                                                        {item.label}
+                                                    </Link>
+                                                </Button>
+                                            ) : (
                                                 <Link href={item.href}>
-                                                    {item.label}
+                                                    {item.icon}
                                                 </Link>
-                                            </Button>
-                                        ) : (
-                                            <Link href={item.href}>
-                                                {item.icon}
-                                            </Link>
-                                        )}
-                                    </NavigationMenuLink>
-                                </NavigationMenuItem>
-                            ))}
+                                            )}
+                                        </NavigationMenuLink>
+                                    </NavigationMenuItem>
+                                );
+                            })}
                             <div className="flex justify-end">
                                 <NavigationMenuItem>
                                     <NavigationMenuTrigger className="text-primary dark:text-foreground">

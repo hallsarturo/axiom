@@ -74,7 +74,7 @@ export default function Home() {
                             className="text-8xl sm:text-9xl md:text-[11rem] font-semibold tracking-tight text-balance text-foreground"
                         >
                             <Image
-                                src="/axiom-logo-black-re.png"
+                                src="/axiom_purple.png"
                                 width={600}
                                 height={400}
                                 alt="AXIOM logo"

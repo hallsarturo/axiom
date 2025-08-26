@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { CircleCheckIcon, CircleHelpIcon, CircleIcon } from 'lucide-react';
 import {
     NavigationMenu,
@@ -32,6 +33,13 @@ import { ModeToggle } from '@/components/ui/themes/mode-toggle';
 
 export function NavigationMenuHome() {
     const [open, setOpen] = React.useState(false);
+    const pathname = usePathname();
+
+    const menuItems = [
+        { href: '/', label: 'Home' },
+        { href: '/sign-up', label: 'Sign Up' },
+        { href: '/sign-in', label: 'Sign In' },
+    ];
 
     return (
         <>
@@ -43,14 +51,29 @@ export function NavigationMenuHome() {
                     className="min-w-0 bg-transparent"
                 >
                     <NavigationMenuList className="gap-4 bg-transparent">
-                        <NavigationMenuItem className="bg-transparent">
-                            <NavigationMenuLink
-                                asChild
-                                className="bg-transparent"
-                            >
-                                <Link href="/">Home</Link>
-                            </NavigationMenuLink>
-                        </NavigationMenuItem>
+                        {menuItems.map((item, idx) => {
+                            const isActive = pathname === item.href;
+                            return (
+                                <NavigationMenuItem
+                                    key={idx}
+                                    className="bg-transparent"
+                                >
+                                    <NavigationMenuLink
+                                        asChild
+                                        className={
+                                            `bg-transparent font-medium ` +
+                                            (isActive
+                                                ? 'text-primary dark:text-accent-foreground'
+                                                : '')
+                                        }
+                                    >
+                                        <Link href={item.href}>
+                                            {item.label}
+                                        </Link>
+                                    </NavigationMenuLink>
+                                </NavigationMenuItem>
+                            );
+                        })}
                         <NavigationMenuItem>
                             <NavigationMenuTrigger className="bg-transparent">
                                 About
@@ -88,22 +111,6 @@ export function NavigationMenuHome() {
                                     </li>
                                 </ul>
                             </NavigationMenuContent>
-                        </NavigationMenuItem>
-                        <NavigationMenuItem>
-                            <NavigationMenuLink
-                                asChild
-                                className="bg-transparent"
-                            >
-                                <Link href="/sign-up">Sign Up</Link>
-                            </NavigationMenuLink>
-                        </NavigationMenuItem>
-                        <NavigationMenuItem>
-                            <NavigationMenuLink
-                                asChild
-                                className="bg-transparent"
-                            >
-                                <Link href="/sign-in">Sign In</Link>
-                            </NavigationMenuLink>
                         </NavigationMenuItem>
                         <NavigationMenuItem className="ml-4">
                             <ModeToggle />
@@ -158,20 +165,29 @@ export function NavigationMenuHome() {
                                 AXIOM
                             </SheetTitle>
                             <nav className="flex flex-col gap-8 mt-4 items-center justify-center w-full">
-                                <Button
-                                    variant="link"
-                                    size="lg"
-                                    className=""
-                                    onClick={() => setOpen(false)}
-                                >
-                                    <House className="mr-4 w-36 h-36 text-primary dark:text-foreground" />
-                                    <Link
-                                        href="/"
-                                        className="w-full text-center text-[1.5625rem] font-light text-primary dark:text-foreground"
-                                    >
-                                        Home
-                                    </Link>
-                                </Button>
+                                {menuItems.map((item, idx) => {
+                                    const isActive = pathname === item.href;
+                                    return (
+                                        <Button
+                                            key={idx}
+                                            variant="link"
+                                            size="lg"
+                                            className={
+                                                isActive
+                                                    ? 'bg-accent text-accent-foreground dark:bg-accent dark:text-accent-foreground'
+                                                    : 'text-primary dark:text-foreground'
+                                            }
+                                            onClick={() => setOpen(false)}
+                                        >
+                                            <Link
+                                                href={item.href}
+                                                className="w-full text-center text-[1.5625rem] font-light"
+                                            >
+                                                {item.label}
+                                            </Link>
+                                        </Button>
+                                    );
+                                })}
                                 <Button
                                     variant="link"
                                     size="lg"
@@ -212,34 +228,6 @@ export function NavigationMenuHome() {
                                         className="w-full text-center text-2xl font-light text-primary dark:text-foreground"
                                     >
                                         Terms & Conditions
-                                    </Link>
-                                </Button>
-                                <Button
-                                    variant="link"
-                                    size="lg"
-                                    className=""
-                                    onClick={() => setOpen(false)}
-                                >
-                                    <IdCard className="mr-4 w-36 h-36 text-primary dark:text-foreground" />
-                                    <Link
-                                        href="/sign-up"
-                                        className="w-full text-center text-2xl font-light text-primary dark:text-foreground"
-                                    >
-                                        Sign Up
-                                    </Link>
-                                </Button>
-                                <Button
-                                    variant="link"
-                                    size="lg"
-                                    className=""
-                                    onClick={() => setOpen(false)}
-                                >
-                                    <LogIn className="mr-4 w-36 h-36 text-primary dark:text-foreground" />
-                                    <Link
-                                        href="/sign-in"
-                                        className="w-full text-center text-2xl font-light text-primary dark:text-foreground"
-                                    >
-                                        Sign In
                                     </Link>
                                 </Button>
                                 <ModeToggle />
