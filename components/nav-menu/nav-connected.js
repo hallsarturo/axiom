@@ -73,7 +73,7 @@ const menuItems = [
     },
     {
         label: 'Contrast',
-        href: '/profile',
+        href: '#',
         icon: null,
         button: true,
     },
