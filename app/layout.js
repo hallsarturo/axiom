@@ -30,8 +30,8 @@ export default function RootLayout({ children }) {
                 <UserProvider>
                     <ThemeProvider
                         attribute="class"
-                        defaultTheme="system"
-                        enableSystem
+                        defaultTheme="light"
+                        enableSystem={false}
                         disableTransitionOnChange
                     >
                         <Toaster richColors />

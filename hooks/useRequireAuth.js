@@ -1,8 +1,14 @@
 import { toast } from 'sonner';
 
 export function requireAuth() {
-    const token =
-        typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+    let token = null;
+    if (
+        process.env.NODE_ENV === 'development' &&
+        typeof window !== 'undefined'
+    ) {
+        token = localStorage.getItem('token');
+    }
+
     if (!token) {
         toast.error('You need to be logged in to use this feature');
         return false;
