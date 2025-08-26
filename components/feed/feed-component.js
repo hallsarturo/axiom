@@ -11,8 +11,7 @@ import {
 } from '@/lib/actions/actions';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import useSWR from 'swr';
-import InfiniteLoader from 'react-window-infinite-loader';
-import { FixedSizeList as List } from 'react-window';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import { SkeletonCard } from '@/components/skeletons/skeletonCard';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
@@ -151,9 +150,6 @@ export function FeedComponent() {
         [loading, hasMore, postType, token, pagination]
     );
 
-    // InfiniteLoader config
-    const isItemLoaded = (index) => index < posts.length;
-
     // Reset feed on postType change (do NOT call loadMoreItems here)
     useEffect(() => {
         setPosts([]);
@@ -218,53 +214,24 @@ export function FeedComponent() {
         loadMoreItems(0, PAGE_SIZE - 1);
     }
 
-    // Render each row
-    const Row = ({ index, style }) => {
-        if (!isItemLoaded(index)) {
-            return (
-                <div style={style} className="flex justify-center items-center">
-                    <SkeletonCard className="max-w-[700px] w-full" />
-                </div>
-            );
-        }
-        const post = posts[index];
-        return (
-            <div style={style} className="flex flex-col gap-2">
-                {post.type === 'paper' && (
-                    <PaperPost
-                        {...post}
-                        mutateFeed={handleFeedRefresh}
-                        refreshFeed={loadMoreItems}
-                    />
-                )}
-                {post.type === 'user' && (
-                    <UserPost
-                        {...post}
-                        mutateFeed={handleFeedRefresh}
-                        refreshFeed={loadMoreItems}
-                    />
-                )}
-            </div>
-        );
-    };
-
     return (
-        <div className="flex flex-col items-start justify-center">
+        <div className="flex flex-col items-center justify-center">
             <div className="flex w-full justify-center">
                 <PublishPost
                     mutateFeed={handlePostPublished}
                     onDialogOpenChange={handleDialogOpen}
                 />
             </div>
-            <div className="flex justify-center items-center mt-0 w-full">
-                {/* <div className="fixed top-1/3 left-20">
-                    <div className="flex flex-col justify-center">
-                        <SelectPostType
-                            defaultValue={undefined}
-                            className="flex justify-center"
-                        />
-                    </div>
-                </div> */}
+            <div
+                id="scrollableDiv"
+                style={{
+                    height: 700,
+                    overflow: 'auto',
+                    display: 'flex',
+                    flexDirection: 'column-reverse',
+                }}
+                className="flex justify-center items-center pt-0 w-full"
+            >
                 {/* Error handling UI */}
                 {error && posts.length === 0 && (
                     <div className="w-full flex flex-col justify-start items-center">
@@ -298,32 +265,57 @@ export function FeedComponent() {
                         No posts found
                     </div>
                 )}
-                {/* Virtualized posts container - FIXED STYLING */}
+                {/* Infinite scroll container */}
                 {posts.length > 0 && (
-                    <InfiniteLoader
-                        isItemLoaded={isItemLoaded}
-                        itemCount={
-                            hasMore ? posts.length + PAGE_SIZE : posts.length
+                    <InfiniteScroll
+                        dataLength={posts.length}
+                        next={() =>
+                            loadMoreItems(
+                                posts.length,
+                                posts.length + PAGE_SIZE - 1
+                            )
                         }
-                        loadMoreItems={loadMoreItems}
-                    >
-                        {({ onItemsRendered, ref }) => (
-                            <List
-                                height={window.innerHeight - 150}
-                                itemCount={
-                                    hasMore
-                                        ? posts.length + PAGE_SIZE
-                                        : posts.length
-                                }
-                                itemSize={425}
-                                width={'100%'}
-                                onItemsRendered={onItemsRendered}
-                                ref={ref}
+                        hasMore={hasMore}
+                        loader={
+                            <div className="w-full flex justify-center">
+                                <SkeletonCard />
+                            </div>
+                        }
+                        endMessage={
+                            <p
+                                style={{
+                                    textAlign: 'center',
+                                    margin: '2rem 0',
+                                }}
                             >
-                                {Row}
-                            </List>
-                        )}
-                    </InfiniteLoader>
+                                <b>No more posts</b>
+                            </p>
+                        }
+                   
+                        className="w-full flex flex-col gap-2"
+                    >
+                        {posts.map((post, index) => (
+                            <div
+                                key={post.id ? `${post.id}-${index}` : index}
+                                className="w-full flex justify-center"
+                            >
+                                {post.type === 'paper' && (
+                                    <PaperPost
+                                        {...post}
+                                        mutateFeed={handleFeedRefresh}
+                                        refreshFeed={loadMoreItems}
+                                    />
+                                )}
+                                {post.type === 'user' && (
+                                    <UserPost
+                                        {...post}
+                                        mutateFeed={handleFeedRefresh}
+                                        refreshFeed={loadMoreItems}
+                                    />
+                                )}
+                            </div>
+                        ))}
+                    </InfiniteScroll>
                 )}
             </div>
         </div>
