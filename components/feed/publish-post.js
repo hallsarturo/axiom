@@ -36,6 +36,7 @@ import { userPostSchema } from '@/lib/schemas/posts';
 import { publishPost } from '@/lib/actions/actions';
 import { useUser } from '@/components/context/UserProfileContext';
 import { useState } from 'react';
+import { requireAuth } from '@/hooks/useRequireAuth';
 
 const ACCEPTED_FORMATS = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif'];
 const MAX_IMAGE_SIZE_MB = 1;
@@ -154,10 +155,16 @@ export function PublishPost({ mutateFeed, onDialogOpenChange, ...props }) {
                                 <Input
                                     placeholder="Share something thoughtful"
                                     className="w-full text-sm sm:text-base cursor-pointer"
-                                    onClick={() => {
-                                        setOpen(true);
-                                        if (onDialogOpenChange)
-                                            onDialogOpenChange(true);
+                                    onClick={(e) => {
+                                        if (!requireAuth()) {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            return;
+                                        } else {
+                                            setOpen(true);
+                                            if (onDialogOpenChange)
+                                                onDialogOpenChange(true);
+                                        }
                                     }}
                                 />
                             </div>

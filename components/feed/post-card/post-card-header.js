@@ -65,7 +65,7 @@ export function PostCardHeader({
                     {/* Custom CardAction for screens >= 455px */}
                     <div className="flex flex-col sm:flex-row justify-end mt-[-6px] mb-2">
                         <div className="flex flex-col sm:flex-row gap-0 sm:items-start items-center sm:justify-end justify-center w-full">
-                            <div className="mr-1 sm:mr-1 mr-0">
+                            <div className="sm:mr-1 mr-0">
                                 <Badge className={badge} variant="">
                                     {type}
                                 </Badge>
