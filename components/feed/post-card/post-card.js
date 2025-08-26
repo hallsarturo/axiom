@@ -164,7 +164,7 @@ export function PostCard(props) {
         >
             <Card className="max-w-2xl w-full md:max-h-[800px] sm:min-w-[650px] md:min-w-[680px] flex flex-col h-full">
                 <PostCardHeader
-                    className="relative"
+                    className=""
                     badge={badge}
                     type={props.type}
                     cardTitle={props.cardTitle}
