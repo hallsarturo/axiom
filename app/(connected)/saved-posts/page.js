@@ -47,58 +47,69 @@ export default function BookmarkedPosts() {
 
     return (
         <div>
-            <div className="bg-white rounded-2xl m-8">
+            <div className="h-screen bg-white rounded-2xl m-8">
                 <div className="mx-auto max-w-2xl px-4 py-6 sm:px-6 sm:py-10 lg:max-w-7xl lg:px-8">
                     <h2 className="text-2xl font-bold tracking-tight text-primary dark:text-foreground">
                         {user ? (
                             <Link href={`/profile/${user.id}`}>
                                 {user ? user.username : ''}&apos;s{' '}
-                                <span className="font-normal ml-2">Bookmarks:</span>
+                                <span className="font-normal ml-2">
+                                    Bookmarks:
+                                </span>
                             </Link>
                         ) : (
                             'null'
                         )}
                     </h2>
                     <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-                        {posts.map((post) => {
-                            const imgUrl = normalizeImageUrl(post.image);
-                            return (
-                                <div key={post.id} className="group relative">
-                                    {imgUrl ? (
-                                        <Image
-                                            alt={post.title || 'Post image'}
-                                            src={imgUrl}
-                                            width={400}
-                                            height={400}
-                                            className="aspect-square w-full rounded-md bg-gray-200 object-cover group-hover:opacity-75 lg:aspect-auto lg:h-80"
-                                        />
-                                    ) : (
-                                        <div className="aspect-square w-full rounded-md bg-gray-200 flex items-center justify-center text-gray-400 lg:aspect-auto lg:h-80">
-                                            No image
+                        {posts.length === 0 ? (
+                            <div className="w-full text-center text-gray-500 py-12">
+                                You haven&apos;t saved any posts yet.
+                            </div>
+                        ) : (
+                            posts.map((post) => {
+                                const imgUrl = normalizeImageUrl(post.image);
+                                return (
+                                    <div
+                                        key={post.id}
+                                        className="group relative"
+                                    >
+                                        {imgUrl ? (
+                                            <Image
+                                                alt={post.title || 'Post image'}
+                                                src={imgUrl}
+                                                width={400}
+                                                height={400}
+                                                className="aspect-square w-full rounded-md bg-gray-200 object-cover group-hover:opacity-75 lg:aspect-auto lg:h-80"
+                                            />
+                                        ) : (
+                                            <div className="aspect-square w-full rounded-md bg-gray-200 flex items-center justify-center text-gray-400 lg:aspect-auto lg:h-80">
+                                                No image
+                                            </div>
+                                        )}
+                                        <div className="mt-4 flex flex-col">
+                                            <div className="flex flex-col">
+                                                <h3 className="text-sm font-medium text-primary">
+                                                    <Link
+                                                        href={`/posts/${post.id}`}
+                                                    >
+                                                        <span
+                                                            aria-hidden="true"
+                                                            className="absolute inset-0"
+                                                        />
+                                                        {post.title}
+                                                    </Link>
+                                                </h3>
+                                                <p className="mt-1 text-sm text-gray-500">
+                                                    {formatDate(post.createdAt)}
+                                                </p>
+                                            </div>
+                                            <p className="text-sm font-medium text-gray-900"></p>
                                         </div>
-                                    )}
-                                    <div className="mt-4 flex flex-col">
-                                        <div className="flex flex-col">
-                                            <h3 className="text-sm font-medium text-primary">
-                                                <Link
-                                                    href={`/posts/${post.id}`}
-                                                >
-                                                    <span
-                                                        aria-hidden="true"
-                                                        className="absolute inset-0"
-                                                    />
-                                                    {post.title}
-                                                </Link>
-                                            </h3>
-                                            <p className="mt-1 text-sm text-gray-500">
-                                                {formatDate(post.createdAt)}
-                                            </p>
-                                        </div>
-                                        <p className="text-sm font-medium text-gray-900"></p>
                                     </div>
-                                </div>
-                            );
-                        })}
+                                );
+                            })
+                        )}
                     </div>
                 </div>
             </div>
