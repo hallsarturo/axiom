@@ -22,37 +22,15 @@ import {
     getBadgeColor,
     splitDescription,
     getCurrentReactionIcon,
+    fetchPost,
 } from '@/lib/utils/post-card';
-
-const fetchPost = async (postId, token, userId) => {
-    if (!postId) throw new Error('No postId provided');
-    const url = new URL(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/posts/${postId}`
-    );
-
-    // Add userId as query parameter for development
-    if (process.env.NODE_ENV === 'development' && userId) {
-        console.log('fetchPost userId: ', userId);
-        url.searchParams.append('userId', String(userId));
-    }
-
-    const res = await fetch(url, {
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
-        credentials: 'include',
-    });
-
-    if (!res.ok) {
-        const text = await res.text();
-        throw new Error(`Failed to fetch: ${res.status} ${text}`);
-    }
-    return res.json();
-};
 
 export function PostCard(props) {
     const { user } = useUser();
     const [seeMore, setSeeMore] = useState(false);
     // Only one reaction can be active at a time
     const [activeReaction, setActiveReaction] = useState(null);
+    const [isLocalBookmarked, setIsLocalBookmarked] = useState(props.isBookmarked || false)
 
     const token =
         process.env.NODE_ENV === 'development'
@@ -70,8 +48,16 @@ export function PostCard(props) {
     // Set activeReaction from backend data when data changes
     useEffect(() => {
         if (data && data.currentUserReaction !== undefined) {
-            console.log('currentUserReaction', data.currentUserReaction);
+            //console.log('currentUserReaction', data.currentUserReaction);
             setActiveReaction(data.currentUserReaction);
+        }
+    }, [data]);
+    
+    // Set activeBookmarked from backend data when data changes
+    useEffect(() => {
+        if (data && data.isBookmarked !== undefined) {
+            //console.log('currentUserReaction', data.currentUserReaction);
+            setIsLocalBookmarked(data.isBookmarked);
         }
     }, [data]);
 
@@ -92,6 +78,8 @@ export function PostCard(props) {
               angers: props.angers,
               totalReactions: props.totalReactions,
           };
+
+
 
     const avatarSrc = getAvatarSrc(
         props.type,
@@ -216,7 +204,8 @@ export function PostCard(props) {
                     handleReaction={handleReaction}
                     postId={props.postId}
                     userId={user?.id}
-                    isBookmarked={data?.isBookmarked ?? props.isBookmarked}
+                    isBookmarked={isLocalBookmarked}
+                    setIsBookmarked={setIsLocalBookmarked}
                     mutatePost={mutate}
                 />
             </Card>

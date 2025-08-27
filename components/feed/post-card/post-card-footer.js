@@ -1,3 +1,5 @@
+'use client';
+
 import { CardFooter } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
@@ -6,6 +8,7 @@ import { FaRegComment, FaRegBookmark, FaBookmark } from 'react-icons/fa';
 import { IoShareSocialOutline } from 'react-icons/io5';
 import { toast } from 'sonner';
 import { putBookmarkByPostId } from '@/lib/actions/actions';
+import { fetchPost } from '@/lib/utils/post-card';
 
 export function PostCardFooter({
     totalReactions,
@@ -18,9 +21,13 @@ export function PostCardFooter({
     postId,
     userId,
     isBookmarked,
+    setIsBookmarked,
     mutatePost,
 }) {
     const handleBookmark = async (userId, postId) => {
+        // Toggle local state immediately
+        setIsBookmarked(!isBookmarked);
+
         let token = null;
         if (
             process.env.NODE_ENV === 'development' &&
@@ -28,16 +35,55 @@ export function PostCardFooter({
         ) {
             token = localStorage.getItem('token');
         }
-        const res = await putBookmarkByPostId(token, postId, userId);
-        if (res.status === 200) {
-            toast.success('bookmark removed');
-        } else if (res.status === 201) {
-            toast.success('Post bookmarked');
-        } else if (res.status === 500) {
-            toast.error('Could not bookmark post');
-        }
-        if (mutatePost) {
-            mutatePost();
+
+        // Get current state for optimistic update
+        const currentIsBookmarked = isBookmarked;
+
+        try {
+            // Immediately update UI optimistically
+            await mutatePost(
+                async (currentData) => {
+                    // Create optimistic data with toggled bookmark state
+                    const optimisticData = {
+                        ...currentData,
+                        isBookmarked: !currentIsBookmarked,
+                    };
+
+                    // Make the actual API call
+                    const res = await putBookmarkByPostId(
+                        token,
+                        postId,
+                        userId
+                    );
+
+                    if (res.status === 200) {
+                        toast.success('Bookmark removed');
+                    } else if (res.status === 201) {
+                        toast.success('Post bookmarked');
+                    } else if (res.status === 500) {
+                        toast.error('Could not bookmark post');
+                        // If error, revert to original state
+                        return currentData;
+                    }
+
+                    // Return data from actual fetch to update cache
+                    const updatedData = await fetchPost(postId, token, userId);
+                    return updatedData;
+                },
+                {
+                    optimisticData: (data) => ({
+                        ...data,
+                        isBookmarked: !currentIsBookmarked,
+                    }),
+                    rollbackOnError: true,
+                    populateCache: true,
+                    revalidate: false, // Don't revalidate immediately as we're handling the update
+                }
+            );
+        } catch (err) {
+            setIsBookmarked(isBookmarked);
+            console.error('Bookmark error:', err);
+            toast.error('Error updating bookmark');
         }
     };
 
