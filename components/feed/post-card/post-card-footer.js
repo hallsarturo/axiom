@@ -4,11 +4,13 @@ import { CardFooter } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
 import { PostCardReactions } from './post-card-reactions';
-import { FaRegComment, FaRegBookmark, FaBookmark } from 'react-icons/fa';
+import { FaRegBookmark, FaBookmark } from 'react-icons/fa';
 import { IoShareSocialOutline } from 'react-icons/io5';
 import { toast } from 'sonner';
+
 import { putBookmarkByPostId } from '@/lib/actions/actions';
 import { fetchPost } from '@/lib/utils/post-card';
+import { Comments } from '@/components/feed/post-card/post-card-comments';
 import { requireAuth } from '@/hooks/useRequireAuth';
 
 export function PostCardFooter({
@@ -104,13 +106,7 @@ export function PostCardFooter({
                         currentReactionIcon={currentReactionIcon}
                         handleReaction={handleReaction}
                     />
-                    <Button
-                        variant="ghost"
-                        className="text-primary dark:text-foreground"
-                    >
-                        <FaRegComment className="size-5.5" />
-                        Comment
-                    </Button>
+                    <Comments />
                     <Button
                         variant="ghost"
                         className="text-primary dark:text-foreground"

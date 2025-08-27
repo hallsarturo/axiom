@@ -11,7 +11,6 @@ import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { toast } from 'sonner';
 import { PostCardHeader } from '@/components/feed/post-card/post-card-header';
 import { PostCardFooter } from '@/components/feed/post-card/post-card-footer';
-import { Comments } from '@/components/feed/post-card/post-card-comments';
 import { useUser } from '@/components/context/UserProfileContext';
 import { useEffect, useState } from 'react';
 import useSWR from 'swr';
