@@ -10,6 +10,7 @@ import {
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { toast } from 'sonner';
 import { PostCardHeader } from '@/components/feed/post-card/post-card-header';
+import { PostCardContent } from '@/components/feed/post-card/post-card-content';
 import { PostCardFooter } from '@/components/feed/post-card/post-card-footer';
 import { useUser } from '@/components/context/UserProfileContext';
 import { useEffect, useState } from 'react';
@@ -163,33 +164,14 @@ export function PostCard(props) {
                     onDelete={deletePost}
                 />
                 <ScrollArea className="flex-1 max-h-[800px] overflow-y-auto rounded-lg">
-                    <CardContent>
-                        <Collapsible
-                            open={seeMore}
-                            onOpenChange={setSeeMore}
-                            className="text-justify mb-3"
-                        >
-                            {description ? part1 : null}
-                            <CollapsibleContent>
-                                {part2 ? part2 : null}
-                            </CollapsibleContent>
-                            <CollapsibleTrigger className="text-primary dark:text-foreground font-medium cursor-pointer ml-2">
-                                {seeMore ? 'See less' : 'See more'}
-                            </CollapsibleTrigger>
-                        </Collapsible>
-                        <div className="w-full flex justify-center items-center">
-                            {/* {console.log('props.imgSrc: ', props.imgSrc)} */}
-                            {props.imgSrc ? (
-                                <Image
-                                    src={props.imgSrc}
-                                    width={500}
-                                    height={500}
-                                    alt="Picture of the author"
-                                    className="rounded-t-lg object-cover max-h-[600px] w-full"
-                                ></Image>
-                            ) : null}
-                        </div>
-                    </CardContent>
+                    <PostCardContent
+                        description={description}
+                        part1={part1}
+                        part2={part2}
+                        seeMore={seeMore}
+                        setSeeMore={setSeeMore}
+                        imgSrc={props.imgSrc}
+                    />
                 </ScrollArea>
                 <PostCardFooter
                     className="justify-center"

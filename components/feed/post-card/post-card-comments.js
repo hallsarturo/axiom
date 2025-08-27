@@ -11,12 +11,18 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { CardContent } from '@/components/ui/card';
 import { FaRegComment } from 'react-icons/fa';
+import { CardContent } from '@/components/ui/card';
 import { PostCardHeader } from '@/components/feed/post-card/post-card-header';
+import { PostCardContent } from '@/components/feed/post-card/post-card-content';
+import { splitDescription } from '@/lib/utils/post-card.js';
+import { useState } from 'react';
 
 export function Comments({ post }) {
-    console.log('Comments component received props:', post);
+    //console.log('Comments component received props:', post);
+    const [seeMore, setSeeMore] = useState(false);
+    const [part1, part2] = splitDescription(post.description);
+
     return (
         <Dialog>
             <DialogTrigger asChild>
@@ -28,12 +34,12 @@ export function Comments({ post }) {
                     Comment
                 </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-2xl w-full h-[95vh] sm:min-w-[650px] md:min-w-[680px]">
-                <ScrollArea className="flex-1 max-h-[70vh]">
+            <DialogContent className="w-full h-[95vh] sm:min-w-[650px] md:min-w-[680px]">
+                <ScrollArea className="max-h-[70vh]">
                     <DialogTitle />
                     <DialogHeader></DialogHeader>
 
-                    <div className="p-4">
+                    <div className="">
                         <PostCardHeader
                             badge={post.badge}
                             type={post.type}
@@ -44,31 +50,14 @@ export function Comments({ post }) {
                             createdAt={post.createdAt}
                             userId={post.userId}
                         />
-
-                        <div className="my-4 p-4 border border-gray-100 rounded-md">
-                            <p className="text-sm text-muted-foreground">
-                                {post.description || 'No description available'}
-                            </p>
-
-                            {post.imgSrc && (
-                                <div className="mt-4">
-                                    <Image
-                                        src={post.imgSrc}
-                                        width={500}
-                                        height={500}
-                                        alt="Post image"
-                                        className="rounded-md max-h-[400px] object-contain mx-auto"
-                                    />
-                                </div>
-                            )}
-                        </div>
-
-                        <div className="border-t pt-4 mt-4">
-                            <h3 className="font-medium mb-2">Comments</h3>
-                            <p className="text-muted-foreground text-sm">
-                                Comments feature coming soon.
-                            </p>
-                        </div>
+                        <PostCardContent
+                            description={post.description}
+                            part1={part1}
+                            part2={part2}
+                            seeMore={seeMore}
+                            setSeeMore={setSeeMore}
+                            imgSrc={post.imgSrc}
+                        />
                     </div>
                 </ScrollArea>
             </DialogContent>
