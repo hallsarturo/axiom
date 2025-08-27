@@ -83,6 +83,7 @@ export function PostCard(props) {
               laughs: data.laughs,
               angers: data.angers,
               totalReactions: data.totalReactions,
+
           }
         : {
               likes: props.likes,
@@ -215,6 +216,7 @@ export function PostCard(props) {
                     handleReaction={handleReaction}
                     postId={props.postId}
                     userId={user?.id}
+                    isBookmarked={data?.isBookmarked ?? props.isBookmarked}
                     mutatePost={mutate}
                 />
             </Card>
