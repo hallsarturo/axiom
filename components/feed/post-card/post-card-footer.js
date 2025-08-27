@@ -26,6 +26,9 @@ export function PostCardFooter({
     isBookmarked,
     setIsBookmarked,
     mutatePost,
+    avatarSrc,
+    badge,
+    ...props
 }) {
     const handleBookmark = async (userId, postId) => {
         // Toggle local state immediately
@@ -106,7 +109,20 @@ export function PostCardFooter({
                         currentReactionIcon={currentReactionIcon}
                         handleReaction={handleReaction}
                     />
-                    <Comments />
+                    <Comments
+                        post={{
+                            badge,
+                            type: props.type,
+                            cardTitle: props.cardTitle,
+                            identifier: props.identifier,
+                            avatarSrc,
+                            author: props.author,
+                            createdAt: props.createdAt,
+                            userId: props.userId,
+                            description: props.description,
+                            imgSrc: props.imgSrc,
+                        }}
+                    />
                     <Button
                         variant="ghost"
                         className="text-primary dark:text-foreground"

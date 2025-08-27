@@ -33,7 +33,7 @@ export function PostCardHeader({
     onDelete,
 }) {
     return (
-        <CardHeader className="relative">
+        <CardHeader className="">
             <div className="flex flex-col w-full">
                 <div className="flex mb-4">
                     <CardDescription className="flex flex-row items-center gap-6 w-full mt-2">

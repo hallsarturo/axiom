@@ -29,7 +29,9 @@ export function PostCard(props) {
     const [seeMore, setSeeMore] = useState(false);
     // Only one reaction can be active at a time
     const [activeReaction, setActiveReaction] = useState(null);
-    const [isLocalBookmarked, setIsLocalBookmarked] = useState(props.isBookmarked || false)
+    const [isLocalBookmarked, setIsLocalBookmarked] = useState(
+        props.isBookmarked || false
+    );
 
     const token =
         process.env.NODE_ENV === 'development'
@@ -51,7 +53,7 @@ export function PostCard(props) {
             setActiveReaction(data.currentUserReaction);
         }
     }, [data]);
-    
+
     // Set activeBookmarked from backend data when data changes
     useEffect(() => {
         if (data && data.isBookmarked !== undefined) {
@@ -68,7 +70,6 @@ export function PostCard(props) {
               laughs: data.laughs,
               angers: data.angers,
               totalReactions: data.totalReactions,
-
           }
         : {
               likes: props.likes,
@@ -77,8 +78,6 @@ export function PostCard(props) {
               angers: props.angers,
               totalReactions: props.totalReactions,
           };
-
-
 
     const avatarSrc = getAvatarSrc(
         props.type,
@@ -206,6 +205,15 @@ export function PostCard(props) {
                     isBookmarked={isLocalBookmarked}
                     setIsBookmarked={setIsLocalBookmarked}
                     mutatePost={mutate}
+                    avatarSrc={avatarSrc}
+                    badge={badge}
+                    type={props.type}
+                    cardTitle={props.cardTitle}
+                    identifier={props.identifier}
+                    author={props.author}
+                    createdAt={props.createdAt}
+                    description={props.description}
+                    imgSrc={props.imgSrc}
                 />
             </Card>
         </div>
