@@ -57,9 +57,9 @@ export function PostCardFooter({
                     );
 
                     if (res.status === 200) {
-                        toast.success('Bookmark removed');
+                        // toast.success('Bookmark removed');
                     } else if (res.status === 201) {
-                        toast.success('Post bookmarked');
+                        // toast.success('Post bookmarked');
                     } else if (res.status === 500) {
                         toast.error('Could not bookmark post');
                         // If error, revert to original state
