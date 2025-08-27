@@ -9,6 +9,7 @@ import { IoShareSocialOutline } from 'react-icons/io5';
 import { toast } from 'sonner';
 import { putBookmarkByPostId } from '@/lib/actions/actions';
 import { fetchPost } from '@/lib/utils/post-card';
+import { requireAuth } from '@/hooks/useRequireAuth';
 
 export function PostCardFooter({
     totalReactions,
@@ -113,8 +114,14 @@ export function PostCardFooter({
                     <Button
                         variant="ghost"
                         className="text-primary dark:text-foreground"
-                        onClick={() => {
-                            handleBookmark(userId, postId);
+                        onClick={(e) => {
+                            if (!requireAuth()) {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                return;
+                            } else {
+                                handleBookmark(userId, postId);
+                            }
                         }}
                     >
                         {isBookmarked ? (
