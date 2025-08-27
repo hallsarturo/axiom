@@ -2,7 +2,7 @@ import { CardFooter } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
 import { PostCardReactions } from './post-card-reactions';
-import { FaRegComment, FaRegBookmark } from 'react-icons/fa';
+import { FaRegComment, FaRegBookmark, FaBookmark } from 'react-icons/fa';
 import { IoShareSocialOutline } from 'react-icons/io5';
 import { toast } from 'sonner';
 import { putBookmarkByPostId } from '@/lib/actions/actions';
@@ -17,6 +17,8 @@ export function PostCardFooter({
     handleReaction,
     postId,
     userId,
+    isBookmarked,
+    mutatePost,
 }) {
     const handleBookmark = async (userId, postId) => {
         let token = null;
@@ -26,13 +28,16 @@ export function PostCardFooter({
         ) {
             token = localStorage.getItem('token');
         }
-        const res = await putBookmarkByPostId(token, userId, postId);
+        const res = await putBookmarkByPostId(token, postId, userId);
         if (res.status === 200) {
             toast.success('bookmark removed');
         } else if (res.status === 201) {
             toast.success('Post bookmarked');
         } else if (res.status === 500) {
             toast.error('Could not bookmark post');
+        }
+        if (mutatePost) {
+            mutatePost();
         }
     };
 
@@ -66,7 +71,11 @@ export function PostCardFooter({
                             handleBookmark(userId, postId);
                         }}
                     >
-                        <FaRegBookmark className="size-5.5" />
+                        {isBookmarked ? (
+                            <FaBookmark className="size-5.5" />
+                        ) : (
+                            <FaRegBookmark className="size-5.5" />
+                        )}
                     </Button>
                     <Button
                         variant="ghost"

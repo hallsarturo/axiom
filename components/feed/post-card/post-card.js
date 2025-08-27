@@ -215,6 +215,7 @@ export function PostCard(props) {
                     handleReaction={handleReaction}
                     postId={props.postId}
                     userId={user?.id}
+                    mutatePost={mutate}
                 />
             </Card>
         </div>

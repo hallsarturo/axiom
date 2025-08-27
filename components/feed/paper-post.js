@@ -21,6 +21,7 @@ export function PaperPost({ mutateFeed, refreshFeed, ...props }) {
             laughs={props.laughs}
             mutateFeed={mutateFeed}
             refreshFeed={refreshFeed}
+            isBookmarked={props.isBookmarked}
         ></PostCard>
     );
 }
