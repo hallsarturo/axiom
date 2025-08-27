@@ -12,6 +12,7 @@ import {
     Settings,
     Newspaper,
     Library,
+    Bookmark,
 } from 'lucide-react';
 
 import {
@@ -47,6 +48,11 @@ export function AppSidebar() {
             title: 'My Posts',
             url: user ? `/my-posts/${user.id}` : '/#',
             icon: Library,
+        },
+        {
+            title: 'Saved Posts',
+            url: user ? `/saved-posts` : '/#',
+            icon: Bookmark,
         },
         {
             title: 'Followers',
