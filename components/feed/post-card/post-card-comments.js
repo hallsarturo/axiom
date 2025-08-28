@@ -12,10 +12,12 @@ import {
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { FaRegComment } from 'react-icons/fa';
+import { Separator } from '@/components/ui/separator';
 import { CardContent } from '@/components/ui/card';
 import { PostCardHeader } from '@/components/feed/post-card/post-card-header';
 import { PostCardContent } from '@/components/feed/post-card/post-card-content';
-import { splitDescription } from '@/lib/utils/post-card.js';
+import { splitDescription } from '@/lib/utils/post-card';
+import { capitalizeFirstLetter } from '@/lib/utils/strings';
 import { useState } from 'react';
 
 export function Comments({ post }) {
@@ -34,12 +36,15 @@ export function Comments({ post }) {
                     Comment
                 </Button>
             </DialogTrigger>
-            <DialogContent className="w-full h-[95vh] sm:min-w-[650px] md:min-w-[680px]">
-                <ScrollArea className="max-h-[70vh]">
-                    <DialogTitle />
+            <DialogContent className="flex flex-col w-full h-[95vh] sm:min-w-[650px] md:min-w-[680px] mx-0 px-0">
+                <ScrollArea className="flex-1 w-full overflow-y-auto">
+                    <DialogTitle className="flex justify-center text-xl font-bold text-primary dark:text-foreground text-center mb-2">
+                        Publicación de {capitalizeFirstLetter(post.author)}
+                    </DialogTitle>
                     <DialogHeader></DialogHeader>
+                    <Separator />
 
-                    <div className="">
+                    <div className="py-2">
                         <PostCardHeader
                             badge={post.badge}
                             type={post.type}
