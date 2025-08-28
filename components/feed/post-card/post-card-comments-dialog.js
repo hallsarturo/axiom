@@ -21,6 +21,7 @@ import { PostCardHeader } from '@/components/feed/post-card/post-card-header';
 import { PostCardContent } from '@/components/feed/post-card/post-card-content';
 import { PostCardFooter } from '@/components/feed/post-card/post-card-footer';
 import { PostCardComments } from '@/components/feed/post-card/post-card-comments';
+import { PostCardCommentForm } from '@/components/feed/post-card/post-card-comment-form';
 import {
     splitDescription,
     getCurrentReactionIcon,
@@ -138,10 +139,10 @@ export function PostCardCommentsDialog({ post }) {
                 </Button>
             </DialogTrigger>
             <DialogContent className="flex flex-col w-full h-[95vh] sm:min-w-[650px] md:min-w-[680px] mx-0 px-0 py-2">
+                <DialogTitle className=" flex justify-center items-center text-xl font-bold text-primary dark:text-foreground text-center">
+                    Post by {capitalizeFirstLetter(postData.author)}
+                </DialogTitle>
                 <ScrollArea className="flex-1 w-full overflow-y-auto">
-                    <DialogTitle className="flex justify-center text-xl font-bold text-primary dark:text-foreground text-center mb-2">
-                        Post by {capitalizeFirstLetter(postData.author)}
-                    </DialogTitle>
                     <DialogHeader></DialogHeader>
                     <Separator />
 
@@ -208,12 +209,12 @@ export function PostCardCommentsDialog({ post }) {
                             insideDialog={true} // Flag to prevent nested dialogs
                         />
                     </div>
-                    <Separator className="mx-5" />
-
-                    <DialogFooter className="flex justify-start px-2 py-4">
-                        <PostCardComments />
-                    </DialogFooter>
+                    <Separator className="ml-5 pr-5" />
+                    <PostCardComments />
                 </ScrollArea>
+                <DialogFooter className="flex justify-start px-2 py-4">
+                    <PostCardCommentForm />
+                </DialogFooter>
             </DialogContent>
         </Dialog>
     );

@@ -14,7 +14,7 @@ import { useState, useEffect } from 'react';
 
 export function PostCardComments() {
     return (
-        <div className="flex w-full">
+        <div className="flex w-full px-2 py-4">
             <div className="flex gap-2 ">
                 <Avatar>
                     <AvatarImage src="https://github.com/shadcn.png" />
