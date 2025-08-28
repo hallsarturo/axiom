@@ -36,12 +36,13 @@ import { userPostSchema } from '@/lib/schemas/posts';
 import { publishPost } from '@/lib/actions/actions';
 import { useUser } from '@/components/context/UserProfileContext';
 import { useState } from 'react';
-import { requireAuth } from '@/hooks/useRequireAuth';
+import { useRequireAuth } from '@/hooks/useRequireAuth';
 
 const ACCEPTED_FORMATS = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif'];
 const MAX_IMAGE_SIZE_MB = 1;
 
 export function PublishPost({ mutateFeed, onDialogOpenChange, ...props }) {
+    const requireAuth = useRequireAuth();
     const { user } = useUser();
     const [open, setOpen] = useState(false);
     const form = useForm({

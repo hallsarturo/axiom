@@ -32,6 +32,10 @@ export function PostCardHeader({
     userId,
     onDelete,
 }) {
+    // compute href and choose tag based on type
+    const href = identifier ? `https://${identifier}` : '#';
+    const useAnchor = type === 'paper' || type === 'news';
+
     return (
         <CardHeader className="">
             <div className="flex flex-col w-full">
@@ -140,13 +144,23 @@ export function PostCardHeader({
                     </div>
                 </div>
                 <CardTitle className="leading-4 mt-2 mb-0 w-full">
-                    <Link
-                        href={identifier ? `https://${identifier}` : '#'}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                    >
-                        {cardTitle}
-                    </Link>
+                    {useAnchor ? (
+                        <a
+                            href={href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            {cardTitle}
+                        </a>
+                    ) : (
+                        <Link
+                            href={href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            {cardTitle}
+                        </Link>
+                    )}
                 </CardTitle>
             </div>
         </CardHeader>

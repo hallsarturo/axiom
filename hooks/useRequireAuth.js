@@ -1,19 +1,14 @@
 import { toast } from 'sonner';
+import { useUser } from '@/components/context/UserProfileContext';
 
-export function requireAuth() {
-    let token = null;
+export function useRequireAuth() {
+    const { user } = useUser();
 
-
-        if (
-            process.env.NODE_ENV === 'development' &&
-            typeof window !== 'undefined'
-        ) {
-            token = localStorage.getItem('token');
+    return () => {
+        if (!user) {
+            toast.error('You need to be logged in to use this feature');
+            return false;
         }
-
-    if (!token) {
-        toast.error('You need to be logged in to use this feature');
-        return false;
-    }
-    return true;
+        return true;
+    };
 }

@@ -9,7 +9,7 @@ import { BiLike, BiSolidLike, BiDislike, BiSolidDislike } from 'react-icons/bi';
 import { FaRegLaughBeam, FaLaughBeam } from 'react-icons/fa';
 import { FaRegAngry } from 'react-icons/fa';
 import { FaFaceAngry } from 'react-icons/fa6';
-import { requireAuth } from '@/hooks/useRequireAuth';
+import { useRequireAuth } from '@/hooks/useRequireAuth';
 
 export function PostCardReactions({
     userReaction,
@@ -17,6 +17,7 @@ export function PostCardReactions({
     currentReactionIcon,
     handleReaction,
 }) {
+    const requireAuth = useRequireAuth();
     return (
         <Popover>
             <PopoverTrigger asChild>
@@ -30,7 +31,6 @@ export function PostCardReactions({
                                 e.stopPropagation();
                                 return;
                             }
-                           
                         }}
                     >
                         <AnimatePresence mode="wait">

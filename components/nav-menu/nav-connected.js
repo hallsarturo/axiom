@@ -206,12 +206,13 @@ export function NavigationConnected() {
                                         >
                                             {user ? (
                                                 <Button
+                                                    asChild
                                                     variant="link"
                                                     className="w-32 mx-auto flex gap-4 items-center"
                                                     onClick={handleLogout}
                                                 >
-                                                    <div className="flex items-center gap-4">
-                                                        <LogOut className="text-primary dark:text-foreground" />
+                                                    <div className="flex flex-row items-center gap-4">
+                                                        <LogOut className="text-primary  dark:text-foreground" />
                                                         Sign Out
                                                     </div>
                                                 </Button>
@@ -225,8 +226,8 @@ export function NavigationConnected() {
                                                         href="/sign-in"
                                                         className="flex gap-4 items-center"
                                                     >
-                                                        <div className="flex items-center gap-4">
-                                                            <LogIn className="text-primary dark:text-foreground" />
+                                                        <div className="flex flex-row items-center gap-4">
+                                                            <LogIn className="text-primary  dark:text-foreground  " />
                                                             Sign In
                                                         </div>
                                                     </Link>

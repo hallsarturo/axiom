@@ -4,13 +4,13 @@ import { CardFooter } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
 import { PostCardReactions } from './post-card-reactions';
-import { FaRegBookmark, FaBookmark } from 'react-icons/fa';
+import { FaRegComment, FaRegBookmark, FaBookmark } from 'react-icons/fa';
 import { IoShareSocialOutline } from 'react-icons/io5';
 import { toast } from 'sonner';
 import { putBookmarkByPostId } from '@/lib/actions/actions';
 import { fetchPost } from '@/lib/utils/post-card';
-import { Comments } from '@/components/feed/post-card/post-card-comments';
-import { requireAuth } from '@/hooks/useRequireAuth';
+import { PostCardCommentsDialog } from '@/components/feed/post-card/post-card-comments-dialog';
+import { useRequireAuth } from '@/hooks/useRequireAuth';
 
 export function PostCardFooter({
     totalReactions,
@@ -22,6 +22,8 @@ export function PostCardFooter({
     handleReaction,
     postId,
     userId,
+    handleBookmark: externalHandleBookmark,
+    bookmarkIcon,
     isBookmarked,
     setIsBookmarked,
     mutatePost,
@@ -29,8 +31,14 @@ export function PostCardFooter({
     badge,
     ...props
 }) {
+    const requireAuth = useRequireAuth();
+
     const handleBookmark = async (userId, postId) => {
         // Toggle local state immediately
+        // If an external handler is provided, use it
+        if (externalHandleBookmark) {
+            return externalHandleBookmark(userId, postId);
+        }
         setIsBookmarked(!isBookmarked);
 
         let token = null;
@@ -108,20 +116,32 @@ export function PostCardFooter({
                         currentReactionIcon={currentReactionIcon}
                         handleReaction={handleReaction}
                     />
-                    <Comments
-                        post={{
-                            badge,
-                            type: props.type,
-                            cardTitle: props.cardTitle,
-                            identifier: props.identifier,
-                            avatarSrc,
-                            author: props.author,
-                            createdAt: props.createdAt,
-                            userId: props.userId,
-                            description: props.description,
-                            imgSrc: props.imgSrc,
-                        }}
-                    />
+                    {props.insideDialog ? (
+                        <Button
+                            variant="ghost"
+                            className="text-muted-foreground"
+                            disabled={true}
+                        >
+                            <FaRegComment className="size-5.5" />
+                            Comment
+                        </Button>
+                    ) : (
+                        <PostCardCommentsDialog
+                            post={{
+                                badge,
+                                type: props.type,
+                                cardTitle: props.cardTitle,
+                                identifier: props.identifier,
+                                avatarSrc,
+                                author: props.author,
+                                createdAt: props.createdAt,
+                                userId: props.userId,
+                                postId: postId,
+                                description: props.description,
+                                imgSrc: props.imgSrc,
+                            }}
+                        />
+                    )}
                     <Button
                         variant="ghost"
                         className="text-primary dark:text-foreground"
@@ -135,11 +155,11 @@ export function PostCardFooter({
                             }
                         }}
                     >
-                        {isBookmarked ? (
+                        {bookmarkIcon || (isBookmarked ? (
                             <FaBookmark className="size-5.5" />
                         ) : (
                             <FaRegBookmark className="size-5.5" />
-                        )}
+                        ))}
                     </Button>
                     <Button
                         variant="ghost"
