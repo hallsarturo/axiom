@@ -7,7 +7,6 @@ import { PostCardReactions } from './post-card-reactions';
 import { FaRegBookmark, FaBookmark } from 'react-icons/fa';
 import { IoShareSocialOutline } from 'react-icons/io5';
 import { toast } from 'sonner';
-
 import { putBookmarkByPostId } from '@/lib/actions/actions';
 import { fetchPost } from '@/lib/utils/post-card';
 import { Comments } from '@/components/feed/post-card/post-card-comments';
