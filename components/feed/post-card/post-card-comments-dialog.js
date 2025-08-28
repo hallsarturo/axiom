@@ -7,6 +7,7 @@ import {
     DialogHeader,
     DialogTitle,
     DialogTrigger,
+    DialogFooter,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -19,6 +20,7 @@ import { CardContent } from '@/components/ui/card';
 import { PostCardHeader } from '@/components/feed/post-card/post-card-header';
 import { PostCardContent } from '@/components/feed/post-card/post-card-content';
 import { PostCardFooter } from '@/components/feed/post-card/post-card-footer';
+import { PostCardComments } from '@/components/feed/post-card/post-card-comments';
 import {
     splitDescription,
     getCurrentReactionIcon,
@@ -68,7 +70,7 @@ export function PostCardCommentsDialog({ post }) {
     const postData = data || post;
 
     // Get the bookmark icon based on the latest data
-    const bookmarkIcon = getBookmarkIcon(postData?.isBookmarked)
+    const bookmarkIcon = getBookmarkIcon(postData?.isBookmarked);
 
     // Create local handlers for the dialog
     const handleDialogReaction = async (type) => {
@@ -135,7 +137,7 @@ export function PostCardCommentsDialog({ post }) {
                     Comment
                 </Button>
             </DialogTrigger>
-            <DialogContent className="flex flex-col w-full h-[95vh] sm:min-w-[650px] md:min-w-[680px] mx-0 px-0">
+            <DialogContent className="flex flex-col w-full h-[95vh] sm:min-w-[650px] md:min-w-[680px] mx-0 px-0 py-2">
                 <ScrollArea className="flex-1 w-full overflow-y-auto">
                     <DialogTitle className="flex justify-center text-xl font-bold text-primary dark:text-foreground text-center mb-2">
                         Post by {capitalizeFirstLetter(postData.author)}
@@ -206,6 +208,11 @@ export function PostCardCommentsDialog({ post }) {
                             insideDialog={true} // Flag to prevent nested dialogs
                         />
                     </div>
+                    <Separator className="mx-5" />
+
+                    <DialogFooter className="flex justify-start px-2 py-4">
+                        <PostCardComments />
+                    </DialogFooter>
                 </ScrollArea>
             </DialogContent>
         </Dialog>

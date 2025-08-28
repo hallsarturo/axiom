@@ -10,7 +10,7 @@ import {
 
 export function PostCardContent({ description, part1, part2, seeMore, setSeeMore, imgSrc }) {
     return (
-        <CardContent>
+        <CardContent className="mb-2">
             <Collapsible
                 open={seeMore}
                 onOpenChange={setSeeMore}
