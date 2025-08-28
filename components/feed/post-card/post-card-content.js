@@ -8,7 +8,14 @@ import {
     CollapsibleTrigger,
 } from '@/components/ui/collapsible';
 
-export function PostCardContent({ description, part1, part2, seeMore, setSeeMore, imgSrc }) {
+export function PostCardContent({
+    description,
+    part1,
+    part2,
+    seeMore,
+    setSeeMore,
+    imgSrc,
+}) {
     return (
         <CardContent className="mb-2">
             <Collapsible
@@ -17,11 +24,9 @@ export function PostCardContent({ description, part1, part2, seeMore, setSeeMore
                 className="text-justify mb-3"
             >
                 {description ? part1 : null}
-                <CollapsibleContent>
-                    {part2 ? part2 : null}
-                </CollapsibleContent>
-                <CollapsibleTrigger className="text-primary dark:text-foreground font-medium cursor-pointer ml-2">
-                    {seeMore ? 'See less' : 'See more'}
+                <CollapsibleContent>{part2 ? part2 : null}</CollapsibleContent>
+                <CollapsibleTrigger className="text-primary dark:text-foreground font-medium cursor-pointer ml-1">
+                    {seeMore ? ' ...See less' : ' ...See more'}
                 </CollapsibleTrigger>
             </Collapsible>
             <div className="w-full flex justify-center items-center">
