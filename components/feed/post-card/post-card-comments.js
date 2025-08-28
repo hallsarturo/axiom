@@ -21,7 +21,7 @@ export function PostCardComments() {
                     <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
                 <div className="flex flex-col">
-                    <Card className="flex  m-0 p-1">
+                    <Card className="flex bg-muted m-0 mr-4 p-1">
                         <CardHeader className="m-0 px-2 pt-2">
                             <CardTitle>author</CardTitle>
                         </CardHeader>
@@ -36,10 +36,15 @@ export function PostCardComments() {
                             </p>
                         </CardContent>
                     </Card>
-                    <div className="flex flex-row text-sm ml-4 mt-2 gap-5">
-                        <div>1h |</div>
-                        <div>react |</div>
-                        <div>reply</div>
+                    <div className="flex flex-row justify-between mr-6">
+                        <div className="flex flex-row text-muted-foreground text-sm ml-4 mt-2 gap-5">
+                            <div>1 h </div>
+                            <div>Like </div>
+                            <div>Reply</div>
+                        </div>
+                        <div className="flex flex-row text-muted-foreground text-sm ml-4 mt-2 ">
+                            0 reactions
+                        </div>
                     </div>
                 </div>
             </div>
