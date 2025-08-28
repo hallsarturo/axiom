@@ -142,7 +142,7 @@ export function PostCardCommentsDialog({ post }) {
                 <DialogTitle className=" flex justify-center items-center text-xl font-bold text-primary dark:text-foreground text-center">
                     Post by {capitalizeFirstLetter(postData.author)}
                 </DialogTitle>
-                <ScrollArea className="flex-1 w-full overflow-y-auto">
+                <ScrollArea className="flex-1 w-full overflow-y-auto min-h-[10vh]">
                     <DialogHeader></DialogHeader>
                     <Separator />
 
@@ -212,7 +212,7 @@ export function PostCardCommentsDialog({ post }) {
                     <Separator className="ml-5 pr-5" />
                     <PostCardComments />
                 </ScrollArea>
-                <DialogFooter className="flex justify-start border-t-1 px-2 py-4">
+                <DialogFooter className="flex justify-start border-t-1 px-2 py-4 max-h-[50vh] overflow-hidden">
                     <PostCardCommentForm />
                 </DialogFooter>
             </DialogContent>

@@ -107,7 +107,22 @@ export function PostCardCommentForm({ ...props }) {
                                             placeholder="Comment"
                                             rows="2"
                                             {...field}
-                                            className="w-full pr-16 resize-none"
+                                            className="w-full pr-16 resize-none bg-muted min-h-[3rem] max-h-[calc(50vh-2rem)] overflow-y-auto"
+                                            style={{
+                                                height: 'auto',
+                                                minHeight: '3rem',
+                                            }}
+                                            onInput={(e) => {
+                                                // Auto-resize textarea based on content
+                                                e.target.style.height = 'auto';
+                                                e.target.style.height =
+                                                    Math.min(
+                                                        e.target.scrollHeight,
+                                                        window.innerHeight *
+                                                            0.5 -
+                                                            32
+                                                    ) + 'px';
+                                            }}
                                         ></Textarea>
                                     </FormControl>
                                     <Button
