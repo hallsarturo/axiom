@@ -251,7 +251,7 @@ export function PublishPost({ mutateFeed, onDialogOpenChange, ...props }) {
                                                                 placeholder="Content"
                                                                 rows="10"
                                                                 {...field}
-                                                                className=""
+                                                                className="resize-none"
                                                             />
                                                         </FormControl>
                                                         <FormMessage />

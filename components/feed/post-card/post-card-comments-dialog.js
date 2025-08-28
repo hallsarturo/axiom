@@ -212,7 +212,7 @@ export function PostCardCommentsDialog({ post }) {
                     <Separator className="ml-5 pr-5" />
                     <PostCardComments />
                 </ScrollArea>
-                <DialogFooter className="flex justify-start px-2 py-4">
+                <DialogFooter className="flex justify-start border-t-1 px-2 py-4">
                     <PostCardCommentForm />
                 </DialogFooter>
             </DialogContent>
