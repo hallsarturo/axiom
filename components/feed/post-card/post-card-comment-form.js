@@ -20,10 +20,10 @@ import { publishComment } from '@/lib/actions/actions';
 import { useUser } from '@/components/context/UserProfileContext';
 import { useState } from 'react';
 import { useRequireAuth } from '@/hooks/useRequireAuth';
+import { mutate } from 'swr';
 
-export function PostCardCommentForm({ ...props }) {
+export function PostCardCommentForm({ postId }) {
     const requireAuth = useRequireAuth();
-    const postId = props.postId;
     const [isDisabled, setIsDisabled] = useState(false);
     const { user } = useUser();
     const form = useForm({
@@ -36,7 +36,6 @@ export function PostCardCommentForm({ ...props }) {
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     async function onSubmit(values) {
-        // console.log('Form submitted!', values); // Debug line
         setIsSubmitting(true);
 
         let token = null;
@@ -52,11 +51,20 @@ export function PostCardCommentForm({ ...props }) {
 
             if (result.success) {
                 form.reset(); // Reset form fields
-                // if (mutateFeed && result.data?.post) {
-                //     mutateFeed(result.data?.post); //
-                // }
+
+                // This is the key line - mutate the comments data to refresh
+                mutate(
+                    (key) =>
+                        Array.isArray(key) &&
+                        key[0] &&
+                        key[0].startsWith(`comments-${postId}`),
+                    undefined,
+                    { revalidate: true }
+                );
+
+                toast.success('Comment added');
             } else {
-                toast.error('Error posting');
+                toast.error('Error posting comment');
                 setMessage(`Posting failed: ${result.error}`);
             }
         } catch (error) {
