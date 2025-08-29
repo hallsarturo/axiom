@@ -37,7 +37,7 @@ export function PostCardHeader({
     const useAnchor = type === 'paper' || type === 'news';
 
     return (
-        <CardHeader className="">
+        <CardHeader className="mt-[-20px] sm:mt-[-10px]">
             <div className="flex flex-col w-full">
                 <div className="flex mb-4">
                     <CardDescription className="flex flex-row items-center gap-6 w-full mt-2">
@@ -67,7 +67,7 @@ export function PostCardHeader({
                     {/* </div> */}
 
                     {/* Custom CardAction for screens >= 455px */}
-                    <div className="flex flex-col sm:flex-row justify-end mt-[-6px] mb-2">
+                    <div className="flex flex-col sm:flex-row justify-end pt-[5px] sm:mt-[0px] mb-2">
                         <div className="flex flex-col sm:flex-row gap-0 sm:items-start items-center sm:justify-end justify-center w-full">
                             <div className="sm:mr-1 mr-0">
                                 <Badge className={badge} variant="">

@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/card';
 import { getCommentsByPostId } from '@/lib/actions/actions';
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 
 export function PostCardComments({ ...props }) {
     const [comments, setComments] = useState([]);
@@ -38,7 +39,7 @@ export function PostCardComments({ ...props }) {
             {comments.map((comment, index) => (
                 <div
                     key={comment.id || index}
-                    className="flex w-full px-2 py-4"
+                    className="flex w-full px-2 py-2"
                 >
                     <div className="flex gap-2">
                         <Avatar>
@@ -48,7 +49,13 @@ export function PostCardComments({ ...props }) {
                         <div className="flex flex-col">
                             <Card className="flex bg-muted m-0 mr-4 p-1">
                                 <CardHeader className="m-0 px-2 pt-2">
-                                    <CardTitle>{comment.username}</CardTitle>
+                                    <Link
+                                        href={`/profile/${comment.userId}`}
+                                    >
+                                        <CardTitle className="font-bold text-primary dark:text-primary-foreground">
+                                            {comment.username}
+                                        </CardTitle>
+                                    </Link>
                                 </CardHeader>
                                 <CardContent className="mt-[-25px] py-0 px-2">
                                     {comment.content}
