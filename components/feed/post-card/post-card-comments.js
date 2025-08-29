@@ -36,16 +36,19 @@ export function PostCardComments({ ...props }) {
     return (
         <div>
             {comments.map((comment, index) => (
-                <div key={comment.id || index} className="flex w-full px-2 py-4">
-                    <div className="flex gap-2 ">
+                <div
+                    key={comment.id || index}
+                    className="flex w-full px-2 py-4"
+                >
+                    <div className="flex gap-2">
                         <Avatar>
-                            <AvatarImage src="https://github.com/shadcn.png" />
+                            <AvatarImage src={comment.userProfilePic} />
                             <AvatarFallback>CN</AvatarFallback>
                         </Avatar>
                         <div className="flex flex-col">
                             <Card className="flex bg-muted m-0 mr-4 p-1">
                                 <CardHeader className="m-0 px-2 pt-2">
-                                    <CardTitle>{comment.userId}</CardTitle>
+                                    <CardTitle>{comment.username}</CardTitle>
                                 </CardHeader>
                                 <CardContent className="mt-[-25px] py-0 px-2">
                                     {comment.content}
