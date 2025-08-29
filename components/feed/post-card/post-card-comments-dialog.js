@@ -210,12 +210,10 @@ export function PostCardCommentsDialog({ post }) {
                         />
                     </div>
                     <Separator className="ml-5 pr-5" />
-                    <PostCardComments 
-                        postId={post.postId}    
-                    />
+                    <PostCardComments postId={post.postId} />
                 </ScrollArea>
                 <DialogFooter className="flex justify-start border-t-1 px-2 py-4 max-h-[50vh] overflow-hidden">
-                    <PostCardCommentForm />
+                    <PostCardCommentForm postId={post.postId} />
                 </DialogFooter>
             </DialogContent>
         </Dialog>

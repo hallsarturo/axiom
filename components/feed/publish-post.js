@@ -57,7 +57,7 @@ export function PublishPost({ mutateFeed, onDialogOpenChange, ...props }) {
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     async function onSubmit(values) {
-        console.log('Form submitted!', values); // Debug line
+        // console.log('Form submitted!', values); // Debug line
         setIsSubmitting(true);
 
         let token = null;

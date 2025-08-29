@@ -104,9 +104,10 @@ export function PostCardFooter({
         <CardFooter className="justify-center">
             <div className="flex flex-col w-full gap-1.5">
                 <div className="flex flex-row w-full justify-between text-sm flex-wrap">
-                    <p>reactions {totalReactions}</p>
-                    <p>comments {comments}</p>
-                    <p>shares {shares}</p>
+                    <p>{totalReactions} reactions</p>
+                    <p>{comments} comments</p>
+                    <p># bookmarked</p>
+                    <p>{shares} shares</p>
                 </div>
                 <Separator />
                 <div className="flex flex-row justify-around flex-wrap">
@@ -155,11 +156,12 @@ export function PostCardFooter({
                             }
                         }}
                     >
-                        {bookmarkIcon || (isBookmarked ? (
-                            <FaBookmark className="size-5.5" />
-                        ) : (
-                            <FaRegBookmark className="size-5.5" />
-                        ))}
+                        {bookmarkIcon ||
+                            (isBookmarked ? (
+                                <FaBookmark className="size-5.5" />
+                            ) : (
+                                <FaRegBookmark className="size-5.5" />
+                            ))}
                     </Button>
                     <Button
                         variant="ghost"

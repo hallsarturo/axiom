@@ -23,18 +23,20 @@ import { useRequireAuth } from '@/hooks/useRequireAuth';
 
 export function PostCardCommentForm({ ...props }) {
     const requireAuth = useRequireAuth();
+    const postId = props.postId;
+    const [isDisabled, setIsDisabled] = useState(false);
     const { user } = useUser();
     const form = useForm({
         resolver: zodResolver(userPostCommentSchema),
         defaultValues: {
-            comment: '',
+            content: '',
         },
     });
     const [message, setMessage] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     async function onSubmit(values) {
-        console.log('Form submitted!', values); // Debug line
+        // console.log('Form submitted!', values); // Debug line
         setIsSubmitting(true);
 
         let token = null;
@@ -46,7 +48,7 @@ export function PostCardCommentForm({ ...props }) {
         }
 
         try {
-            const result = await publishComment(token, values);
+            const result = await publishComment(token, postId, values);
 
             if (result.success) {
                 form.reset(); // Reset form fields
@@ -90,7 +92,11 @@ export function PostCardCommentForm({ ...props }) {
     return (
         <div className="flex w-full gap-2">
             <Avatar>
-                <AvatarImage src="https://github.com/shadcn.png" />
+                <AvatarImage
+                    src={
+                        user ? user.userProfilePic || user.photoUrl : undefined
+                    }
+                />
                 <AvatarFallback>CN</AvatarFallback>
             </Avatar>
             <div className="w-full mr-2">
@@ -99,11 +105,12 @@ export function PostCardCommentForm({ ...props }) {
                         <FormField
                             className="w-full"
                             control={form.control}
-                            name="comment"
+                            name="content"
                             render={({ field }) => (
                                 <FormItem className="relative w-full">
                                     <FormControl>
                                         <Textarea
+                                            disabled={isDisabled}
                                             placeholder="Comment"
                                             rows="2"
                                             {...field}
@@ -111,6 +118,14 @@ export function PostCardCommentForm({ ...props }) {
                                             style={{
                                                 height: 'auto',
                                                 minHeight: '3rem',
+                                            }}
+                                            onClick={(e) => {
+                                                if (!requireAuth()) {
+                                                    e.preventDefault();
+                                                    e.stopPropagation();
+                                                    setIsDisabled(true);
+                                                    return;
+                                                }
                                             }}
                                             onInput={(e) => {
                                                 // Auto-resize textarea based on content
@@ -137,7 +152,13 @@ export function PostCardCommentForm({ ...props }) {
                                     </Button>
                                 </FormItem>
                             )}
-                        ></FormField>
+                        >
+                            {message && (
+                                <div className="text-sm text-center py-2 text-red-500">
+                                    {message}
+                                </div>
+                            )}
+                        </FormField>
                     </div>
                 </Form>
             </div>
