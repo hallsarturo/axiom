@@ -22,7 +22,11 @@ import { useState } from 'react';
 import { useRequireAuth } from '@/hooks/useRequireAuth';
 import { mutate } from 'swr';
 
-export function PostCardCommentForm({ postId }) {
+export function PostCardCommentForm({
+    postId,
+    parentCommentId,
+    onSubmitSuccess,
+}) {
     const requireAuth = useRequireAuth();
     const [isDisabled, setIsDisabled] = useState(false);
     const { user } = useUser();
@@ -30,6 +34,7 @@ export function PostCardCommentForm({ postId }) {
         resolver: zodResolver(userPostCommentSchema),
         defaultValues: {
             content: '',
+            parentCommentId: parentCommentId || null,
         },
     });
     const [message, setMessage] = useState('');
@@ -47,12 +52,17 @@ export function PostCardCommentForm({ postId }) {
         }
 
         try {
-            const result = await publishComment(token, postId, values);
+            const submitValues = {
+                ...values,
+                parentCommentId: parentCommentId || null,
+            };
+
+            const result = await publishComment(token, postId, submitValues);
 
             if (result.success) {
                 form.reset(); // Reset form fields
 
-                // This is the key line - mutate the comments data to refresh
+                // Mutate the comments data to refresh
                 mutate(
                     (key) =>
                         Array.isArray(key) &&
@@ -63,6 +73,9 @@ export function PostCardCommentForm({ postId }) {
                 );
 
                 toast.success('Comment added');
+                if (onSubmitSuccess) {
+                    onSubmitSuccess();
+                }
             } else {
                 toast.error('Error posting comment');
                 setMessage(`Posting failed: ${result.error}`);

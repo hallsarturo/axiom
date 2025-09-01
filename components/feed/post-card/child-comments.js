@@ -4,59 +4,15 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { PostCardCommentForm } from '@/components/feed/post-card/post-card-comment-form';
-import { ChildComments } from '@/components/feed/post-card/child-comments';
-import { getCommentsByPostId } from '@/lib/actions/actions';
 import { timeAgo } from '@/lib/utils/date';
-import { useState } from 'react';
-import { useUser } from '@/components/context/UserProfileContext';
 import Link from 'next/link';
-import useSWR from 'swr';
-import { Skeleton } from '@/components/ui/skeleton';
+import { useUser } from '@/components/context/UserProfileContext';
+import { useState } from 'react';
 
-// Create a fetcher function for SWR
-const fetchComments = async (postId, page, pageSize) => {
-    return await getCommentsByPostId(postId, page, pageSize);
-};
-
-export function PostCardComments({ postId, mutateKey }) {
-    const { user } = useUser();
+export function ChildComments({ childComments }) {
     const [replyCommentList, setReplyCommentList] = useState([]);
     const [page, setPage] = useState(1);
     const pageSize = 10;
-
-    // Use SWR for automatic refresh
-    const { data, error, isLoading, mutate } = useSWR(
-        [`comments-${postId}`, page],
-        () => fetchComments(postId, page, pageSize),
-        {
-            revalidateOnFocus: false,
-            dedupingInterval: 5000,
-        }
-    );
-
-    // Extract data from response
-    const comments = data?.comments || [];
-    const totalPages = data?.pagination?.totalPages || 1;
-
-    // Split comments into parents and children
-    const parentComments = comments.filter(
-        (c) => c.parentCommentId === 0 || c.parentCommentId === null
-    );
-    const childComments = comments.filter(
-        (c) => c.parentCommentId !== 0 && c.parentCommentId !== null
-    );
-
-    // Helper: get children for a parent comment
-    const getChildren = (parentId) =>
-        childComments.filter((c) => c.parentCommentId === parentId);
-
-    if (isLoading) {
-        return <CommentsSkeleton />;
-    }
-
-    if (error) {
-        return <div className="text-red-500 p-4">Error loading comments</div>;
-    }
 
     // Handle comment replies
     const handleCommentReply = (commentId) => {
@@ -71,10 +27,9 @@ export function PostCardComments({ postId, mutateKey }) {
             setReplyCommentList([...replyCommentList, commentId]);
         }
     };
-
     return (
         <div>
-            {parentComments.map((comment, index) => (
+            {childComments.map((comment, index) => (
                 <div
                     key={comment.id || index}
                     className="flex flex-col w-full px-2 py-2"
@@ -101,7 +56,7 @@ export function PostCardComments({ postId, mutateKey }) {
                                 <div className="flex flex-row text-muted-foreground text-sm ml-4 mt-2 gap-5">
                                     <div>{timeAgo(comment.createdAt)} </div>
                                     <div>Like </div>
-                                    <div>
+                                    {/* <div>
                                         <Button
                                             variant="link"
                                             size="xs"
@@ -112,7 +67,7 @@ export function PostCardComments({ postId, mutateKey }) {
                                         >
                                             Reply
                                         </Button>
-                                    </div>
+                                    </div> */}
                                 </div>
                                 <div className="flex flex-row text-muted-foreground text-sm ml-4 mt-2 ">
                                     0 reactions
@@ -121,12 +76,7 @@ export function PostCardComments({ postId, mutateKey }) {
                         </div>
                     </div>
                     <div className="mt-2 mx-14">
-                        {/* Render child comments for this parent */}
-                        {
-                            <ChildComments
-                                childComments={getChildren(comment.id)}
-                            />
-                        }
+                        {}
 
                         {replyCommentList.includes(comment.id) ? (
                             <PostCardCommentForm
@@ -137,24 +87,6 @@ export function PostCardComments({ postId, mutateKey }) {
                                 }}
                             />
                         ) : null}
-                    </div>
-                </div>
-            ))}
-
-            {/* You can add pagination controls here */}
-        </div>
-    );
-}
-
-function CommentsSkeleton() {
-    return (
-        <div className="space-y-3">
-            {[1, 2, 3].map((i) => (
-                <div key={i} className="flex gap-2">
-                    <Skeleton className="h-10 w-10 rounded-full" />
-                    <div className="space-y-2 flex-1">
-                        <Skeleton className="h-4 w-[80px]" />
-                        <Skeleton className="h-10 w-full" />
                     </div>
                 </div>
             ))}
