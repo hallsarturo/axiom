@@ -79,11 +79,20 @@ export function PostCardComments({ postId, mutateKey }) {
                     key={comment.id || index}
                     className="flex flex-col w-full px-2 py-2"
                 >
-                    <div className="flex gap-2">
-                        <Avatar>
+                    <div className="flex gap-2 relative">
+                        <Avatar className="">
                             <AvatarImage src={comment.userProfilePic} />
                             <AvatarFallback>CN</AvatarFallback>
                         </Avatar>
+                        {getChildren(comment.id).length > 0 && (
+                            <span
+                                className="absolute left-4 bg-border w-px"
+                                style={{
+                                    top: '2.5rem', // same as top-10
+                                    height: 'calc(100% - 10px)', // subtract 10px from the height
+                                }}
+                            />
+                        )}
                         <div className="flex flex-col">
                             <Card className="flex bg-muted m-0 mr-4 p-1">
                                 <CardHeader className="m-0 px-2 pt-2">
@@ -120,7 +129,7 @@ export function PostCardComments({ postId, mutateKey }) {
                             </div>
                         </div>
                     </div>
-                    <div className="mt-2 mx-14">
+                    <div className="mt-2 mx-14 relative">
                         {/* Render child comments for this parent */}
                         {
                             <ChildComments
@@ -129,13 +138,16 @@ export function PostCardComments({ postId, mutateKey }) {
                         }
 
                         {replyCommentList.includes(comment.id) ? (
-                            <PostCardCommentForm
-                                postId={postId}
-                                parentCommentId={comment.id}
-                                onSubmitSuccess={() => {
-                                    // Close the reply form after successful submission
-                                }}
-                            />
+                            <div className="mx-3">
+                                <PostCardCommentForm
+                                    postId={postId}
+                                    parentCommentId={comment.id}
+                                    onSubmitSuccess={() => {
+                                        // Close the reply form after successful submission
+                                    }}
+                                    placeHolder={`reply to ${comment.username}`}
+                                />
+                            </div>
                         ) : null}
                     </div>
                 </div>

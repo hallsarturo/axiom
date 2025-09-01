@@ -35,6 +35,7 @@ export function ChildComments({ childComments }) {
                     className="flex flex-col w-full px-2 py-2"
                 >
                     <div className="flex gap-2">
+                        <span className="absolute -left-10 top-5 h-[1px] w-[30px] bg-border" />
                         <Avatar>
                             <AvatarImage src={comment.userProfilePic} />
                             <AvatarFallback>CN</AvatarFallback>
@@ -85,6 +86,7 @@ export function ChildComments({ childComments }) {
                                 onSubmitSuccess={() => {
                                     // Close the reply form after successful submission
                                 }}
+                                
                             />
                         ) : null}
                     </div>

@@ -26,6 +26,7 @@ export function PostCardCommentForm({
     postId,
     parentCommentId,
     onSubmitSuccess,
+    placeHolder,
 }) {
     const requireAuth = useRequireAuth();
     const [isDisabled, setIsDisabled] = useState(false);
@@ -137,7 +138,7 @@ export function PostCardCommentForm({
                                         <FormControl>
                                             <Textarea
                                                 disabled={isDisabled}
-                                                placeholder="Comment"
+                                                placeholder={placeHolder}
                                                 rows="2"
                                                 {...field}
                                                 className="w-full pr-16 resize-none bg-muted min-h-[3rem] max-h-[calc(50vh-2rem)] overflow-y-auto"

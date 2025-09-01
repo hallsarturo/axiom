@@ -213,7 +213,7 @@ export function PostCardCommentsDialog({ post }) {
                     <PostCardComments postId={post.postId} />
                 </ScrollArea>
                 <DialogFooter className="flex justify-start border-t-1 px-2 py-4 max-h-[50vh] overflow-hidden">
-                    <PostCardCommentForm postId={post.postId} />
+                    <PostCardCommentForm postId={post.postId} placeHolder={'comment'} />
                 </DialogFooter>
             </DialogContent>
         </Dialog>
