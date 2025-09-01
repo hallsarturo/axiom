@@ -89,7 +89,7 @@ export function PostCardComments({ postId, mutateKey }) {
                                 className="absolute left-4 bg-border w-px"
                                 style={{
                                     top: '2.5rem', // same as top-10
-                                    height: 'calc(100% - 10px)', // subtract 10px from the height
+                                    height: 'calc(100% - 4px)', // subtract 10px from the height
                                 }}
                             />
                         )}
@@ -131,11 +131,14 @@ export function PostCardComments({ postId, mutateKey }) {
                     </div>
                     <div className="mt-2 mx-14 relative">
                         {/* Render child comments for this parent */}
-                        {
+                        {getChildren(comment.id).length > 0 && (
                             <ChildComments
                                 childComments={getChildren(comment.id)}
+                                postId={postId}
+                                replyCommentList={replyCommentList}
+                                handleCommentReply={handleCommentReply}
                             />
-                        }
+                        )}
 
                         {replyCommentList.includes(comment.id) ? (
                             <div className="mx-3">
@@ -144,6 +147,8 @@ export function PostCardComments({ postId, mutateKey }) {
                                     parentCommentId={comment.id}
                                     onSubmitSuccess={() => {
                                         // Close the reply form after successful submission
+                                        handleCommentReply(comment.id); // Toggle off the reply form
+                                        mutate(); // Re-fetch comments to show the new reply
                                     }}
                                     placeHolder={`reply to ${comment.username}`}
                                 />

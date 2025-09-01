@@ -138,7 +138,13 @@ export function PostCardCommentsDialog({ post }) {
                     Comment
                 </Button>
             </DialogTrigger>
-            <DialogContent className="flex flex-col w-full h-[95vh] sm:min-w-[650px] md:min-w-[680px] mx-0 px-0 py-2">
+            <DialogContent
+                className="flex flex-col w-full h-[95vh] sm:min-w-[650px] md:min-w-[680px] mx-0 px-0 py-2"
+                aria-describedby="dialog-description"
+            >
+                <p id="dialog-description" className="sr-only">
+                    Comment section for this post
+                </p>
                 <DialogTitle className=" flex justify-center items-center text-xl font-bold text-primary dark:text-foreground text-center">
                     Post by {capitalizeFirstLetter(postData.author)}
                 </DialogTitle>
@@ -213,7 +219,10 @@ export function PostCardCommentsDialog({ post }) {
                     <PostCardComments postId={post.postId} />
                 </ScrollArea>
                 <DialogFooter className="flex justify-start border-t-1 px-2 py-4 max-h-[50vh] overflow-hidden">
-                    <PostCardCommentForm postId={post.postId} placeHolder={'comment'} />
+                    <PostCardCommentForm
+                        postId={post.postId}
+                        placeHolder={'comment'}
+                    />
                 </DialogFooter>
             </DialogContent>
         </Dialog>
