@@ -2,7 +2,9 @@
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { getCommentsByPostId } from '@/lib/actions/actions';
+import { timeAgo } from '@/lib/utils/date';
 import { useState } from 'react';
 import Link from 'next/link';
 import useSWR from 'swr';
@@ -66,9 +68,9 @@ export function PostCardComments({ postId, mutateKey }) {
                             </Card>
                             <div className="flex flex-row justify-between mr-6">
                                 <div className="flex flex-row text-muted-foreground text-sm ml-4 mt-2 gap-5">
-                                    <div>1 h </div>
+                                    <div>{timeAgo(comment.createdAt)} </div>
                                     <div>Like </div>
-                                    <div>Reply</div>
+                                    <div><Button variant="link" size="xs" className="text-muted-foreground text-sm" >Reply</Button></div>
                                 </div>
                                 <div className="flex flex-row text-muted-foreground text-sm ml-4 mt-2 ">
                                     0 reactions
