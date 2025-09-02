@@ -94,7 +94,7 @@ export function PostCardComments({ postId, mutateKey }) {
                                 className="absolute left-4 bg-border w-px"
                                 style={{
                                     top: '2.5rem', // same as top-10
-                                    height: 'calc(100% - 4px)', // subtract 10px from the height
+                                    height: 'calc(100% - 18px)', // subtract 10px from the height
                                 }}
                             />
                         )}
@@ -137,12 +137,28 @@ export function PostCardComments({ postId, mutateKey }) {
                     <div className="mt-2 mx-14 relative">
                         {/* Render child comments for this parent */}
                         {getChildren(comment.id).length > 0 && (
-                            <ChildComments
-                                childComments={getChildren(comment.id)}
-                                postId={postId}
-                                replyCommentList={replyCommentList}
-                                handleCommentReply={handleCommentReply}
-                            />
+                            <>
+                                <Collapsible className="relative">
+                                    <span className="absolute -left-10 top-3 h-[1px] w-[30px] bg-border" />
+                                    <CollapsibleTrigger className="font-medium text-primary dark:text-primary-foreground cursor-pointer">
+                                        {getChildren(comment.id).length > 1
+                                            ? `See the ${getChildren(comment.id).length} answers`
+                                            : `See ${getChildren(comment.id).length} answer`}
+                                    </CollapsibleTrigger>
+                                    <CollapsibleContent>
+                                        <ChildComments
+                                            childComments={getChildren(
+                                                comment.id
+                                            )}
+                                            postId={postId}
+                                            replyCommentList={replyCommentList}
+                                            handleCommentReply={
+                                                handleCommentReply
+                                            }
+                                        />
+                                    </CollapsibleContent>
+                                </Collapsible>
+                            </>
                         )}
 
                         {replyCommentList.includes(comment.id) ? (
