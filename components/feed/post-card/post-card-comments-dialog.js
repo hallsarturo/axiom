@@ -152,17 +152,19 @@ export function PostCardCommentsDialog({ post }) {
                     <DialogHeader></DialogHeader>
                     <Separator />
 
-                    <div className="py-2">
-                        <PostCardHeader
-                            badge={postData.badge}
-                            type={postData.type}
-                            cardTitle={post.cardTitle}
-                            identifier={post.identifier}
-                            avatarSrc={postData.avatarSrc}
-                            author={postData.author}
-                            createdAt={postData.createdAt}
-                            userId={postData.userId}
-                        />
+                    <div className="py-2 px-0">
+                        <div className="mb-5">
+                            <PostCardHeader
+                                badge={postData.badge}
+                                type={postData.type}
+                                cardTitle={post.cardTitle}
+                                identifier={post.identifier}
+                                avatarSrc={postData.avatarSrc}
+                                author={postData.author}
+                                createdAt={postData.createdAt}
+                                userId={postData.userId}
+                            />
+                        </div>
                         <PostCardContent
                             description={postData.description}
                             part1={part1}

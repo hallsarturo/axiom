@@ -143,7 +143,7 @@ export function PostCardHeader({
                         </div>
                     </div>
                 </div>
-                <CardTitle className="leading-4 mt-2 mb-0 w-full">
+                <CardTitle className="leading-5 mt-1 -mb-4 w-full">
                     {useAnchor ? (
                         <a
                             href={href}

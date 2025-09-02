@@ -17,11 +17,11 @@ export function PostCardContent({
     imgSrc,
 }) {
     return (
-        <CardContent className="mb-2">
+        <CardContent className="mb-2 p-0">
             <Collapsible
                 open={seeMore}
                 onOpenChange={setSeeMore}
-                className="text-justify mb-3"
+                className="text-justify mb-3 px-5"
             >
                 {description ? part1 : null}
                 <CollapsibleContent>{part2 ? part2 : null}</CollapsibleContent>
@@ -29,14 +29,14 @@ export function PostCardContent({
                     {seeMore ? ' ...See less' : ' ...See more'}
                 </CollapsibleTrigger>
             </Collapsible>
-            <div className="w-full flex justify-center items-center">
+            <div className="w-full flex justify-center items-center p-0">
                 {imgSrc ? (
                     <Image
                         src={imgSrc}
                         width={500}
                         height={500}
                         alt="Picture of the author"
-                        className="rounded-t-lg object-cover max-h-[600px] w-full"
+                        className="object-cover max-h-[600px] w-full"
                     />
                 ) : null}
             </div>
