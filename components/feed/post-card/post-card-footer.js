@@ -12,6 +12,7 @@ import { fetchPost } from '@/lib/utils/post-card';
 import { PostCardCommentsDialog } from '@/components/feed/post-card/post-card-comments-dialog';
 import { useRequireAuth } from '@/hooks/useRequireAuth';
 import { useReactionsStore } from '@/lib/state/reactionsStore';
+import { useBookmarksStore } from '@/lib/state/bookmarksStore';
 
 export function PostCardFooter({
     totalReactions,
@@ -19,10 +20,6 @@ export function PostCardFooter({
     shares,
     postId,
     userId,
-    handleBookmark: externalHandleBookmark,
-    bookmarkIcon,
-    isBookmarked,
-    setIsBookmarked,
     mutatePost,
     avatarSrc,
     badge,
@@ -30,71 +27,25 @@ export function PostCardFooter({
 }) {
     const requireAuth = useRequireAuth();
 
-    // We no longer need userReaction, reactionCounts, currentReactionIcon, handleReaction props
-    // since the PostCardReactions component now gets these from the store
+    // Get bookmark data directly from Zustand store
+    const { handleBookmark: storeHandleBookmark, getBookmarkData } = useBookmarksStore();
+    const { isBookmarked, bookmarkCount } = getBookmarkData(postId);
 
-    const handleBookmark = async (userId, postId) => {
-        // Toggle local state immediately
-        // If an external handler is provided, use it
-        if (externalHandleBookmark) {
-            return externalHandleBookmark(userId, postId);
-        }
-        setIsBookmarked(!isBookmarked);
+    const token =
+        process.env.NODE_ENV === 'development' && typeof window !== 'undefined'
+            ? localStorage.getItem('token')
+            : null;
 
-        let token = null;
-        if (
-            process.env.NODE_ENV === 'development' &&
-            typeof window !== 'undefined'
-        ) {
-            token = localStorage.getItem('token');
-        }
-
-        // Get current state for optimistic update
-        const currentIsBookmarked = isBookmarked;
+    const handleBookmarkClick = async (userId, postId) => {
+        if (!requireAuth()) return;
 
         try {
-            // Immediately update UI optimistically
-            await mutatePost(
-                async (currentData) => {
-                    // Create optimistic data with toggled bookmark state
-                    const optimisticData = {
-                        ...currentData,
-                        isBookmarked: !currentIsBookmarked,
-                    };
-
-                    // Make the actual API call
-                    const res = await putBookmarkByPostId(
-                        token,
-                        postId,
-                        userId
-                    );
-
-                    if (res.status === 200) {
-                        // toast.success('Bookmark removed');
-                    } else if (res.status === 201) {
-                        // toast.success('Post bookmarked');
-                    } else if (res.status === 500) {
-                        toast.error('Could not bookmark post');
-                        // If error, revert to original state
-                        return currentData;
-                    }
-
-                    // Return data from actual fetch to update cache
-                    const updatedData = await fetchPost(postId, token, userId);
-                    return updatedData;
-                },
-                {
-                    optimisticData: (data) => ({
-                        ...data,
-                        isBookmarked: !currentIsBookmarked,
-                    }),
-                    rollbackOnError: true,
-                    populateCache: true,
-                    revalidate: false, // Don't revalidate immediately as we're handling the update
-                }
-            );
+            await storeHandleBookmark(postId, userId, token);
+            // SWR mutate for consistency
+            if (mutatePost) {
+                mutatePost();
+            }
         } catch (err) {
-            setIsBookmarked(isBookmarked);
             console.error('Bookmark error:', err);
             toast.error('Error updating bookmark');
         }
@@ -106,7 +57,7 @@ export function PostCardFooter({
                 <div className="flex flex-row w-full justify-between text-sm flex-wrap">
                     <p>{totalReactions} reactions</p>
                     <p>{comments} comments</p>
-                    <p># bookmarked</p>
+                    <p>{bookmarkCount} bookmarked</p>
                     <p>{shares} shares</p>
                 </div>
                 <Separator />
@@ -114,7 +65,7 @@ export function PostCardFooter({
                     {/* Updated to just pass postId */}
                     <PostCardReactions postId={postId} />
 
-                    {/* Rest remains the same */}
+                    {/* Comments button/dialog */}
                     {props.insideDialog ? (
                         <Button
                             variant="ghost"
@@ -141,27 +92,20 @@ export function PostCardFooter({
                             }}
                         />
                     )}
-                    {/* Bookmark button */}
+                    
+                    {/* Bookmark button - using store state directly */}
                     <Button
                         variant="ghost"
                         className="text-primary dark:text-foreground"
-                        onClick={(e) => {
-                            if (!requireAuth()) {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                return;
-                            } else {
-                                handleBookmark(userId, postId);
-                            }
-                        }}
+                        onClick={() => handleBookmarkClick(userId, postId)}
                     >
-                        {bookmarkIcon ||
-                            (isBookmarked ? (
-                                <FaBookmark className="size-5.5" />
-                            ) : (
-                                <FaRegBookmark className="size-5.5" />
-                            ))}
+                        {isBookmarked ? (
+                            <FaBookmark className="size-5.5" />
+                        ) : (
+                            <FaRegBookmark className="size-5.5" />
+                        )}
                     </Button>
+                    
                     {/* Share button */}
                     <Button
                         variant="ghost"

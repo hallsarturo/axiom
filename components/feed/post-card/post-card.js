@@ -26,13 +26,11 @@ import {
     fetchPost,
 } from '@/lib/utils/post-card';
 import { useReactionsStore } from '@/lib/state/reactionsStore';
+import { useBookmarksStore } from '@/lib/state/bookmarksStore';
 
 export function PostCard(props) {
     const { user } = useUser();
     const [seeMore, setSeeMore] = useState(false);
-    const [isLocalBookmarked, setIsLocalBookmarked] = useState(
-        props.isBookmarked || false
-    );
 
     // Get the reaction store functions
     const {
@@ -41,6 +39,9 @@ export function PostCard(props) {
         getReactionData,
     } = useReactionsStore();
 
+    // Get the bookmarks store functions
+    const { setBookmarkData, fetchBookmarkCount } = useBookmarksStore();
+
     const token =
         process.env.NODE_ENV === 'development'
             ? typeof window !== 'undefined'
@@ -48,6 +49,7 @@ export function PostCard(props) {
                 : null
             : null;
 
+    // Fetch data with SWR
     const { data, mutate } = useSWR(
         props.postId && token && user?.id
             ? [`post`, props.postId, token, user.id]
@@ -55,20 +57,26 @@ export function PostCard(props) {
         ([, postId, token, userId]) => fetchPost(postId, token, userId),
         {
             onSuccess: (data) => {
-                // Sync SWR data with Zustand store for reactions
                 if (data) {
+                    // Set reaction data
                     setReactionData(props.postId, data);
+
+                    // Set bookmark data from post response
+                    setBookmarkData(props.postId, {
+                        isBookmarked: data.isBookmarked,
+                        // Don't set bookmarkCount here as it might not be accurate
+                    });
                 }
             },
         }
     );
 
-    // Set activeBookmarked from backend data when data changes
+    // Always fetch bookmark count when component mounts or post ID changes
     useEffect(() => {
-        if (data && data.isBookmarked !== undefined) {
-            setIsLocalBookmarked(data.isBookmarked);
+        if (props.postId) {
+            fetchBookmarkCount(props.postId);
         }
-    }, [data]);
+    }, [props.postId, fetchBookmarkCount]);
 
     // Get reaction data from store
     const { userReaction, reactionCounts } = getReactionData(props.postId);
@@ -176,8 +184,6 @@ export function PostCard(props) {
                     handleReaction={handleReaction}
                     postId={props.postId}
                     userId={user?.id}
-                    isBookmarked={isLocalBookmarked}
-                    setIsBookmarked={setIsLocalBookmarked}
                     mutatePost={mutate}
                     avatarSrc={avatarSrc}
                     badge={badge}

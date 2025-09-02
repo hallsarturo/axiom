@@ -36,6 +36,7 @@ import { useUser } from '@/components/context/UserProfileContext';
 import { putReaction, putBookmarkByPostId } from '@/lib/actions/actions';
 import { toast } from 'sonner';
 import { useReactionsStore } from '@/lib/state/reactionsStore';
+import { useBookmarksStore } from '@/lib/state/bookmarksStore';
 
 export function PostCardCommentsDialog({ post }) {
     const { user } = useUser();
@@ -46,6 +47,13 @@ export function PostCardCommentsDialog({ post }) {
                 : null
             : null;
 
+    // Get reactions functions from store
+    const { setReactionData, getReactionData } = useReactionsStore();
+
+    // Get bookmarks functions from store
+    const { setBookmarkData, fetchBookmarkCount, getBookmarkData } =
+        useBookmarksStore();
+
     // Fetch live post data
     const { data, mutate } = useSWR(
         post.postId && token && user?.id
@@ -54,34 +62,28 @@ export function PostCardCommentsDialog({ post }) {
         ([, postId, token, userId]) => fetchPost(postId, token, userId),
         {
             onSuccess: (data) => {
-                // Sync with reactions store
+                // Sync with stores
                 if (data) {
                     setReactionData(post.postId, data);
+                    // Also set bookmark data
+                    setBookmarkData(post.postId, {
+                        isBookmarked: data.isBookmarked,
+                        bookmarkCount: data.bookmarkCount || 0,
+                    });
                 }
             },
         }
     );
 
-    // Get reactions functions from store
-    const { setReactionData, getReactionData } = useReactionsStore();
-
-    // REMOVE THIS LINE - it's causing the problem:
-    // const { totalReactions } = getReactionData(post.postId);
-
-    const [seeMore, setSeeMore] = useState(false);
-    const [part1, part2] = splitDescription(post.description);
-
-    // Local bookmark state
-    const [isLocalBookmarked, setIsLocalBookmarked] = useState(
-        post.isBookmarked || false
-    );
-
-    // Update local bookmark state when data changes
+    // Always fetch bookmark count when component mounts or post ID changes
     useEffect(() => {
-        if (data && data.isBookmarked !== undefined) {
-            setIsLocalBookmarked(data.isBookmarked);
+        if (post.postId) {
+            fetchBookmarkCount(post.postId);
         }
-    }, [data]);
+    }, [post.postId, fetchBookmarkCount]);
+
+    // Get bookmark data from store
+    const { bookmarkCount, isBookmarked } = getBookmarkData(post.postId);
 
     // Use SWR data if available, else fallback to passed post
     const postData = data || post;
@@ -97,54 +99,18 @@ export function PostCardCommentsDialog({ post }) {
     // Get the bookmark icon based on the latest data
     const bookmarkIcon = getBookmarkIcon(postData?.isBookmarked);
 
-    // We don't need these handlers anymore as the reaction actions
-    // are handled directly by the PostCardReactions component
-
-    const handleDialogBookmark = async (userId, postId) => {
-        // Capture current state before toggle
-        const currentBookmarkState = isLocalBookmarked;
-
-        // Optimistically update UI
-        setIsLocalBookmarked(!isLocalBookmarked);
-
-        try {
-            await mutate(
-                async () => {
-                    const res = await putBookmarkByPostId(
-                        token,
-                        postId,
-                        userId
-                    );
-                    if (res.status === 500) {
-                        toast.error('Could not bookmark post');
-                        return null;
-                    }
-                    return await fetchPost(postId, token, user.id);
-                },
-                {
-                    optimisticData: (currentData) => ({
-                        ...currentData,
-                        isBookmarked: !currentBookmarkState,
-                    }),
-                    populateCache: true,
-                    rollbackOnError: true,
-                    revalidate: false,
-                }
-            );
-        } catch (err) {
-            // Revert state on error
-            setIsLocalBookmarked(isLocalBookmarked);
-            console.error('Dialog bookmark error:', err);
-            toast.error('Error updating bookmark');
-        }
-    };
-
     // Get comment count from Zustand store
     const { getComments } = useCommentsStore();
     const storeComments = getComments(post.postId);
 
     // Use comment count from Zustand store if available, otherwise use SWR data
     const commentsCount = storeComments.totalCount || postData?.comments || 0;
+
+    const [seeMore, setSeeMore] = useState(false);
+
+    // Split description for "See More" functionality
+    const description = postData.description;
+    const [part1, part2] = splitDescription(description);
 
     return (
         <Dialog>
@@ -195,14 +161,10 @@ export function PostCardCommentsDialog({ post }) {
                         <PostCardFooter
                             className="justify-center"
                             totalReactions={totalReactions}
-                            comments={commentsCount} // Use comments from Zustand
+                            comments={commentsCount}
                             shares={postData?.shares ?? 0}
                             postId={post.postId}
                             userId={user?.id}
-                            bookmarkIcon={bookmarkIcon}
-                            handleBookmark={handleDialogBookmark}
-                            isBookmarked={postData?.isBookmarked}
-                            setIsBookmarked={setIsLocalBookmarked}
                             mutatePost={mutate}
                             avatarSrc={postData.avatarSrc}
                             badge={postData.badge}
