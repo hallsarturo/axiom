@@ -11,15 +11,12 @@ import { putBookmarkByPostId } from '@/lib/actions/actions';
 import { fetchPost } from '@/lib/utils/post-card';
 import { PostCardCommentsDialog } from '@/components/feed/post-card/post-card-comments-dialog';
 import { useRequireAuth } from '@/hooks/useRequireAuth';
+import { useReactionsStore } from '@/lib/state/reactionsStore';
 
 export function PostCardFooter({
     totalReactions,
     comments,
     shares,
-    userReaction,
-    reactionCounts,
-    currentReactionIcon,
-    handleReaction,
     postId,
     userId,
     handleBookmark: externalHandleBookmark,
@@ -32,6 +29,9 @@ export function PostCardFooter({
     ...props
 }) {
     const requireAuth = useRequireAuth();
+
+    // We no longer need userReaction, reactionCounts, currentReactionIcon, handleReaction props
+    // since the PostCardReactions component now gets these from the store
 
     const handleBookmark = async (userId, postId) => {
         // Toggle local state immediately
@@ -111,12 +111,10 @@ export function PostCardFooter({
                 </div>
                 <Separator />
                 <div className="flex flex-row justify-around flex-wrap">
-                    <PostCardReactions
-                        userReaction={userReaction}
-                        reactionCounts={reactionCounts}
-                        currentReactionIcon={currentReactionIcon}
-                        handleReaction={handleReaction}
-                    />
+                    {/* Updated to just pass postId */}
+                    <PostCardReactions postId={postId} />
+
+                    {/* Rest remains the same */}
                     {props.insideDialog ? (
                         <Button
                             variant="ghost"
@@ -143,6 +141,7 @@ export function PostCardFooter({
                             }}
                         />
                     )}
+                    {/* Bookmark button */}
                     <Button
                         variant="ghost"
                         className="text-primary dark:text-foreground"
@@ -163,6 +162,7 @@ export function PostCardFooter({
                                 <FaRegBookmark className="size-5.5" />
                             ))}
                     </Button>
+                    {/* Share button */}
                     <Button
                         variant="ghost"
                         className="text-primary dark:text-foreground flex-shrink-0"

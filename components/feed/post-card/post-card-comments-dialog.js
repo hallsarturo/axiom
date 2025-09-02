@@ -35,6 +35,7 @@ import { useState, useEffect } from 'react';
 import { useUser } from '@/components/context/UserProfileContext';
 import { putReaction, putBookmarkByPostId } from '@/lib/actions/actions';
 import { toast } from 'sonner';
+import { useReactionsStore } from '@/lib/state/reactionsStore';
 
 export function PostCardCommentsDialog({ post }) {
     const { user } = useUser();
@@ -50,8 +51,20 @@ export function PostCardCommentsDialog({ post }) {
         post.postId && token && user?.id
             ? [`post`, post.postId, token, user.id]
             : null,
-        ([, postId, token, userId]) => fetchPost(postId, token, userId)
+        ([, postId, token, userId]) => fetchPost(postId, token, userId),
+        {
+            onSuccess: (data) => {
+                // Sync with reactions store
+                if (data) {
+                    setReactionData(post.postId, data);
+                }
+            },
+        }
     );
+
+    // Get reactions functions from store
+    const { setReactionData, getReactionData } = useReactionsStore();
+    const { totalReactions } = getReactionData(post.postId);
 
     const [seeMore, setSeeMore] = useState(false);
     const [part1, part2] = splitDescription(post.description);
@@ -74,20 +87,8 @@ export function PostCardCommentsDialog({ post }) {
     // Get the bookmark icon based on the latest data
     const bookmarkIcon = getBookmarkIcon(postData?.isBookmarked);
 
-    // Create local handlers for the dialog
-    const handleDialogReaction = async (type) => {
-        try {
-            await mutate(
-                async () => {
-                    await putReaction(token, user.id, post.postId, type);
-                    return await fetchPost(post.postId, token, user.id);
-                },
-                { revalidate: true }
-            );
-        } catch (err) {
-            console.error('Dialog reaction error:', err);
-        }
-    };
+    // We don't need these handlers anymore as the reaction actions
+    // are handled directly by the PostCardReactions component
 
     const handleDialogBookmark = async (userId, postId) => {
         // Capture current state before toggle
@@ -153,7 +154,7 @@ export function PostCardCommentsDialog({ post }) {
                 <p id="dialog-description" className="sr-only">
                     Comment section for this post
                 </p>
-                <DialogTitle className=" flex justify-center items-center text-xl font-bold text-primary dark:text-foreground text-center">
+                <DialogTitle className="flex justify-center items-center text-xl font-bold text-primary dark:text-foreground text-center">
                     Post by {capitalizeFirstLetter(postData.author)}
                 </DialogTitle>
                 <ScrollArea className="flex-1 w-full overflow-y-auto min-h-[10vh]">
@@ -183,33 +184,13 @@ export function PostCardCommentsDialog({ post }) {
                         />
                         <PostCardFooter
                             className="justify-center"
-                            totalReactions={postData?.totalReactions ?? 0}
+                            totalReactions={totalReactions}
                             comments={commentsCount} // Use comments from Zustand
                             shares={postData?.shares ?? 0}
-                            userReaction={postData?.currentUserReaction}
-                            reactionCounts={{
-                                likes: postData?.likes ?? 0,
-                                dislikes: postData?.dislikes ?? 0,
-                                laughs: postData?.laughs ?? 0,
-                                angers: postData?.angers ?? 0,
-                                totalReactions: postData?.totalReactions ?? 0,
-                            }}
-                            currentReactionIcon={getCurrentReactionIcon(
-                                postData?.currentUserReaction,
-                                {
-                                    likes: postData?.likes ?? 0,
-                                    dislikes: postData?.dislikes ?? 0,
-                                    laughs: postData?.laughs ?? 0,
-                                    angers: postData?.angers ?? 0,
-                                    totalReactions:
-                                        postData?.totalReactions ?? 0,
-                                }
-                            )}
-                            handleReaction={handleDialogReaction}
-                            bookmarkIcon={bookmarkIcon}
-                            handleBookmark={handleDialogBookmark}
                             postId={post.postId}
                             userId={user?.id}
+                            bookmarkIcon={bookmarkIcon}
+                            handleBookmark={handleDialogBookmark}
                             isBookmarked={postData?.isBookmarked}
                             setIsBookmarked={setIsLocalBookmarked}
                             mutatePost={mutate}

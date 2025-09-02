@@ -25,15 +25,21 @@ import {
     getCurrentReactionIcon,
     fetchPost,
 } from '@/lib/utils/post-card';
+import { useReactionsStore } from '@/lib/state/reactionsStore';
 
 export function PostCard(props) {
     const { user } = useUser();
     const [seeMore, setSeeMore] = useState(false);
-    // Only one reaction can be active at a time
-    const [activeReaction, setActiveReaction] = useState(null);
     const [isLocalBookmarked, setIsLocalBookmarked] = useState(
         props.isBookmarked || false
     );
+
+    // Get the reaction store functions
+    const {
+        setReactionData,
+        handleReaction: handleStoreReaction,
+        getReactionData,
+    } = useReactionsStore();
 
     const token =
         process.env.NODE_ENV === 'development'
@@ -41,55 +47,53 @@ export function PostCard(props) {
                 ? localStorage.getItem('token')
                 : null
             : null;
+
     const { data, mutate } = useSWR(
         props.postId && token && user?.id
             ? [`post`, props.postId, token, user.id]
             : null,
-        ([, postId, token, userId]) => fetchPost(postId, token, userId)
-    );
-
-    // Set activeReaction from backend data when data changes
-    useEffect(() => {
-        if (data && data.currentUserReaction !== undefined) {
-            //console.log('currentUserReaction', data.currentUserReaction);
-            setActiveReaction(data.currentUserReaction);
+        ([, postId, token, userId]) => fetchPost(postId, token, userId),
+        {
+            onSuccess: (data) => {
+                // Sync SWR data with Zustand store for reactions
+                if (data) {
+                    setReactionData(props.postId, data);
+                }
+            },
         }
-    }, [data]);
+    );
 
     // Set activeBookmarked from backend data when data changes
     useEffect(() => {
         if (data && data.isBookmarked !== undefined) {
-            //console.log('currentUserReaction', data.currentUserReaction);
             setIsLocalBookmarked(data.isBookmarked);
         }
     }, [data]);
 
-    // Use SWR data for reaction counts
-    const reactionCounts = data
-        ? {
-              likes: data.likes,
-              dislikes: data.dislikes,
-              laughs: data.laughs,
-              angers: data.angers,
-              totalReactions: data.totalReactions,
-          }
-        : {
-              likes: props.likes,
-              dislikes: props.dislikes,
-              laughs: props.laughs,
-              angers: props.angers,
-              totalReactions: props.totalReactions,
-          };
+    // Get reaction data from store
+    const { userReaction, reactionCounts } = getReactionData(props.postId);
+
+    // Generate the current reaction icon based on store data
+    const currentReactionIcon = getCurrentReactionIcon(
+        userReaction,
+        reactionCounts
+    );
+
+    // Reaction handler delegates to store
+    const handleReaction = async (type) => {
+        await handleStoreReaction(props.postId, type, user?.id, token);
+        // We don't need to mutate SWR here as the store handles the network calls
+        // If you want to keep SWR in sync, you could still call mutate()
+        mutate();
+    };
 
     // Get comment count from Zustand store
     const { getComments } = useCommentsStore();
     const storeComments = getComments(props.postId);
-
-    // Use SWR data for fetching post data, but comments count from Zustand store
-    // Prefer Zustand comments count, fallback to SWR data, then to props
     const commentsCount =
         storeComments.totalCount || data?.commentsCount || props.commentsCount;
 
+    // Get avatar src, badge color, etc.
     const avatarSrc = getAvatarSrc(
         props.type,
         props.avatarPic,
@@ -100,28 +104,6 @@ export function PostCard(props) {
     const badge = getBadgeColor(props.type);
     const description = props.description;
     const [part1, part2] = splitDescription(description);
-    // Use SWR data for user's reaction
-    const userReaction = data?.currentUserReaction;
-    const currentReactionIcon = getCurrentReactionIcon(
-        userReaction,
-        reactionCounts
-    );
-
-    // Reaction States
-    const handleReaction = async (type) => {
-        try {
-            await mutate(
-                async () => {
-                    console.log('reaction handler clicked');
-                    await putReaction(token, user.id, props.postId, type);
-                    return await fetchPost(props.postId, token, user.id);
-                },
-                { revalidate: true }
-            );
-        } catch (err) {
-            console.error('Reaction error:', err);
-        }
-    };
 
     // Delete user post
     async function deletePost() {
@@ -153,8 +135,8 @@ export function PostCard(props) {
         }
     }
 
-    // Use SWR data for total reactions
-    const totalReactions = data?.totalReactions ?? props.totalReactions;
+    // Use total reactions from store
+    const totalReactions = reactionCounts.totalReactions;
 
     return (
         <div

@@ -10,14 +10,71 @@ import { FaRegLaughBeam, FaLaughBeam } from 'react-icons/fa';
 import { FaRegAngry } from 'react-icons/fa';
 import { FaFaceAngry } from 'react-icons/fa6';
 import { useRequireAuth } from '@/hooks/useRequireAuth';
+import { useReactionsStore } from '@/lib/state/reactionsStore';
+import { useUser } from '@/components/context/UserProfileContext';
 
-export function PostCardReactions({
-    userReaction,
-    reactionCounts,
-    currentReactionIcon,
-    handleReaction,
-}) {
+export function PostCardReactions({ postId }) {
     const requireAuth = useRequireAuth();
+    const { user } = useUser();
+
+    // Get reaction data from Zustand store
+    const { getReactionData, handleReaction } = useReactionsStore();
+    const { userReaction, reactionCounts } = getReactionData(postId);
+
+    const token =
+        process.env.NODE_ENV === 'development'
+            ? typeof window !== 'undefined'
+                ? localStorage.getItem('token')
+                : null
+            : null;
+
+    // Generate current reaction icon
+    const currentReactionIcon = (() => {
+        switch (userReaction) {
+            case 'like':
+                return (
+                    <div className="flex flex-row gap-2 align-middle">
+                        <BiSolidLike className="size-5.5 text-primary dark:text-foreground" />
+                        <span>{reactionCounts.likes} Likes</span>
+                    </div>
+                );
+            case 'dislike':
+                return (
+                    <div className="flex flex-row gap-2 align-middle text-primary dark:text-foreground">
+                        <BiSolidDislike className="size-5.5" />
+                        <span>{reactionCounts.dislikes} Dislikes</span>
+                    </div>
+                );
+            case 'laugh':
+                return (
+                    <div className="flex flex-row gap-2 align-middle text-primary dark:text-foreground">
+                        <FaLaughBeam className="size-5.5" />
+                        <span>{reactionCounts.laughs} Laughs</span>
+                    </div>
+                );
+            case 'anger':
+                return (
+                    <div className="flex flex-row gap-2 align-middle text-primary dark:text-foreground">
+                        <FaFaceAngry className="size-5.5" />
+                        <span>{reactionCounts.angers} Anger</span>
+                    </div>
+                );
+            default:
+                return (
+                    <div className="flex flex-row gap-2 align-middle">
+                        <BiLike className="size-5.5" />
+                        <span>{reactionCounts.likes} Likes</span>
+                    </div>
+                );
+        }
+    })();
+
+    // Handle reaction directly with the store
+    const handleReactionClick = (type) => {
+        if (!requireAuth()) return;
+        handleReaction(postId, type, user?.id, token);
+    };
+
     return (
         <Popover>
             <PopoverTrigger asChild>
@@ -50,7 +107,7 @@ export function PostCardReactions({
             </PopoverTrigger>
             <PopoverContent className="w-full">
                 <Button
-                    onClick={() => handleReaction('like')}
+                    onClick={() => handleReactionClick('like')}
                     className="text-xs"
                     variant="ghost"
                 >
@@ -67,7 +124,7 @@ export function PostCardReactions({
                     )}
                 </Button>
                 <Button
-                    onClick={() => handleReaction('dislike')}
+                    onClick={() => handleReactionClick('dislike')}
                     className="text-xs"
                     variant="ghost"
                 >
@@ -84,7 +141,7 @@ export function PostCardReactions({
                     )}
                 </Button>
                 <Button
-                    onClick={() => handleReaction('laugh')}
+                    onClick={() => handleReactionClick('laugh')}
                     className="text-xs"
                     variant="ghost"
                 >
@@ -101,7 +158,7 @@ export function PostCardReactions({
                     )}
                 </Button>
                 <Button
-                    onClick={() => handleReaction('anger')}
+                    onClick={() => handleReactionClick('anger')}
                     className="text-xs"
                     variant="ghost"
                 >
