@@ -6,10 +6,14 @@ import { Button } from '@/components/ui/button';
 import { PostCardCommentForm } from '@/components/feed/post-card/post-card-comment-form';
 import { timeAgo } from '@/lib/utils/date';
 import Link from 'next/link';
-import { useUser } from '@/components/context/UserProfileContext';
 import { useState } from 'react';
 
-export function ChildComments({ childComments, postId, replyCommentList, handleCommentReply }) {
+export function ChildComments({
+    childComments,
+    postId,
+    replyCommentList,
+    handleCommentReply,
+}) {
     const [page, setPage] = useState(1);
     const pageSize = 10;
 

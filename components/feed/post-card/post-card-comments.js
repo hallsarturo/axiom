@@ -3,12 +3,16 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import {
+    Collapsible,
+    CollapsibleContent,
+    CollapsibleTrigger,
+} from '@/components/ui/collapsible';
 import { PostCardCommentForm } from '@/components/feed/post-card/post-card-comment-form';
 import { ChildComments } from '@/components/feed/post-card/child-comments';
 import { getCommentsByPostId } from '@/lib/actions/actions';
 import { timeAgo } from '@/lib/utils/date';
 import { useState } from 'react';
-import { useUser } from '@/components/context/UserProfileContext';
 import Link from 'next/link';
 import useSWR from 'swr';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -19,10 +23,9 @@ const fetchComments = async (postId, page, pageSize) => {
 };
 
 export function PostCardComments({ postId, mutateKey }) {
-    const { user } = useUser();
     const [replyCommentList, setReplyCommentList] = useState([]);
     const [page, setPage] = useState(1);
-    const pageSize = 10;
+    const pageSize = 20;
 
     // Use SWR for automatic refresh
     const { data, error, isLoading, mutate } = useSWR(
@@ -42,9 +45,11 @@ export function PostCardComments({ postId, mutateKey }) {
     const parentComments = comments.filter(
         (c) => c.parentCommentId === 0 || c.parentCommentId === null
     );
+    console.log('parent comments: ', parentComments);
     const childComments = comments.filter(
         (c) => c.parentCommentId !== 0 && c.parentCommentId !== null
     );
+    console.log('childComments: ', childComments);
 
     // Helper: get children for a parent comment
     const getChildren = (parentId) =>
