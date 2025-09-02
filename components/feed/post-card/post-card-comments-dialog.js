@@ -64,7 +64,9 @@ export function PostCardCommentsDialog({ post }) {
 
     // Get reactions functions from store
     const { setReactionData, getReactionData } = useReactionsStore();
-    const { totalReactions } = getReactionData(post.postId);
+
+    // REMOVE THIS LINE - it's causing the problem:
+    // const { totalReactions } = getReactionData(post.postId);
 
     const [seeMore, setSeeMore] = useState(false);
     const [part1, part2] = splitDescription(post.description);
@@ -83,6 +85,14 @@ export function PostCardCommentsDialog({ post }) {
 
     // Use SWR data if available, else fallback to passed post
     const postData = data || post;
+
+    // Get reaction data AFTER we have postData:
+    const reactionData = getReactionData(post.postId);
+    // This ensures we have the latest data from the store
+    const totalReactions =
+        reactionData?.reactionCounts?.totalReactions ||
+        postData?.totalReactions ||
+        0;
 
     // Get the bookmark icon based on the latest data
     const bookmarkIcon = getBookmarkIcon(postData?.isBookmarked);
