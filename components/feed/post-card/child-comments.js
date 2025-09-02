@@ -30,7 +30,7 @@ export function ChildComments({
                         className="flex flex-col w-full px-2 py-2"
                     >
                         <div className="flex gap-2 relative">
-                            <span className="absolute -left-12 top-5 h-[1px] w-[30px] bg-border" />
+                            <span className="absolute -left-12 top-4 h-[1px] w-[30px] bg-border" />
                             <Avatar>
                                 <AvatarImage src={comment.userProfilePic} />
                                 <AvatarFallback>CN</AvatarFallback>

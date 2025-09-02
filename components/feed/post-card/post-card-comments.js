@@ -146,16 +146,27 @@ export function PostCardComments({ postId, mutateKey }) {
                                             : `See ${getChildren(comment.id).length} answer`}
                                     </CollapsibleTrigger>
                                     <CollapsibleContent>
-                                        <ChildComments
-                                            childComments={getChildren(
-                                                comment.id
-                                            )}
-                                            postId={postId}
-                                            replyCommentList={replyCommentList}
-                                            handleCommentReply={
-                                                handleCommentReply
-                                            }
-                                        />
+                                        <div className="relative">
+                                            <span
+                                                className="absolute left-[-40px] bg-border w-px"
+                                                style={{
+                                                    top: '-1rem', // same as top-10
+                                                    height: 'calc(90%)', // subtract 10px from the height
+                                                }}
+                                            />
+                                            <ChildComments
+                                                childComments={getChildren(
+                                                    comment.id
+                                                )}
+                                                postId={postId}
+                                                replyCommentList={
+                                                    replyCommentList
+                                                }
+                                                handleCommentReply={
+                                                    handleCommentReply
+                                                }
+                                            />
+                                        </div>
                                     </CollapsibleContent>
                                 </Collapsible>
                             </>
