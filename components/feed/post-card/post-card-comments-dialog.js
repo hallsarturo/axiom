@@ -96,9 +96,6 @@ export function PostCardCommentsDialog({ post }) {
         postData?.totalReactions ||
         0;
 
-    // Get the bookmark icon based on the latest data
-    const bookmarkIcon = getBookmarkIcon(postData?.isBookmarked);
-
     // Get comment count from Zustand store
     const { getComments } = useCommentsStore();
     const storeComments = getComments(post.postId);

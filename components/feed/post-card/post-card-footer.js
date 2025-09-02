@@ -28,7 +28,8 @@ export function PostCardFooter({
     const requireAuth = useRequireAuth();
 
     // Get bookmark data directly from Zustand store
-    const { handleBookmark: storeHandleBookmark, getBookmarkData } = useBookmarksStore();
+    const { handleBookmark: storeHandleBookmark, getBookmarkData } =
+        useBookmarksStore();
     const { isBookmarked, bookmarkCount } = getBookmarkData(postId);
 
     const token =
@@ -36,11 +37,24 @@ export function PostCardFooter({
             ? localStorage.getItem('token')
             : null;
 
+    // Add logging to help diagnose issues
     const handleBookmarkClick = async (userId, postId) => {
         if (!requireAuth()) return;
 
+        console.log(
+            'Before bookmark toggle - isBookmarked:',
+            isBookmarked,
+            'count:',
+            bookmarkCount
+        );
         try {
-            await storeHandleBookmark(postId, userId, token);
+            const result = await storeHandleBookmark(postId, userId, token);
+            console.log('After bookmark toggle - result:', result);
+
+            // Get fresh state after toggle
+            const newState = getBookmarkData(postId);
+            console.log('New bookmark state:', newState);
+
             // SWR mutate for consistency
             if (mutatePost) {
                 mutatePost();
@@ -92,7 +106,7 @@ export function PostCardFooter({
                             }}
                         />
                     )}
-                    
+
                     {/* Bookmark button - using store state directly */}
                     <Button
                         variant="ghost"
@@ -100,12 +114,12 @@ export function PostCardFooter({
                         onClick={() => handleBookmarkClick(userId, postId)}
                     >
                         {isBookmarked ? (
-                            <FaBookmark className="size-5.5" />
-                        ) : (
                             <FaRegBookmark className="size-5.5" />
+                        ) : (
+                            <FaBookmark className="size-5.5" />
                         )}
                     </Button>
-                    
+
                     {/* Share button */}
                     <Button
                         variant="ghost"
