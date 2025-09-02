@@ -12,6 +12,7 @@ import { toast } from 'sonner';
 import { PostCardHeader } from '@/components/feed/post-card/post-card-header';
 import { PostCardContent } from '@/components/feed/post-card/post-card-content';
 import { PostCardFooter } from '@/components/feed/post-card/post-card-footer';
+import { useCommentsStore } from '@/lib/state/commentsStore';
 import { useUser } from '@/components/context/UserProfileContext';
 import { useEffect, useState } from 'react';
 import useSWR from 'swr';
@@ -79,6 +80,15 @@ export function PostCard(props) {
               angers: props.angers,
               totalReactions: props.totalReactions,
           };
+
+    // Get comment count from Zustand store
+    const { getComments } = useCommentsStore();
+    const storeComments = getComments(props.postId);
+
+    // Use SWR data for fetching post data, but comments count from Zustand store
+    // Prefer Zustand comments count, fallback to SWR data, then to props
+    const commentsCount =
+        storeComments.totalCount || data?.commentsCount || props.commentsCount;
 
     const avatarSrc = getAvatarSrc(
         props.type,
@@ -176,7 +186,7 @@ export function PostCard(props) {
                 <PostCardFooter
                     className="justify-center"
                     totalReactions={totalReactions}
-                    comments={props.comments}
+                    comments={commentsCount}
                     shares={props.shares}
                     userReaction={userReaction}
                     reactionCounts={reactionCounts}

@@ -16,7 +16,7 @@ import { toast } from 'sonner';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { userPostCommentSchema } from '@/lib/schemas/posts';
-import { publishComment } from '@/lib/actions/actions';
+import { useCommentsStore } from '@/lib/state/commentsStore';
 import { useUser } from '@/components/context/UserProfileContext';
 import { useState } from 'react';
 import { useRequireAuth } from '@/hooks/useRequireAuth';
@@ -35,11 +35,13 @@ export function PostCardCommentForm({
         resolver: zodResolver(userPostCommentSchema),
         defaultValues: {
             content: '',
-            parentCommentId: parentCommentId || null,
         },
     });
     const [message, setMessage] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
+
+    // Get addComment function from Zustand store
+    const { addComment } = useCommentsStore();
 
     async function onSubmit(values) {
         setIsSubmitting(true);
@@ -53,27 +55,19 @@ export function PostCardCommentForm({
         }
 
         try {
-            const submitValues = {
-                ...values,
-                parentCommentId: parentCommentId || null,
-            };
-
-            const result = await publishComment(token, postId, submitValues);
+            // Use Zustand store to add comment
+            const result = await addComment(
+                token,
+                postId,
+                values,
+                parentCommentId
+            );
 
             if (result.success) {
                 form.reset(); // Reset form fields
-
-                // Mutate the comments data to refresh
-                mutate(
-                    (key) =>
-                        Array.isArray(key) &&
-                        key[0] &&
-                        key[0].startsWith(`comments-${postId}`),
-                    undefined,
-                    { revalidate: true }
-                );
-
                 toast.success('Comment added');
+
+                // Call success callback if provided
                 if (onSubmitSuccess) {
                     onSubmitSuccess();
                 }

@@ -10,69 +10,57 @@ import {
 } from '@/components/ui/collapsible';
 import { PostCardCommentForm } from '@/components/feed/post-card/post-card-comment-form';
 import { ChildComments } from '@/components/feed/post-card/child-comments';
-import { getCommentsByPostId } from '@/lib/actions/actions';
 import { timeAgo } from '@/lib/utils/date';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import useSWR from 'swr';
+import { useCommentsStore } from '@/lib/state/commentsStore';
 import { Skeleton } from '@/components/ui/skeleton';
 
-// Create a fetcher function for SWR
-const fetchComments = async (postId, page, pageSize) => {
-    return await getCommentsByPostId(postId, page, pageSize);
-};
-
-export function PostCardComments({ postId, mutateKey }) {
+export function PostCardComments({ postId }) {
     const [replyCommentList, setReplyCommentList] = useState([]);
     const [page, setPage] = useState(1);
+    const [loading, setLoading] = useState(true);
     const pageSize = 20;
 
-    // Use SWR for automatic refresh
-    const { data, error, isLoading, mutate } = useSWR(
-        [`comments-${postId}`, page],
-        () => fetchComments(postId, page, pageSize),
-        {
-            revalidateOnFocus: false,
-            dedupingInterval: 5000,
-        }
-    );
+    // Get comments from Zustand store
+    const { fetchComments, getComments } = useCommentsStore();
+    const { comments = [], totalCount = 0 } = getComments(postId);
 
-    // Extract data from response
-    const comments = data?.comments || [];
-    const totalPages = data?.pagination?.totalPages || 1;
+    // Fetch comments when component mounts or postId/page changes
+    useEffect(() => {
+        const loadComments = async () => {
+            setLoading(true);
+            await fetchComments(postId, page, pageSize);
+            setLoading(false);
+        };
+
+        loadComments();
+    }, [fetchComments, postId, page]);
 
     // Split comments into parents and children
     const parentComments = comments.filter(
         (c) => c.parentCommentId === 0 || c.parentCommentId === null
     );
-    console.log('parent comments: ', parentComments);
+
     const childComments = comments.filter(
         (c) => c.parentCommentId !== 0 && c.parentCommentId !== null
     );
-    console.log('childComments: ', childComments);
 
     // Helper: get children for a parent comment
     const getChildren = (parentId) =>
         childComments.filter((c) => c.parentCommentId === parentId);
 
-    if (isLoading) {
+    if (loading) {
         return <CommentsSkeleton />;
-    }
-
-    if (error) {
-        return <div className="text-red-500 p-4">Error loading comments</div>;
     }
 
     // Handle comment replies
     const handleCommentReply = (commentId) => {
-        // Toggle the comment ID in the replyCommentList
         if (replyCommentList.includes(commentId)) {
-            //Remove the ID if already in the List (closes the reply form)
             setReplyCommentList(
                 replyCommentList.filter((id) => id !== commentId)
             );
         } else {
-            // Add the ID if not in the list (opens the reply form)
             setReplyCommentList([...replyCommentList, commentId]);
         }
     };
@@ -178,9 +166,8 @@ export function PostCardComments({ postId, mutateKey }) {
                                     postId={postId}
                                     parentCommentId={comment.id}
                                     onSubmitSuccess={() => {
-                                        // Close the reply form after successful submission
-                                        handleCommentReply(comment.id); // Toggle off the reply form
-                                        mutate(); // Re-fetch comments to show the new reply
+                                        // Close reply form after submission
+                                        handleCommentReply(comment.id);
                                     }}
                                     placeHolder={`reply to ${comment.username}`}
                                 />
@@ -190,7 +177,7 @@ export function PostCardComments({ postId, mutateKey }) {
                 </div>
             ))}
 
-            {/* You can add pagination controls here */}
+            {/* Pagination controls if needed */}
         </div>
     );
 }

@@ -30,6 +30,7 @@ import {
 import { capitalizeFirstLetter } from '@/lib/utils/strings';
 import useSWR from 'swr';
 import { fetchPost } from '@/lib/utils/post-card';
+import { useCommentsStore } from '@/lib/state/commentsStore';
 import { useState, useEffect } from 'react';
 import { useUser } from '@/components/context/UserProfileContext';
 import { putReaction, putBookmarkByPostId } from '@/lib/actions/actions';
@@ -47,7 +48,7 @@ export function PostCardCommentsDialog({ post }) {
     // Fetch live post data
     const { data, mutate } = useSWR(
         post.postId && token && user?.id
-            ? [`post-dialog`, post.postId, token, user.id]
+            ? [`post`, post.postId, token, user.id]
             : null,
         ([, postId, token, userId]) => fetchPost(postId, token, userId)
     );
@@ -127,6 +128,13 @@ export function PostCardCommentsDialog({ post }) {
         }
     };
 
+    // Get comment count from Zustand store
+    const { getComments } = useCommentsStore();
+    const storeComments = getComments(post.postId);
+
+    // Use comment count from Zustand store if available, otherwise use SWR data
+    const commentsCount = storeComments.totalCount || postData?.comments || 0;
+
     return (
         <Dialog>
             <DialogTrigger asChild>
@@ -176,7 +184,7 @@ export function PostCardCommentsDialog({ post }) {
                         <PostCardFooter
                             className="justify-center"
                             totalReactions={postData?.totalReactions ?? 0}
-                            comments={postData?.comments ?? 0}
+                            comments={commentsCount} // Use comments from Zustand
                             shares={postData?.shares ?? 0}
                             userReaction={postData?.currentUserReaction}
                             reactionCounts={{
