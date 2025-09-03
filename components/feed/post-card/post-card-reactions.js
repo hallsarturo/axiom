@@ -39,8 +39,11 @@ export function PostCardReactions({
     const finalTriggerTextClass =
         triggerTextClass || 'text-primary dark:text-foreground';
 
-    const triggerIconClass = `${triggerIconSizeClass} ${finalTriggerTextClass}`;
-    const contentIconClass = `${contentIconSizeClass} text-primary dark:text-foreground`;
+    // separate size-only classes and color handled by wrapper (so SVG uses currentColor)
+    const triggerIconSizeOnly = triggerIconSizeClass;
+    const contentIconSizeOnly = contentIconSizeClass;
+    const iconWrapperColorClass = `${finalTriggerTextClass} group-hover:text-white transition-colors`;
+    const contentIconWrapperColorClass = `text-primary dark:text-foreground group-hover:text-white transition-colors`;
 
     // Generate current reaction icon
     const currentReactionIcon = (() => {
@@ -48,35 +51,71 @@ export function PostCardReactions({
             case 'like':
                 return (
                     <div className="flex flex-row gap-2 items-center">
-                        <BiSolidLike className={triggerIconClass} />
-                        <span>{reactionCounts.likes} Likes</span>
+                        <span className={iconWrapperColorClass}>
+                            <BiSolidLike
+                                fill="currentColor"
+                                className={triggerIconSizeOnly}
+                            />
+                        </span>
+                        <span
+                            className={`${finalTriggerTextClass} group-hover:text-white transition-colors`}
+                        >
+                            {reactionCounts.likes} Likes
+                        </span>
                     </div>
                 );
             case 'dislike':
                 return (
-                    <div className="flex flex-row gap-2 items-center text-primary dark:text-foreground">
-                        <BiSolidDislike className={triggerIconClass} />
-                        <span>{reactionCounts.dislikes} Dislikes</span>
+                    <div className="flex flex-row gap-2 items-center">
+                        <span className={iconWrapperColorClass}>
+                            <BiSolidDislike
+                                fill="currentColor"
+                                className={triggerIconSizeOnly}
+                            />
+                        </span>
+                        <span
+                            className={`${finalTriggerTextClass} group-hover:text-white transition-colors`}
+                        >
+                            {reactionCounts.dislikes} Dislikes
+                        </span>
                     </div>
                 );
             case 'laugh':
                 return (
-                    <div className="flex flex-row gap-2 items-center text-primary dark:text-foreground">
-                        <FaLaughBeam className={triggerIconClass} />
-                        <span>{reactionCounts.laughs} Laughs</span>
+                    <div className="flex flex-row gap-2 items-center">
+                        <span className={iconWrapperColorClass}>
+                            <FaLaughBeam
+                                fill="currentColor"
+                                className={triggerIconSizeOnly}
+                            />
+                        </span>
+                        <span
+                            className={`${finalTriggerTextClass} group-hover:text-white transition-colors`}
+                        >
+                            {reactionCounts.laughs} Laughs
+                        </span>
                     </div>
                 );
             case 'anger':
                 return (
-                    <div className="flex flex-row gap-2 items-center text-primary dark:text-foreground">
-                        <FaFaceAngry className={triggerIconClass} />
-                        <span>{reactionCounts.angers} Anger</span>
+                    <div className="flex flex-row gap-2 items-center">
+                        <span className={iconWrapperColorClass}>
+                            <FaFaceAngry
+                                fill="currentColor"
+                                className={triggerIconSizeOnly}
+                            />
+                        </span>
+                        <span
+                            className={`${finalTriggerTextClass} group-hover:text-white transition-colors`}
+                        >
+                            {reactionCounts.angers} Anger
+                        </span>
                     </div>
                 );
             default:
                 return (
                     <div className="flex flex-row gap-2 items-center">
-                        <BiLike className={triggerIconClass} />
+                        <BiLike className={triggerIconSizeOnly} />
                         <span>{reactionCounts.likes} Likes</span>
                     </div>
                 );
@@ -149,9 +188,9 @@ export function PostCardReactions({
                     <Button
                         type="button"
                         variant={triggerButtonVariant}
-                        className={`${triggerClassName} ${triggerTextClass} ${commentDialogOpen ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        // make this a group so children can use group-hover
+                        className={`group ${triggerClassName} ${finalTriggerTextClass} ${commentDialogOpen ? 'opacity-50 cursor-not-allowed' : ''}`}
                         onClick={handleTriggerClick}
-                        // Important: disable the button when dialog is open
                         disabled={commentDialogOpen}
                     >
                         <AnimatePresence mode="wait">
@@ -176,14 +215,24 @@ export function PostCardReactions({
                     variant="ghost"
                 >
                     {userReaction === 'like' ? (
-                        <div className="flex flex-row gap-2 align-middle text-primary dark:text-foreground">
-                            <BiSolidLike className={contentIconClass} />
-                            {reactionCounts.likes}
+                        <div className="flex flex-row gap-2 align-middle">
+                            <span className={contentIconWrapperColorClass}>
+                                <BiSolidLike
+                                    fill="currentColor"
+                                    className={contentIconSizeOnly}
+                                />
+                            </span>
+                            <span className="ml-2">{reactionCounts.likes}</span>
                         </div>
                     ) : (
-                        <div className="flex flex-row gap-2 align-middle text-primary dark:text-foreground">
-                            <BiLike className={contentIconClass} />
-                            {reactionCounts.likes}
+                        <div className="flex flex-row gap-2 align-middle">
+                            <span className={contentIconWrapperColorClass}>
+                                <BiLike
+                                    fill="currentColor"
+                                    className={contentIconSizeOnly}
+                                />
+                            </span>
+                            <span className="ml-2">{reactionCounts.likes}</span>
                         </div>
                     )}
                 </Button>
@@ -193,14 +242,28 @@ export function PostCardReactions({
                     variant="ghost"
                 >
                     {userReaction === 'dislike' ? (
-                        <div className="flex flex-row gap-2 align-middle text-primary dark:text-foreground">
-                            <BiSolidDislike className={contentIconClass} />
-                            {reactionCounts.dislikes}
+                        <div className="flex flex-row gap-2 align-middle">
+                            <span className={contentIconWrapperColorClass}>
+                                <BiSolidDislike
+                                    fill="currentColor"
+                                    className={contentIconSizeOnly}
+                                />
+                            </span>
+                            <span className="ml-2">
+                                {reactionCounts.dislikes}
+                            </span>
                         </div>
                     ) : (
-                        <div className="flex flex-row gap-2 align-middle text-primary dark:text-foreground">
-                            <BiDislike className={contentIconClass} />
-                            {reactionCounts.dislikes}
+                        <div className="flex flex-row gap-2 align-middle">
+                            <span className={contentIconWrapperColorClass}>
+                                <BiDislike
+                                    fill="currentColor"
+                                    className={contentIconSizeOnly}
+                                />
+                            </span>
+                            <span className="ml-2">
+                                {reactionCounts.dislikes}
+                            </span>
                         </div>
                     )}
                 </Button>
@@ -210,14 +273,28 @@ export function PostCardReactions({
                     variant="ghost"
                 >
                     {userReaction === 'laugh' ? (
-                        <div className="flex flex-row gap-2 align-middle text-primary dark:text-foreground">
-                            <FaLaughBeam className={contentIconClass} />
-                            {reactionCounts.laughs}
+                        <div className="flex flex-row gap-2 align-middle">
+                            <span className={contentIconWrapperColorClass}>
+                                <FaLaughBeam
+                                    fill="currentColor"
+                                    className={contentIconSizeOnly}
+                                />
+                            </span>
+                            <span className="ml-2">
+                                {reactionCounts.laughs}
+                            </span>
                         </div>
                     ) : (
-                        <div className="flex flex-row gap-2 align-middle text-primary dark:text-foreground">
-                            <FaRegLaughBeam className={contentIconClass} />
-                            {reactionCounts.laughs}
+                        <div className="flex flex-row gap-2 align-middle">
+                            <span className={contentIconWrapperColorClass}>
+                                <FaRegLaughBeam
+                                    fill="currentColor"
+                                    className={contentIconSizeOnly}
+                                />
+                            </span>
+                            <span className="ml-2">
+                                {reactionCounts.laughs}
+                            </span>
                         </div>
                     )}
                 </Button>
@@ -227,14 +304,28 @@ export function PostCardReactions({
                     variant="ghost"
                 >
                     {userReaction === 'anger' ? (
-                        <div className="flex flex-row gap-2 align-middle text-primary dark:text-foreground">
-                            <FaFaceAngry className={contentIconClass} />
-                            {reactionCounts.angers}
+                        <div className="flex flex-row gap-2 align-middle">
+                            <span className={contentIconWrapperColorClass}>
+                                <FaFaceAngry
+                                    fill="currentColor"
+                                    className={contentIconSizeOnly}
+                                />
+                            </span>
+                            <span className="ml-2">
+                                {reactionCounts.angers}
+                            </span>
                         </div>
                     ) : (
-                        <div className="flex flex-row gap-2 align-middle text-primary dark:text-foreground">
-                            <FaRegAngry className={contentIconClass} />
-                            {reactionCounts.angers}
+                        <div className="flex flex-row gap-2 align-middle">
+                            <span className={contentIconWrapperColorClass}>
+                                <FaRegAngry
+                                    fill="currentColor"
+                                    className={contentIconSizeOnly}
+                                />
+                            </span>
+                            <span className="ml-2">
+                                {reactionCounts.angers}
+                            </span>
                         </div>
                     )}
                 </Button>
