@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import {
     NavigationMenu,
     NavigationMenuContent,
@@ -126,118 +127,152 @@ export function NavigationConnected() {
 
     return (
         <>
-            <nav className="">
-                {/* Desktop menu */}
-                <div className="hidden md:block">
+            {/* Desktop menu */}
+            <div className="hidden md:flex md:w-full md:justify-around">
+                {/* Left section - Search */}
+                <div className="flex justify-center">
                     <NavigationMenu
                         position="popper"
                         viewport={false}
-                        className="min-w-0"
+                        className="flex w-full !max-w-full"
                     >
-                        <NavigationMenuList className="gap-4">
-                            <NavigationMenuItem>
-                                <SearchBar />
-                            </NavigationMenuItem>
-                            {menuItems.map((item, idx) => {
-                                const isActive = pathname === item.href;
-                                return (
-                                    <NavigationMenuItem key={idx}>
-                                        <NavigationMenuLink
-                                            asChild
-                                            className={
-                                                `${navigationMenuTriggerStyle()} font-medium ` +
-                                                (isActive
-                                                    ? 'bg-accent text-accent-foreground dark:bg-accent dark:text-accent-foreground'
-                                                    : 'text-primary dark:text-foreground')
-                                            }
-                                        >
-                                            {item.button ? (
-                                                <Button
-                                                    variant={
-                                                        isActive
-                                                            ? 'accent'
-                                                            : 'primary'
-                                                    }
-                                                    asChild
-                                                >
-                                                    <Link href={item.href}>
-                                                        {item.label}
-                                                    </Link>
-                                                </Button>
-                                            ) : (
-                                                <Link href={item.href}>
-                                                    {item.icon}
-                                                </Link>
-                                            )}
-                                        </NavigationMenuLink>
-                                    </NavigationMenuItem>
-                                );
-                            })}
-                            <div className="flex justify-end ml-7">
-                                <NavigationMenuItem>
-                                    <NavigationMenuTrigger className="text-primary dark:text-foreground">
-                                        <Badge className="h-5 min-w-5 rounded-full px-1 font-mono tabular-nums cursor-pointer">
-                                            8
-                                        </Badge>
-                                    </NavigationMenuTrigger>
+                        <NavigationMenuList>
+                            <div className="flex items-center justify-around">
+                                <NavigationMenuItem className="mr-10">
+                                    <Link href="/feed">
+                                        <Image
+                                            src="/axiom_purple.png"
+                                            width={60}
+                                            height={40}
+                                            alt="Axiom logo"
+                                        />
+                                    </Link>
                                 </NavigationMenuItem>
-                                <NavigationMenuItem className="">
-                                    <NavigationMenuTrigger className="text-primary font-medium dark:text-foreground cursor-pointer">
-                                        <Avatar>
-                                            <AvatarImage
-                                                src={
-                                                    user ? user.photoUrl : null
-                                                }
-                                            />
-                                            <AvatarFallback>CN</AvatarFallback>
-                                        </Avatar>
-                                    </NavigationMenuTrigger>
-                                    <NavigationMenuContent className="">
-                                        <NavigationMenuLink className="cursor-default text-center">
-                                            <p>
-                                                {user
-                                                    ? user?.displayName
-                                                    : null}
-                                            </p>
-                                        </NavigationMenuLink>
-                                        <NavigationMenuLink
-                                            asChild
-                                            className="flex flex-col justify-center items-center w-[150px]"
-                                        >
-                                            {user ? (
-                                                <Button
-                                                    asChild
-                                                    variant="link"
-                                                    className="w-32 mx-auto flex gap-4 items-center"
-                                                    onClick={handleLogout}
-                                                >
-                                                    <div className="flex flex-row items-center gap-4">
-                                                        <LogOut className="text-primary  dark:text-foreground" />
-                                                        Sign Out
-                                                    </div>
-                                                </Button>
-                                            ) : (
-                                                <Button
-                                                    variant="link"
-                                                    className="w-32 mx-auto"
-                                                    asChild
-                                                >
-                                                    <Link
-                                                        href="/sign-in"
-                                                        className="flex gap-4 items-center"
-                                                    >
-                                                        <div className="flex flex-row items-center gap-4">
-                                                            <LogIn className="text-primary  dark:text-foreground  " />
-                                                            Sign In
-                                                        </div>
-                                                    </Link>
-                                                </Button>
-                                            )}
-                                        </NavigationMenuLink>
-                                    </NavigationMenuContent>
+                                <NavigationMenuItem>
+                                    <SearchBar />
                                 </NavigationMenuItem>
                             </div>
+                        </NavigationMenuList>
+                    </NavigationMenu>
+                </div>
+
+                {/* Center section - Main menu items */}
+                <div className="flex justify-center">
+                    <NavigationMenu
+                        position="popper"
+                        viewport={false}
+                        className="flex w-full !max-w-full"
+                    >
+                        <NavigationMenuList className="flex w-full">
+                            <div className="flex w-full justify-center gap-8">
+                                {menuItems.map((item, idx) => {
+                                    const isActive = pathname === item.href;
+                                    return (
+                                        <NavigationMenuItem key={idx}>
+                                            <NavigationMenuLink
+                                                asChild
+                                                className={
+                                                    `${navigationMenuTriggerStyle()} font-medium ` +
+                                                    (isActive
+                                                        ? 'bg-accent text-accent-foreground dark:bg-accent dark:text-accent-foreground'
+                                                        : 'text-primary dark:text-foreground')
+                                                }
+                                            >
+                                                {item.button ? (
+                                                    <Button
+                                                        variant={
+                                                            isActive
+                                                                ? 'accent'
+                                                                : 'primary'
+                                                        }
+                                                        asChild
+                                                    >
+                                                        <Link href={item.href}>
+                                                            {item.label}
+                                                        </Link>
+                                                    </Button>
+                                                ) : (
+                                                    <Link href={item.href}>
+                                                        {item.icon}
+                                                    </Link>
+                                                )}
+                                            </NavigationMenuLink>
+                                        </NavigationMenuItem>
+                                    );
+                                })}
+                            </div>
+                        </NavigationMenuList>
+                    </NavigationMenu>
+                </div>
+
+                {/* Right section - User controls */}
+                <div className="flex justify-center">
+                    <NavigationMenu
+                        position="popper"
+                        viewport={false}
+                        className="flex w-full !max-w-full"
+                    >
+                        <NavigationMenuList>
+                            <NavigationMenuItem className="flex">
+                                <NavigationMenuTrigger className="text-primary dark:text-foreground">
+                                    <Badge className="h-5 min-w-5 rounded-full px-1 font-mono tabular-nums cursor-pointer">
+                                        8
+                                    </Badge>
+                                </NavigationMenuTrigger>
+                            </NavigationMenuItem>
+
                             <NavigationMenuItem>
+                                {/* Avatar and dropdown menu */}
+                                <NavigationMenuTrigger className="text-primary font-medium dark:text-foreground cursor-pointer">
+                                    <Avatar>
+                                        <AvatarImage
+                                            src={user ? user.photoUrl : null}
+                                        />
+                                        <AvatarFallback>CN</AvatarFallback>
+                                    </Avatar>
+                                </NavigationMenuTrigger>
+                                <NavigationMenuContent>
+                                    <NavigationMenuLink className="cursor-default text-center">
+                                        <p>{user ? user?.displayName : null}</p>
+                                    </NavigationMenuLink>
+                                    <NavigationMenuLink
+                                        asChild
+                                        className="flex flex-col justify-center items-center w-[150px]"
+                                    >
+                                        {user ? (
+                                            <Button
+                                                asChild
+                                                variant="link"
+                                                className="w-32 mx-auto flex gap-4 items-center"
+                                                onClick={handleLogout}
+                                            >
+                                                <div className="flex flex-row items-center gap-4">
+                                                    <LogOut className="text-primary  dark:text-foreground" />
+                                                    Sign Out
+                                                </div>
+                                            </Button>
+                                        ) : (
+                                            <Button
+                                                variant="link"
+                                                className="w-32 mx-auto"
+                                                asChild
+                                            >
+                                                <Link
+                                                    href="/sign-in"
+                                                    className="flex gap-4 items-center"
+                                                >
+                                                    <div className="flex flex-row items-center gap-4">
+                                                        <LogIn className="text-primary  dark:text-foreground  " />
+                                                        Sign In
+                                                    </div>
+                                                </Link>
+                                            </Button>
+                                        )}
+                                    </NavigationMenuLink>
+                                </NavigationMenuContent>
+                            </NavigationMenuItem>
+
+                            <NavigationMenuItem className="flex">
                                 <NavigationMenuLink
                                     asChild
                                     className={navigationMenuTriggerStyle()}
@@ -248,90 +283,89 @@ export function NavigationConnected() {
                         </NavigationMenuList>
                     </NavigationMenu>
                 </div>
-            </nav>
-            <nav>
-                {/* Mobile full-screen menu */}
-                <nav className="md:hidden">
-                    <Sheet
-                        open={open}
-                        onOpenChange={setOpen}
-                        className="md:hidden flex flex-col"
+            </div>
+
+            {/* Mobile full-screen menu */}
+            <nav className="md:hidden">
+                <Sheet
+                    open={open}
+                    onOpenChange={setOpen}
+                    className="md:hidden flex flex-col"
+                >
+                    <SheetTrigger
+                        className="cursor-pointer"
+                        onClick={() => setOpen(true)}
                     >
-                        <SheetTrigger
-                            className="cursor-pointer"
-                            onClick={() => setOpen(true)}
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={1.5}
+                            stroke="currentColor"
+                            className="size-6 text-primary dark:text-foreground"
                         >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth={1.5}
-                                stroke="currentColor"
-                                className="size-6 text-primary dark:text-foreground"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-                                />
-                            </svg>
-                        </SheetTrigger>
-                        <SheetContent
-                            side="top"
-                            className="flex flex-col items-center justify-center min-h-screen w-full p-4 overflow-hidden"
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+                            />
+                        </svg>
+                    </SheetTrigger>
+                    <SheetContent
+                        side="top"
+                        className="flex flex-col items-center justify-center min-h-screen w-full p-4 overflow-hidden"
+                    >
+                        <div
+                            aria-hidden="true"
+                            className="absolute inset-0 -z-10 transform-gpu overflow-hidden blur-3xl"
                         >
                             <div
-                                aria-hidden="true"
-                                className="absolute inset-0 -z-10 transform-gpu overflow-hidden blur-3xl"
-                            >
-                                <div
-                                    style={{
-                                        clipPath:
-                                            'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
-                                    }}
-                                    className="absolute left-0 top-0 w-full h-full bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30"
-                                />
-                            </div>
-                            <SheetHeader className="flex flex-col items-center justify-center w-full text-2xl">
-                                <SheetTitle className="flex justify-center items-center w-full text-5xl text-primary dark:text-foreground mb-12">
-                                    AXIOM
-                                </SheetTitle>
-                                <nav className="flex flex-col gap-8 mt-4 items-center justify-center w-full">
-                                    {mobileMenuItems.map((item, idx) => (
-                                        <Button
-                                            key={idx}
-                                            variant="link"
-                                            size="lg"
-                                            className=""
-                                            onClick={() => setOpen(false)}
-                                        >
-                                            {item.icon}
-                                            <Link
-                                                href={item.href}
-                                                className="w-full text-center text-2xl font-light text-primary dark:text-foreground"
-                                            >
-                                                {item.label}
-                                            </Link>
-                                        </Button>
-                                    ))}
+                                style={{
+                                    clipPath:
+                                        'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
+                                }}
+                                className="absolute left-0 top-0 w-full h-full bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30"
+                            />
+                        </div>
+                        <SheetHeader className="flex flex-col items-center justify-center w-full text-2xl">
+                            <SheetTitle className="flex justify-center items-center w-full text-5xl text-primary dark:text-foreground mb-12">
+                                AXIOM
+                            </SheetTitle>
+                            <nav className="flex flex-col gap-8 mt-4 items-center justify-center w-full">
+                                {mobileMenuItems.map((item, idx) => (
                                     <Button
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            handleLogout();
-                                        }}
+                                        key={idx}
                                         variant="link"
                                         size="lg"
-                                        className="text-2xl font-light text-primary dark:text-foreground"
+                                        className=""
+                                        onClick={() => setOpen(false)}
                                     >
-                                        <IdCard className="mr-4 w-36 h-36 text-primary dark:text-foreground" />
-                                        Sign Out
+                                        {item.icon}
+                                        <Link
+                                            href={item.href}
+                                            className="w-full text-center text-2xl font-light text-primary dark:text-foreground"
+                                        >
+                                            {item.label}
+                                        </Link>
                                     </Button>
-                                    <ModeToggle />
-                                </nav>
-                            </SheetHeader>
-                        </SheetContent>
-                    </Sheet>
-                </nav>
+                                ))}
+                                <Button
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        handleLogout();
+                                    }}
+                                    variant="link"
+                                    size="lg"
+                                    className="text-2xl font-light text-primary dark:text-foreground"
+                                >
+                                    <IdCard className="mr-4 w-36 h-36 text-primary dark:text-foreground" />
+                                    Sign Out
+                                </Button>
+                                <ModeToggle />
+                            </nav>
+                        </SheetHeader>
+                    </SheetContent>
+                </Sheet>
             </nav>
         </>
     );
