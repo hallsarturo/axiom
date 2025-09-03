@@ -225,7 +225,7 @@ export function FeedComponent() {
             <div
                 id="scrollableDiv"
                 style={{
-                    height: '80vh', // More responsive than fixed px
+                    height: '100vh', // More responsive than fixed px
                     overflow: 'auto',
                 }}
                 className="flex justify-center items-start pt-0 w-full"

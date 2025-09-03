@@ -143,9 +143,9 @@ export function PublishPost({ mutateFeed, onDialogOpenChange, ...props }) {
     return (
         <div className="min-w-full sm:min-w-[680px]">
             <div className={`${props.className || ''}`}>
-                <Card className="max-w-[700px] m-4 p-8">
+                <Card className="max-w-[700px] mb-4 p-4">
                     <div>
-                        <div className="flex flex-row gap-4 mb-3 items-center sm:items-start">
+                        <div className="flex flex-row gap-4 mb-0 items-center sm:items-start">
                             <Avatar>
                                 <AvatarImage
                                     src={user ? user.photoUrl : null}
@@ -170,8 +170,8 @@ export function PublishPost({ mutateFeed, onDialogOpenChange, ...props }) {
                                 />
                             </div>
                         </div>
-                        <Separator />
-                        <div className="flex flex-col gap-3 mt-3 sm:flex-row items-center sm:justify-around">
+                        {/* <Separator /> */}
+                        <div className="flex flex-col gap-0 pt-0 sm:flex-row items-center sm:justify-around">
                             <Dialog
                                 open={open}
                                 onOpenChange={(newOpen) => {
@@ -182,7 +182,7 @@ export function PublishPost({ mutateFeed, onDialogOpenChange, ...props }) {
                                 }}
                             >
                                 {/* Trigger buttons outside form */}
-                                <DialogTrigger asChild>
+                                {/* <DialogTrigger asChild>
                                     <Button
                                         variant="secondary"
                                         className="text-xs px-3 mt-2 py-1 h-8 flex items-center justify-center w-fit mb-2"
@@ -204,7 +204,7 @@ export function PublishPost({ mutateFeed, onDialogOpenChange, ...props }) {
                                         </svg>
                                         <span>Upload a paper</span>
                                     </Button>
-                                </DialogTrigger>
+                                </DialogTrigger> */}
 
                                 {/* Dialog content with form inside */}
                                 <DialogContent className="flex flex-col items-center min-h-2/3">
@@ -347,7 +347,7 @@ export function PublishPost({ mutateFeed, onDialogOpenChange, ...props }) {
                             </Dialog>
 
                             {/* Other buttons like image upload */}
-                            <Tooltip>
+                            {/* <Tooltip>
                                 <TooltipTrigger asChild>
                                     <Button
                                         variant="secondary"
@@ -373,7 +373,7 @@ export function PublishPost({ mutateFeed, onDialogOpenChange, ...props }) {
                                 <TooltipContent className="hidden md:inline-block">
                                     <p>Not available yet</p>
                                 </TooltipContent>
-                            </Tooltip>
+                            </Tooltip> */}
                         </div>
                     </div>
                 </Card>
