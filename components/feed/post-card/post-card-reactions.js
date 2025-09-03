@@ -83,6 +83,13 @@ export function PostCardReactions({
         }
     })();
 
+    const token =
+        process.env.NODE_ENV === 'development'
+            ? typeof window !== 'undefined'
+                ? localStorage.getItem('token')
+                : null
+            : null;
+
     // Handle reaction directly with the store
     const handleReactionClick = (e, type) => {
         e.preventDefault();
