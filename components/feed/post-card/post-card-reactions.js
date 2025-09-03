@@ -211,7 +211,7 @@ export function PostCardReactions({
             <PopoverContent className="w-full" style={{ zIndex: 60 }}>
                 <Button
                     onClick={(e) => handleReactionClick(e, 'like')}
-                    className="text-xs"
+                    className="text-xs group"
                     variant="ghost"
                 >
                     {userReaction === 'like' ? (
@@ -222,7 +222,7 @@ export function PostCardReactions({
                                     className={contentIconSizeOnly}
                                 />
                             </span>
-                            <span className="ml-2">{reactionCounts.likes}</span>
+                            <span className={`${finalTriggerTextClass} group-hover:text-white transition-colors ml-2`}>{reactionCounts.likes}</span>
                         </div>
                     ) : (
                         <div className="flex flex-row gap-2 align-middle">
@@ -232,13 +232,13 @@ export function PostCardReactions({
                                     className={contentIconSizeOnly}
                                 />
                             </span>
-                            <span className="ml-2">{reactionCounts.likes}</span>
+                            <span className={`${finalTriggerTextClass} group-hover:text-white transition-colors ml-2`}>{reactionCounts.likes}</span>
                         </div>
                     )}
                 </Button>
                 <Button
                     onClick={(e) => handleReactionClick(e, 'dislike')}
-                    className="text-xs"
+                    className="text-xs group"
                     variant="ghost"
                 >
                     {userReaction === 'dislike' ? (
@@ -249,7 +249,7 @@ export function PostCardReactions({
                                     className={contentIconSizeOnly}
                                 />
                             </span>
-                            <span className="ml-2">
+                            <span className={`${finalTriggerTextClass} group-hover:text-white transition-colors ml-2`}>
                                 {reactionCounts.dislikes}
                             </span>
                         </div>
@@ -261,7 +261,7 @@ export function PostCardReactions({
                                     className={contentIconSizeOnly}
                                 />
                             </span>
-                            <span className="ml-2">
+                            <span className={`${finalTriggerTextClass} group-hover:text-white transition-colors ml-2`}>
                                 {reactionCounts.dislikes}
                             </span>
                         </div>
@@ -269,7 +269,7 @@ export function PostCardReactions({
                 </Button>
                 <Button
                     onClick={(e) => handleReactionClick(e, 'laugh')}
-                    className="text-xs"
+                    className="text-xs group"
                     variant="ghost"
                 >
                     {userReaction === 'laugh' ? (
@@ -280,7 +280,7 @@ export function PostCardReactions({
                                     className={contentIconSizeOnly}
                                 />
                             </span>
-                            <span className="ml-2">
+                            <span className={`${finalTriggerTextClass} group-hover:text-white transition-colors ml-2`}>
                                 {reactionCounts.laughs}
                             </span>
                         </div>
@@ -292,7 +292,7 @@ export function PostCardReactions({
                                     className={contentIconSizeOnly}
                                 />
                             </span>
-                            <span className="ml-2">
+                            <span className={`${finalTriggerTextClass} group-hover:text-white transition-colors ml-2`}>
                                 {reactionCounts.laughs}
                             </span>
                         </div>
@@ -300,7 +300,7 @@ export function PostCardReactions({
                 </Button>
                 <Button
                     onClick={(e) => handleReactionClick(e, 'anger')}
-                    className="text-xs"
+                    className="text-xs group"
                     variant="ghost"
                 >
                     {userReaction === 'anger' ? (
@@ -311,7 +311,7 @@ export function PostCardReactions({
                                     className={contentIconSizeOnly}
                                 />
                             </span>
-                            <span className="ml-2">
+                            <span className={`${finalTriggerTextClass} group-hover:text-white transition-colors ml-2`}>
                                 {reactionCounts.angers}
                             </span>
                         </div>
@@ -323,7 +323,7 @@ export function PostCardReactions({
                                     className={contentIconSizeOnly}
                                 />
                             </span>
-                            <span className="ml-2">
+                            <span className={`${finalTriggerTextClass} group-hover:text-white transition-colors ml-2`}>
                                 {reactionCounts.angers}
                             </span>
                         </div>
