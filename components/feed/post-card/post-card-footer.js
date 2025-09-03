@@ -13,6 +13,7 @@ import { PostCardCommentsDialog } from '@/components/feed/post-card/post-card-co
 import { useRequireAuth } from '@/hooks/useRequireAuth';
 import { useReactionsStore } from '@/lib/state/reactionsStore';
 import { useBookmarksStore } from '@/lib/state/bookmarksStore';
+import { useState } from 'react';
 
 export function PostCardFooter({
     totalReactions,
@@ -65,6 +66,9 @@ export function PostCardFooter({
         }
     };
 
+    // Manage dialog open state
+    const [commentDialogOpen, setCommentDialogOpen] = useState(false);
+
     return (
         <CardFooter className="justify-center">
             <div className="flex flex-col w-full gap-1.5">
@@ -77,7 +81,10 @@ export function PostCardFooter({
                 <Separator />
                 <div className="flex flex-row justify-around flex-wrap">
                     {/* Updated to just pass postId */}
-                    <PostCardReactions postId={postId} />
+                    <PostCardReactions
+                        postId={postId}
+                        commentDialogOpen={commentDialogOpen}
+                    />
 
                     {/* Comments button/dialog */}
                     {props.insideDialog ? (
@@ -104,6 +111,8 @@ export function PostCardFooter({
                                 description: props.description,
                                 imgSrc: props.imgSrc,
                             }}
+                            commentDialogOpen={commentDialogOpen}
+                            setCommentDialogOpen={setCommentDialogOpen}
                         />
                     )}
 

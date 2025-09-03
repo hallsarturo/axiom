@@ -38,7 +38,11 @@ import { toast } from 'sonner';
 import { useReactionsStore } from '@/lib/state/reactionsStore';
 import { useBookmarksStore } from '@/lib/state/bookmarksStore';
 
-export function PostCardCommentsDialog({ post }) {
+export function PostCardCommentsDialog({
+    post,
+    commentDialogOpen,
+    setCommentDialogOpen,
+}) {
     const { user } = useUser();
     const token =
         process.env.NODE_ENV === 'development'
@@ -110,7 +114,7 @@ export function PostCardCommentsDialog({ post }) {
     const [part1, part2] = splitDescription(description);
 
     return (
-        <Dialog>
+        <Dialog open={commentDialogOpen} onOpenChange={setCommentDialogOpen}>
             <DialogTrigger asChild>
                 <Button
                     variant="ghost"

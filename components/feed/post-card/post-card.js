@@ -31,6 +31,7 @@ import { useBookmarksStore } from '@/lib/state/bookmarksStore';
 export function PostCard(props) {
     const { user } = useUser();
     const [seeMore, setSeeMore] = useState(false);
+    
 
     // Get the reaction store functions
     const {

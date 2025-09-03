@@ -12,8 +12,11 @@ import { FaFaceAngry } from 'react-icons/fa6';
 import { useRequireAuth } from '@/hooks/useRequireAuth';
 import { useReactionsStore } from '@/lib/state/reactionsStore';
 import { useUser } from '@/components/context/UserProfileContext';
+import { useEffect, useState } from 'react';
 
-export function PostCardReactions({ postId }) {
+export function PostCardReactions({ postId, commentDialogOpen = false }) {
+    // Add state for popover open
+    const [popoverOpen, setPopoverOpen] = useState(false);
     const requireAuth = useRequireAuth();
     const { user } = useUser();
 
@@ -70,25 +73,67 @@ export function PostCardReactions({ postId }) {
     })();
 
     // Handle reaction directly with the store
-    const handleReactionClick = (type) => {
+    const handleReactionClick = (e, type) => {
+        e.preventDefault();
+        e.stopPropagation();
+
         if (!requireAuth()) return;
         handleReaction(postId, type, user?.id, token);
     };
 
+    // If dialogOpen changes to true, close the popover
+    useEffect(() => {
+        if (commentDialogOpen) {
+            setPopoverOpen(false);
+        }
+    }, [commentDialogOpen]);
+    
+    // This function handles the trigger click
+    const handleTriggerClick = (e) => {
+        if (commentDialogOpen) {
+            // If dialog is open, prevent the default behavior and stop propagation
+            e.preventDefault();
+            e.stopPropagation();
+            return;
+        }
+        
+        if (!requireAuth()) {
+            e.preventDefault();
+            e.stopPropagation();
+            return;
+        }
+        
+        // Toggle the popover state manually
+        setPopoverOpen(prev => !prev);
+    };
+
     return (
-        <Popover>
-            <PopoverTrigger asChild>
-                <span>
+        <Popover
+            open={popoverOpen}
+            onOpenChange={(open) => {
+                // Only allow opening if dialog is not open
+                if (!commentDialogOpen) {
+                    setPopoverOpen(open);
+                }
+            }}
+        >
+            {/* Wrap PopoverTrigger in a div to intercept events before they reach the trigger */}
+            <div 
+                onClick={(e) => {
+                    if (commentDialogOpen) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }
+                }}
+            >
+                <PopoverTrigger asChild>
                     <Button
+                        type="button"
                         variant="ghost"
-                        className="text-primary dark:text-foreground"
-                        onClick={(e) => {
-                            if (!requireAuth()) {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                return;
-                            }
-                        }}
+                        className={`text-primary dark:text-foreground ${commentDialogOpen ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        onClick={handleTriggerClick}
+                        // Important: disable the button when dialog is open
+                        disabled={commentDialogOpen}
                     >
                         <AnimatePresence mode="wait">
                             <motion.div
@@ -103,11 +148,11 @@ export function PostCardReactions({ postId }) {
                             </motion.div>
                         </AnimatePresence>
                     </Button>
-                </span>
-            </PopoverTrigger>
-            <PopoverContent className="w-full">
+                </PopoverTrigger>
+            </div>
+            <PopoverContent className="w-full" style={{ zIndex: 60 }}>
                 <Button
-                    onClick={() => handleReactionClick('like')}
+                    onClick={(e) => handleReactionClick(e, 'like')}
                     className="text-xs"
                     variant="ghost"
                 >
@@ -124,7 +169,7 @@ export function PostCardReactions({ postId }) {
                     )}
                 </Button>
                 <Button
-                    onClick={() => handleReactionClick('dislike')}
+                    onClick={(e) => handleReactionClick(e, 'dislike')}
                     className="text-xs"
                     variant="ghost"
                 >
@@ -141,7 +186,7 @@ export function PostCardReactions({ postId }) {
                     )}
                 </Button>
                 <Button
-                    onClick={() => handleReactionClick('laugh')}
+                    onClick={(e) => handleReactionClick(e, 'laugh')}
                     className="text-xs"
                     variant="ghost"
                 >
@@ -158,7 +203,7 @@ export function PostCardReactions({ postId }) {
                     )}
                 </Button>
                 <Button
-                    onClick={() => handleReactionClick('anger')}
+                    onClick={(e) => handleReactionClick(e, 'anger')}
                     className="text-xs"
                     variant="ghost"
                 >
