@@ -8,6 +8,7 @@ import {
     CollapsibleContent,
     CollapsibleTrigger,
 } from '@/components/ui/collapsible';
+import { Reply } from 'lucide-react';
 import { PostCardCommentForm } from '@/components/feed/post-card/post-card-comment-form';
 import { PostCardReactions } from '@/components/feed/post-card/post-card-reactions';
 import { ChildComments } from '@/components/feed/post-card/child-comments';
@@ -100,8 +101,8 @@ export function PostCardComments({ postId }) {
                                     {comment.content}
                                 </CardContent>
                             </Card>
-                            <div className="flex flex-row justify-between mr-6">
-                                <div className="flex flex-row text-muted-foreground text-sm items-center ml-4 mt-2 gap-5 ">
+                            <div className="flex flex-row justify-between  mr-6">
+                                <div className="flex flex-row text-muted-foreground text-sm items-center ml-4 mt-0 gap-5 ">
                                     <div>{timeAgo(comment.createdAt)} </div>
                                     <div className="flex items-center">
                                         <PostCardReactions
@@ -120,6 +121,7 @@ export function PostCardComments({ postId }) {
                                                 handleCommentReply(comment.id);
                                             }}
                                         >
+                                            <Reply />
                                             Reply
                                         </Button>
                                     </div>
