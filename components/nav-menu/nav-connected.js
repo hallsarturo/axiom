@@ -164,7 +164,7 @@ export function NavigationConnected() {
                         className="flex w-full !max-w-full"
                     >
                         <NavigationMenuList className="flex w-full">
-                            <div className="flex w-full justify-center gap-8">
+                            <div className="flex w-full justify-center gap-6">
                                 {menuItems.map((item, idx) => {
                                     const isActive = pathname === item.href;
                                     return (

@@ -82,6 +82,8 @@ export function PostCardFooter({
                 <div className="flex flex-row justify-around flex-wrap">
                     {/* Updated to just pass postId */}
                     <PostCardReactions
+                        triggerIconSizeClass= "size-5.5"
+                        contentIconSizeClass="size-4.5"
                         postId={postId}
                         commentDialogOpen={commentDialogOpen}
                     />
@@ -90,11 +92,12 @@ export function PostCardFooter({
                     {props.insideDialog ? (
                         <Button
                             variant="ghost"
-                            className="text-muted-foreground"
+                            className=" text-muted-foreground"
                             disabled={true}
                         >
-                            <FaRegComment className="size-5.5" />
-                            Comment
+                           
+                                <FaRegComment className="size-5.5" />
+                        
                         </Button>
                     ) : (
                         <PostCardCommentsDialog

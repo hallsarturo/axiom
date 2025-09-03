@@ -9,6 +9,7 @@ import {
     CollapsibleTrigger,
 } from '@/components/ui/collapsible';
 import { PostCardCommentForm } from '@/components/feed/post-card/post-card-comment-form';
+import { PostCardReactions } from '@/components/feed/post-card/post-card-reactions';
 import { ChildComments } from '@/components/feed/post-card/child-comments';
 import { timeAgo } from '@/lib/utils/date';
 import { useState, useEffect } from 'react';
@@ -100,9 +101,16 @@ export function PostCardComments({ postId }) {
                                 </CardContent>
                             </Card>
                             <div className="flex flex-row justify-between mr-6">
-                                <div className="flex flex-row text-muted-foreground text-sm ml-4 mt-2 gap-5">
+                                <div className="flex flex-row text-muted-foreground text-sm items-center ml-4 mt-2 gap-5 ">
                                     <div>{timeAgo(comment.createdAt)} </div>
-                                    <div>Like </div>
+                                    <div className="flex items-center">
+                                        <PostCardReactions
+                                            triggerIconSizeClass="size-3.5"
+                                            contentIconSizeClass="size-4.5"
+                                            triggerButtonVariant="link"
+                                            triggerTextClass="text-muted-foreground"
+                                        />{' '}
+                                    </div>
                                     <div>
                                         <Button
                                             variant="link"

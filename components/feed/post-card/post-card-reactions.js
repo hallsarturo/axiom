@@ -14,7 +14,18 @@ import { useReactionsStore } from '@/lib/state/reactionsStore';
 import { useUser } from '@/components/context/UserProfileContext';
 import { useEffect, useState } from 'react';
 
-export function PostCardReactions({ postId, commentDialogOpen = false }) {
+export function PostCardReactions({
+    postId,
+    commentDialogOpen = false,
+    // two separate size props: trigger (small) and content (larger or different)
+    triggerIconSizeClass = 'size-5.5',
+    contentIconSizeClass = 'size-4.5',
+    // allow caller to set the trigger button variant (default 'ghost')
+    triggerButtonVariant = 'ghost',
+    // control trigger button classes (text color / bg / extra)
+    triggerTextClass = 'text-primary dark:text-foreground',
+    triggerClassName = '',
+}) {
     // Add state for popover open
     const [popoverOpen, setPopoverOpen] = useState(false);
     const requireAuth = useRequireAuth();
@@ -24,48 +35,48 @@ export function PostCardReactions({ postId, commentDialogOpen = false }) {
     const { getReactionData, handleReaction } = useReactionsStore();
     const { userReaction, reactionCounts } = getReactionData(postId);
 
-    const token =
-        process.env.NODE_ENV === 'development'
-            ? typeof window !== 'undefined'
-                ? localStorage.getItem('token')
-                : null
-            : null;
+    // prefer a single final text class so we never render conflicting utilities
+    const finalTriggerTextClass =
+        triggerTextClass || 'text-primary dark:text-foreground';
+
+    const triggerIconClass = `${triggerIconSizeClass} ${finalTriggerTextClass}`;
+    const contentIconClass = `${contentIconSizeClass} text-primary dark:text-foreground`;
 
     // Generate current reaction icon
     const currentReactionIcon = (() => {
         switch (userReaction) {
             case 'like':
                 return (
-                    <div className="flex flex-row gap-2 align-middle">
-                        <BiSolidLike className="size-5.5 text-primary dark:text-foreground" />
+                    <div className="flex flex-row gap-2 items-center">
+                        <BiSolidLike className={triggerIconClass} />
                         <span>{reactionCounts.likes} Likes</span>
                     </div>
                 );
             case 'dislike':
                 return (
-                    <div className="flex flex-row gap-2 align-middle text-primary dark:text-foreground">
-                        <BiSolidDislike className="size-5.5" />
+                    <div className="flex flex-row gap-2 items-center text-primary dark:text-foreground">
+                        <BiSolidDislike className={triggerIconClass} />
                         <span>{reactionCounts.dislikes} Dislikes</span>
                     </div>
                 );
             case 'laugh':
                 return (
-                    <div className="flex flex-row gap-2 align-middle text-primary dark:text-foreground">
-                        <FaLaughBeam className="size-5.5" />
+                    <div className="flex flex-row gap-2 items-center text-primary dark:text-foreground">
+                        <FaLaughBeam className={triggerIconClass} />
                         <span>{reactionCounts.laughs} Laughs</span>
                     </div>
                 );
             case 'anger':
                 return (
-                    <div className="flex flex-row gap-2 align-middle text-primary dark:text-foreground">
-                        <FaFaceAngry className="size-5.5" />
+                    <div className="flex flex-row gap-2 items-center text-primary dark:text-foreground">
+                        <FaFaceAngry className={triggerIconClass} />
                         <span>{reactionCounts.angers} Anger</span>
                     </div>
                 );
             default:
                 return (
-                    <div className="flex flex-row gap-2 align-middle">
-                        <BiLike className="size-5.5" />
+                    <div className="flex flex-row gap-2 items-center">
+                        <BiLike className={triggerIconClass} />
                         <span>{reactionCounts.likes} Likes</span>
                     </div>
                 );
@@ -87,7 +98,7 @@ export function PostCardReactions({ postId, commentDialogOpen = false }) {
             setPopoverOpen(false);
         }
     }, [commentDialogOpen]);
-    
+
     // This function handles the trigger click
     const handleTriggerClick = (e) => {
         if (commentDialogOpen) {
@@ -96,15 +107,15 @@ export function PostCardReactions({ postId, commentDialogOpen = false }) {
             e.stopPropagation();
             return;
         }
-        
+
         if (!requireAuth()) {
             e.preventDefault();
             e.stopPropagation();
             return;
         }
-        
+
         // Toggle the popover state manually
-        setPopoverOpen(prev => !prev);
+        setPopoverOpen((prev) => !prev);
     };
 
     return (
@@ -116,9 +127,10 @@ export function PostCardReactions({ postId, commentDialogOpen = false }) {
                     setPopoverOpen(open);
                 }
             }}
+            modal={true}
         >
             {/* Wrap PopoverTrigger in a div to intercept events before they reach the trigger */}
-            <div 
+            <div
                 onClick={(e) => {
                     if (commentDialogOpen) {
                         e.preventDefault();
@@ -129,8 +141,8 @@ export function PostCardReactions({ postId, commentDialogOpen = false }) {
                 <PopoverTrigger asChild>
                     <Button
                         type="button"
-                        variant="ghost"
-                        className={`text-primary dark:text-foreground ${commentDialogOpen ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        variant={triggerButtonVariant}
+                        className={`${triggerClassName} ${triggerTextClass} ${commentDialogOpen ? 'opacity-50 cursor-not-allowed' : ''}`}
                         onClick={handleTriggerClick}
                         // Important: disable the button when dialog is open
                         disabled={commentDialogOpen}
@@ -158,12 +170,12 @@ export function PostCardReactions({ postId, commentDialogOpen = false }) {
                 >
                     {userReaction === 'like' ? (
                         <div className="flex flex-row gap-2 align-middle text-primary dark:text-foreground">
-                            <BiSolidLike className="text-primary dark:text-foreground" />
+                            <BiSolidLike className={contentIconClass} />
                             {reactionCounts.likes}
                         </div>
                     ) : (
                         <div className="flex flex-row gap-2 align-middle text-primary dark:text-foreground">
-                            <BiLike className="text-primary dark:text-foreground" />
+                            <BiLike className={contentIconClass} />
                             {reactionCounts.likes}
                         </div>
                     )}
@@ -175,12 +187,12 @@ export function PostCardReactions({ postId, commentDialogOpen = false }) {
                 >
                     {userReaction === 'dislike' ? (
                         <div className="flex flex-row gap-2 align-middle text-primary dark:text-foreground">
-                            <BiSolidDislike className="text-primary dark:text-foreground" />
+                            <BiSolidDislike className={contentIconClass} />
                             {reactionCounts.dislikes}
                         </div>
                     ) : (
                         <div className="flex flex-row gap-2 align-middle text-primary dark:text-foreground">
-                            <BiDislike className="text-primary dark:text-foreground" />
+                            <BiDislike className={contentIconClass} />
                             {reactionCounts.dislikes}
                         </div>
                     )}
@@ -192,12 +204,12 @@ export function PostCardReactions({ postId, commentDialogOpen = false }) {
                 >
                     {userReaction === 'laugh' ? (
                         <div className="flex flex-row gap-2 align-middle text-primary dark:text-foreground">
-                            <FaLaughBeam className="text-primary dark:text-foreground" />
+                            <FaLaughBeam className={contentIconClass} />
                             {reactionCounts.laughs}
                         </div>
                     ) : (
                         <div className="flex flex-row gap-2 align-middle text-primary dark:text-foreground">
-                            <FaRegLaughBeam className="text-primary dark:text-foreground" />
+                            <FaRegLaughBeam className={contentIconClass} />
                             {reactionCounts.laughs}
                         </div>
                     )}
@@ -209,12 +221,12 @@ export function PostCardReactions({ postId, commentDialogOpen = false }) {
                 >
                     {userReaction === 'anger' ? (
                         <div className="flex flex-row gap-2 align-middle text-primary dark:text-foreground">
-                            <FaFaceAngry className="text-primary dark:text-foreground" />
+                            <FaFaceAngry className={contentIconClass} />
                             {reactionCounts.angers}
                         </div>
                     ) : (
                         <div className="flex flex-row gap-2 align-middle text-primary dark:text-foreground">
-                            <FaRegAngry className="text-primary dark:text-foreground" />
+                            <FaRegAngry className={contentIconClass} />
                             {reactionCounts.angers}
                         </div>
                     )}
