@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { PostCardCommentForm } from '@/components/feed/post-card/post-card-comment-form';
 import { timeAgo } from '@/lib/utils/date';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export function ChildComments({
     childComments,
@@ -16,6 +16,11 @@ export function ChildComments({
 }) {
     const [page, setPage] = useState(1);
     const pageSize = 10;
+
+    // Log child comments to help with debugging
+    useEffect(() => {
+        console.log(`Rendering ${childComments?.length || 0} child comments`);
+    }, [childComments]);
 
     return (
         <>

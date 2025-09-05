@@ -20,52 +20,66 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 export function PostCardComments({ postId }) {
     const [replyCommentList, setReplyCommentList] = useState([]);
-    const [page, setPage] = useState(1);
-    const [loading, setLoading] = useState(true);
+    const [expandedComments, setExpandedComments] = useState([]);
+    const [parentPage, setParentPage] = useState(1);
     const pageSize = 20;
 
     // Get comments from Zustand store
-    const { fetchComments, getComments } = useCommentsStore();
-    const { comments = [], totalCount = 0 } = getComments(postId);
+    const {
+        fetchParentComments,
+        fetchChildComments,
+        getParentComments,
+        getChildComments,
+        areChildCommentsLoaded,
+        isLoadingChildComments,
+    } = useCommentsStore();
 
-    // Fetch comments when component mounts or postId/page changes
+    // Get parent comments data
+    const {
+        comments: parentComments,
+        totalCount,
+        isLoading,
+    } = getParentComments(postId);
+
+    // Fetch parent comments when component mounts or postId/page changes
     useEffect(() => {
-        const loadComments = async () => {
-            setLoading(true);
-            await fetchComments(postId, page, pageSize);
-            setLoading(false);
+        const loadParents = async () => {
+            await fetchParentComments(postId, parentPage, pageSize);
         };
+        loadParents();
+    }, [fetchParentComments, postId, parentPage]);
 
-        loadComments();
-    }, [fetchComments, postId, page]);
-
-    // Split comments into parents and children
-    const parentComments = comments.filter(
-        (c) => c.parentCommentId === 0 || c.parentCommentId === null
-    );
-
-    const childComments = comments.filter(
-        (c) => c.parentCommentId !== 0 && c.parentCommentId !== null
-    );
-
-    // Helper: get children for a parent comment
-    const getChildren = (parentId) =>
-        childComments.filter((c) => c.parentCommentId === parentId);
-
-    if (loading) {
-        return <CommentsSkeleton />;
-    }
-
-    // Handle comment replies
+    // Handle comment replies toggle
     const handleCommentReply = (commentId) => {
-        if (replyCommentList.includes(commentId)) {
-            setReplyCommentList(
-                replyCommentList.filter((id) => id !== commentId)
+        setReplyCommentList((prev) =>
+            prev.includes(commentId)
+                ? prev.filter((id) => id !== commentId)
+                : [...prev, commentId]
+        );
+    };
+
+    // Handle click on "See answers"
+    const handleExpandChildren = async (commentId) => {
+        // Toggle expanded state
+        const isCurrentlyExpanded = expandedComments.includes(commentId);
+
+        if (isCurrentlyExpanded) {
+            setExpandedComments((prev) =>
+                prev.filter((id) => id !== commentId)
             );
         } else {
-            setReplyCommentList([...replyCommentList, commentId]);
+            setExpandedComments((prev) => [...prev, commentId]);
+
+            // Only fetch if not already loaded
+            if (!areChildCommentsLoaded(postId, commentId)) {
+                await fetchChildComments(postId, commentId, 1, 20);
+            }
         }
     };
+
+    if (isLoading) {
+        return <CommentsSkeleton />;
+    }
 
     return (
         <div>
@@ -79,12 +93,12 @@ export function PostCardComments({ postId }) {
                             <AvatarImage src={comment.userProfilePic} />
                             <AvatarFallback>CN</AvatarFallback>
                         </Avatar>
-                        {getChildren(comment.id).length > 0 && (
+                        {comment.childrenCount > 0 && (
                             <span
                                 className="absolute left-4 bg-border w-px"
                                 style={{
-                                    top: '2.5rem', // same as top-10
-                                    height: 'calc(100% - 18px)', // subtract 10px from the height
+                                    top: '2.5rem',
+                                    height: 'calc(100% - 18px)',
                                 }}
                             />
                         )}
@@ -101,61 +115,81 @@ export function PostCardComments({ postId }) {
                                     {comment.content}
                                 </CardContent>
                             </Card>
-                            <div className="flex flex-row justify-between  mr-6">
-                                <div className="flex flex-row text-muted-foreground text-sm items-center ml-4 mt-0 gap-5 ">
-                                    <div>{timeAgo(comment.createdAt)} </div>
+                            <div className="flex flex-row justify-between mr-6">
+                                <div className="flex flex-row text-muted-foreground text-sm items-center ml-4 mt-0 gap-5">
+                                    <div>{timeAgo(comment.createdAt)}</div>
                                     <div className="flex items-center">
                                         <PostCardReactions
+                                            postId={postId}
+                                            commentId={comment.id}
+                                            type="comment"
                                             triggerIconSizeClass="size-3.5"
                                             contentIconSizeClass="size-4.5"
                                             triggerButtonVariant="link"
                                             triggerTextClass="text-muted-foreground"
-                                        />{' '}
+                                        />
                                     </div>
                                     <div>
                                         <Button
                                             variant="link"
                                             size="xs"
                                             className="text-muted-foreground text-sm"
-                                            onClick={() => {
-                                                handleCommentReply(comment.id);
-                                            }}
+                                            onClick={() =>
+                                                handleCommentReply(comment.id)
+                                            }
                                         >
                                             <Reply />
                                             Reply
                                         </Button>
                                     </div>
                                 </div>
-                                <div className="flex flex-row text-muted-foreground text-sm ml-4 mt-2 ">
-                                    0 reactions
+                                <div className="flex flex-row text-muted-foreground text-sm ml-4 mt-2">
+                                    {comment.reactions || 0} reactions
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div className="mt-2 mx-14 relative">
-                        {/* Render child comments for this parent */}
-                        {getChildren(comment.id).length > 0 && (
-                            <>
-                                <Collapsible className="relative">
-                                    <span className="absolute -left-10 top-3 h-[1px] w-[30px] bg-border" />
-                                    <CollapsibleTrigger className="font-medium text-primary dark:text-primary-foreground cursor-pointer">
-                                        {getChildren(comment.id).length > 1
-                                            ? `See the ${getChildren(comment.id).length} answers`
-                                            : `See ${getChildren(comment.id).length} answer`}
-                                    </CollapsibleTrigger>
-                                    <CollapsibleContent>
-                                        <div className="relative">
-                                            <span
-                                                className="absolute left-[-40px] bg-border w-px"
-                                                style={{
-                                                    top: '-1rem', // same as top-10
-                                                    height: 'calc(90%)', // subtract 10px from the height
-                                                }}
-                                            />
+                        {/* Show "See answers" button if comment has children */}
+                        {comment.hasChildren && comment.childrenCount > 0 && (
+                            <Collapsible
+                                className="relative"
+                                open={expandedComments.includes(comment.id)}
+                                onOpenChange={() =>
+                                    handleExpandChildren(comment.id)
+                                }
+                            >
+                                <span className="absolute -left-10 top-3 h-[1px] w-[30px] bg-border" />
+                                <CollapsibleTrigger className="font-medium text-primary dark:text-primary-foreground cursor-pointer">
+                                    {comment.childrenCount > 1
+                                        ? `See the ${comment.childrenCount} answers`
+                                        : `See ${comment.childrenCount} answer`}
+                                </CollapsibleTrigger>
+                                <CollapsibleContent>
+                                    <div className="relative">
+                                        <span
+                                            className="absolute left-[-40px] bg-border w-px"
+                                            style={{
+                                                top: '-1rem',
+                                                height: 'calc(90%)',
+                                            }}
+                                        />
+                                        {isLoadingChildComments(
+                                            postId,
+                                            comment.id
+                                        ) ? (
+                                            <div className="p-2">
+                                                <Skeleton className="h-10 w-full rounded mb-2" />
+                                                <Skeleton className="h-8 w-3/4 rounded" />
+                                            </div>
+                                        ) : (
                                             <ChildComments
-                                                childComments={getChildren(
-                                                    comment.id
-                                                )}
+                                                childComments={
+                                                    getChildComments(
+                                                        postId,
+                                                        comment.id
+                                                    ).comments
+                                                }
                                                 postId={postId}
                                                 replyCommentList={
                                                     replyCommentList
@@ -164,30 +198,69 @@ export function PostCardComments({ postId }) {
                                                     handleCommentReply
                                                 }
                                             />
-                                        </div>
-                                    </CollapsibleContent>
-                                </Collapsible>
-                            </>
+                                        )}
+                                    </div>
+                                </CollapsibleContent>
+                            </Collapsible>
                         )}
 
-                        {replyCommentList.includes(comment.id) ? (
+                        {/* Show reply form if comment is in replyCommentList */}
+                        {replyCommentList.includes(comment.id) && (
                             <div className="mx-3">
                                 <PostCardCommentForm
                                     postId={postId}
                                     parentCommentId={comment.id}
                                     onSubmitSuccess={() => {
-                                        // Close reply form after submission
                                         handleCommentReply(comment.id);
+                                        // If this comment already had the child comments expanded,
+                                        // refresh them after replying
+                                        if (
+                                            expandedComments.includes(
+                                                comment.id
+                                            )
+                                        ) {
+                                            fetchChildComments(
+                                                postId,
+                                                comment.id,
+                                                1,
+                                                20
+                                            );
+                                        }
                                     }}
-                                    placeHolder={`reply to ${comment.username}`}
+                                    placeHolder={`Reply to ${comment.username}`}
                                 />
                             </div>
-                        ) : null}
+                        )}
                     </div>
                 </div>
             ))}
 
             {/* Pagination controls if needed */}
+            {totalCount > pageSize && (
+                <div className="flex justify-center mt-4">
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        disabled={parentPage === 1}
+                        onClick={() => setParentPage((p) => Math.max(1, p - 1))}
+                    >
+                        Previous
+                    </Button>
+                    <span className="mx-2 flex items-center">
+                        Page {parentPage} of {Math.ceil(totalCount / pageSize)}
+                    </span>
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        disabled={
+                            parentPage >= Math.ceil(totalCount / pageSize)
+                        }
+                        onClick={() => setParentPage((p) => p + 1)}
+                    >
+                        Next
+                    </Button>
+                </div>
+            )}
         </div>
     );
 }
