@@ -145,7 +145,7 @@ export function PostCardComments({ postId }) {
                                     </div>
                                 </div>
                                 <div className="flex flex-row text-muted-foreground text-sm ml-4 mt-2">
-                                    {comment.reactions || 0} reactions
+                                    {comment.totalReactions || 0} reactions
                                 </div>
                             </div>
                         </div>
