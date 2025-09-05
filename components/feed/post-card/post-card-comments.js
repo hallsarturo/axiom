@@ -127,6 +127,7 @@ export function PostCardComments({ postId }) {
                                             contentIconSizeClass="size-4.5"
                                             triggerButtonVariant="link"
                                             triggerTextClass="text-muted-foreground"
+                                            hover='disabled'
                                         />
                                     </div>
                                     <div>

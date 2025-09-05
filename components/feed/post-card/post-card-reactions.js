@@ -25,6 +25,7 @@ export function PostCardReactions({
     // control trigger button classes (text color / bg / extra)
     triggerTextClass = 'text-primary dark:text-foreground',
     triggerClassName = '',
+    hover = 'enabled', // new prop: 'enabled' (default) or 'disabled'
 }) {
     // Add state for popover open
     const [popoverOpen, setPopoverOpen] = useState(false);
@@ -42,8 +43,14 @@ export function PostCardReactions({
     // separate size-only classes and color handled by wrapper (so SVG uses currentColor)
     const triggerIconSizeOnly = triggerIconSizeClass;
     const contentIconSizeOnly = contentIconSizeClass;
-    const iconWrapperColorClass = `${finalTriggerTextClass} group-hover:text-white transition-colors`;
-    const contentIconWrapperColorClass = `text-primary dark:text-foreground group-hover:text-white transition-colors`;
+
+    // Conditionally add hover classes
+    const hoverClasses =
+        hover === 'disabled' ? '' : 'group-hover:text-white transition-colors';
+
+    const iconWrapperColorClass = `${finalTriggerTextClass} ${hoverClasses}`;
+    const contentIconWrapperColorClass = `text-primary dark:text-foreground ${hoverClasses}`;
+    const textWrapperColorClass = `${finalTriggerTextClass} ${hoverClasses}`;
 
     // Generate current reaction icon
     const currentReactionIcon = (() => {
@@ -57,9 +64,7 @@ export function PostCardReactions({
                                 className={triggerIconSizeOnly}
                             />
                         </span>
-                        <span
-                            className={`${finalTriggerTextClass} group-hover:text-white transition-colors`}
-                        >
+                        <span className={textWrapperColorClass}>
                             {reactionCounts.likes} Likes
                         </span>
                     </div>
@@ -73,9 +78,7 @@ export function PostCardReactions({
                                 className={triggerIconSizeOnly}
                             />
                         </span>
-                        <span
-                            className={`${finalTriggerTextClass} group-hover:text-white transition-colors`}
-                        >
+                        <span className={textWrapperColorClass}>
                             {reactionCounts.dislikes} Dislikes
                         </span>
                     </div>
@@ -89,9 +92,7 @@ export function PostCardReactions({
                                 className={triggerIconSizeOnly}
                             />
                         </span>
-                        <span
-                            className={`${finalTriggerTextClass} group-hover:text-white transition-colors`}
-                        >
+                        <span className={textWrapperColorClass}>
                             {reactionCounts.laughs} Laughs
                         </span>
                     </div>
@@ -105,9 +106,7 @@ export function PostCardReactions({
                                 className={triggerIconSizeOnly}
                             />
                         </span>
-                        <span
-                            className={`${finalTriggerTextClass} group-hover:text-white transition-colors`}
-                        >
+                        <span className={textWrapperColorClass}>
                             {reactionCounts.angers} Anger
                         </span>
                     </div>
@@ -116,7 +115,9 @@ export function PostCardReactions({
                 return (
                     <div className="flex flex-row gap-2 items-center">
                         <BiLike className={triggerIconSizeOnly} />
-                        <span>{reactionCounts.likes} Likes</span>
+                        <span className={finalTriggerTextClass}>
+                            {reactionCounts.likes} Likes
+                        </span>
                     </div>
                 );
         }
@@ -222,7 +223,11 @@ export function PostCardReactions({
                                     className={contentIconSizeOnly}
                                 />
                             </span>
-                            <span className={`${finalTriggerTextClass} group-hover:text-white transition-colors ml-2`}>{reactionCounts.likes}</span>
+                            <span
+                                className={`${finalTriggerTextClass} group-hover:text-white transition-colors ml-2`}
+                            >
+                                {reactionCounts.likes}
+                            </span>
                         </div>
                     ) : (
                         <div className="flex flex-row gap-2 align-middle">
@@ -232,7 +237,11 @@ export function PostCardReactions({
                                     className={contentIconSizeOnly}
                                 />
                             </span>
-                            <span className={`${finalTriggerTextClass} group-hover:text-white transition-colors ml-2`}>{reactionCounts.likes}</span>
+                            <span
+                                className={`${finalTriggerTextClass} group-hover:text-white transition-colors ml-2`}
+                            >
+                                {reactionCounts.likes}
+                            </span>
                         </div>
                     )}
                 </Button>
@@ -249,7 +258,9 @@ export function PostCardReactions({
                                     className={contentIconSizeOnly}
                                 />
                             </span>
-                            <span className={`${finalTriggerTextClass} group-hover:text-white transition-colors ml-2`}>
+                            <span
+                                className={`${finalTriggerTextClass} group-hover:text-white transition-colors ml-2`}
+                            >
                                 {reactionCounts.dislikes}
                             </span>
                         </div>
@@ -261,7 +272,9 @@ export function PostCardReactions({
                                     className={contentIconSizeOnly}
                                 />
                             </span>
-                            <span className={`${finalTriggerTextClass} group-hover:text-white transition-colors ml-2`}>
+                            <span
+                                className={`${finalTriggerTextClass} group-hover:text-white transition-colors ml-2`}
+                            >
                                 {reactionCounts.dislikes}
                             </span>
                         </div>
@@ -280,7 +293,9 @@ export function PostCardReactions({
                                     className={contentIconSizeOnly}
                                 />
                             </span>
-                            <span className={`${finalTriggerTextClass} group-hover:text-white transition-colors ml-2`}>
+                            <span
+                                className={`${finalTriggerTextClass} group-hover:text-white transition-colors ml-2`}
+                            >
                                 {reactionCounts.laughs}
                             </span>
                         </div>
@@ -292,7 +307,9 @@ export function PostCardReactions({
                                     className={contentIconSizeOnly}
                                 />
                             </span>
-                            <span className={`${finalTriggerTextClass} group-hover:text-white transition-colors ml-2`}>
+                            <span
+                                className={`${finalTriggerTextClass} group-hover:text-white transition-colors ml-2`}
+                            >
                                 {reactionCounts.laughs}
                             </span>
                         </div>
@@ -311,7 +328,9 @@ export function PostCardReactions({
                                     className={contentIconSizeOnly}
                                 />
                             </span>
-                            <span className={`${finalTriggerTextClass} group-hover:text-white transition-colors ml-2`}>
+                            <span
+                                className={`${finalTriggerTextClass} group-hover:text-white transition-colors ml-2`}
+                            >
                                 {reactionCounts.angers}
                             </span>
                         </div>
@@ -323,7 +342,9 @@ export function PostCardReactions({
                                     className={contentIconSizeOnly}
                                 />
                             </span>
-                            <span className={`${finalTriggerTextClass} group-hover:text-white transition-colors ml-2`}>
+                            <span
+                                className={`${finalTriggerTextClass} group-hover:text-white transition-colors ml-2`}
+                            >
                                 {reactionCounts.angers}
                             </span>
                         </div>
