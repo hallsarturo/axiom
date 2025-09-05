@@ -86,7 +86,7 @@ export function PostCardComments({ postId }) {
             {parentComments.map((comment, index) => (
                 <div
                     key={comment.id || index}
-                    className="flex flex-col w-full px-2 py-2"
+                    className="flex flex-col w-full px-2 pb-1"
                 >
                     <div className="flex gap-2 relative">
                         <Avatar className="">
@@ -150,11 +150,11 @@ export function PostCardComments({ postId }) {
                             </div>
                         </div>
                     </div>
-                    <div className="mt-2 mx-14 relative">
+                    <div className="mt-1 mx-14 relative">
                         {/* Show "See answers" button if comment has children */}
                         {comment.hasChildren && comment.childrenCount > 0 && (
                             <Collapsible
-                                className="relative"
+                                className="relative mb-1"
                                 open={expandedComments.includes(comment.id)}
                                 onOpenChange={() =>
                                     handleExpandChildren(comment.id)
