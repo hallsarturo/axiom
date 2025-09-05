@@ -24,10 +24,10 @@ export function ChildComments({
 
     return (
         <>
-            {console.log(
+            {/* {console.log(
                 `Child comments for parent: ${childComments.length}`,
                 childComments
-            )}
+            )} */}
             <div className="space-y-2">
                 {childComments.map((comment, index) => (
                     <div
