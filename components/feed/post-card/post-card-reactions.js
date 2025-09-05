@@ -16,6 +16,8 @@ import { useEffect, useState } from 'react';
 
 export function PostCardReactions({
     postId,
+    commentId,
+    type = 'post',
     commentDialogOpen = false,
     // two separate size props: trigger (small) and content (larger or different)
     triggerIconSizeClass = 'size-5.5',
@@ -33,8 +35,12 @@ export function PostCardReactions({
     const { user } = useUser();
 
     // Get reaction data from Zustand store
-    const { getReactionData, handleReaction } = useReactionsStore();
-    const { userReaction, reactionCounts } = getReactionData(postId);
+    const { getReactionData, handlePostReaction, handleCommentReaction } =
+        useReactionsStore();
+
+    // Use correct id and handler
+    const id = type === 'comment' ? commentId : postId;
+    const { userReaction, reactionCounts } = getReactionData(id, type);
 
     // prefer a single final text class so we never render conflicting utilities
     const finalTriggerTextClass =
@@ -131,12 +137,16 @@ export function PostCardReactions({
             : null;
 
     // Handle reaction directly with the store
-    const handleReactionClick = (e, type) => {
+    const handleReactionClick = (e, reactionType) => {
         e.preventDefault();
         e.stopPropagation();
 
         if (!requireAuth()) return;
-        handleReaction(postId, type, user?.id, token);
+        if (type === 'comment') {
+            handleCommentReaction(commentId, reactionType, user?.id, token);
+        } else {
+            handlePostReaction(postId, reactionType, user?.id, token);
+        }
     };
 
     // If dialogOpen changes to true, close the popover
