@@ -185,6 +185,33 @@ export function PostCardComments({ postId, userId }) {
                             </div>
                         </div>
                     </div>
+                                   {/* Show reply form if comment is in replyCommentList */}
+                        {replyCommentList.includes(comment.id) && (
+                            <div className="ml-6 mr-12 mb-2">
+                                <PostCardCommentForm
+                                    postId={postId}
+                                    parentCommentId={comment.id}
+                                    onSubmitSuccess={() => {
+                                        handleCommentReply(comment.id);
+                                        // If this comment already had the child comments expanded,
+                                        // refresh them after replying
+                                        if (
+                                            expandedComments.includes(
+                                                comment.id
+                                            )
+                                        ) {
+                                            fetchChildComments(
+                                                postId,
+                                                comment.id,
+                                                1,
+                                                20
+                                            );
+                                        }
+                                    }}
+                                    placeHolder={`Reply to ${comment.username}`}
+                                />
+                            </div>
+                        )}
                     <div className="mt-0 mx-14 relative">
                         {/* Show "See answers" button if comment has children */}
                         {comment.hasChildren && comment.childrenCount > 0 && (
@@ -240,33 +267,7 @@ export function PostCardComments({ postId, userId }) {
                             </Collapsible>
                         )}
 
-                        {/* Show reply form if comment is in replyCommentList */}
-                        {replyCommentList.includes(comment.id) && (
-                            <div className="ml-6 mr-12 mb-2">
-                                <PostCardCommentForm
-                                    postId={postId}
-                                    parentCommentId={comment.id}
-                                    onSubmitSuccess={() => {
-                                        handleCommentReply(comment.id);
-                                        // If this comment already had the child comments expanded,
-                                        // refresh them after replying
-                                        if (
-                                            expandedComments.includes(
-                                                comment.id
-                                            )
-                                        ) {
-                                            fetchChildComments(
-                                                postId,
-                                                comment.id,
-                                                1,
-                                                20
-                                            );
-                                        }
-                                    }}
-                                    placeHolder={`Reply to ${comment.username}`}
-                                />
-                            </div>
-                        )}
+         
                     </div>
                 </div>
             ))}
