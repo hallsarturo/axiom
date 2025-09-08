@@ -82,7 +82,7 @@ export function PostCardComments({ postId }) {
     }
 
     return (
-        <div>
+        <div className="mt-2">
             {parentComments.map((comment, index) => (
                 <div
                     key={comment.id || index}
