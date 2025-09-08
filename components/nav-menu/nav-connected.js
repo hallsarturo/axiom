@@ -30,6 +30,7 @@ import {
     IdCard,
     LogIn,
     LogOut,
+    Bell,
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { ModeToggle } from '@/components/ui/themes/mode-toggle';
@@ -214,11 +215,12 @@ export function NavigationConnected() {
                         className="flex w-full !max-w-full"
                     >
                         <NavigationMenuList>
-                            <NavigationMenuItem className="flex">
-                                <NavigationMenuTrigger className="text-primary dark:text-foreground">
-                                    <Badge className="h-5 min-w-5 rounded-full px-1 font-mono tabular-nums cursor-pointer">
+                            <NavigationMenuItem className="flex cursor-pointer">
+                                <NavigationMenuTrigger className="text-primary dark:text-foreground gap-2 cursor-pointer">
+                                    <Badge className="text-xs h-5 min-w-5 rounded-full px-1 font-mono tabular-nums">
                                         8
                                     </Badge>
+                                    <Bell size="18" />
                                 </NavigationMenuTrigger>
                             </NavigationMenuItem>
 
