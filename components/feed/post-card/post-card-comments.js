@@ -1,13 +1,31 @@
 'use client';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+    Card,
+    CardContent,
+    CardHeader,
+    CardAction,
+    CardTitle,
+} from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import {
+    AlertDialog,
+    AlertDialogTrigger,
+    AlertDialogContent,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogCancel,
+    AlertDialogAction,
+} from '@/components/ui/alert-dialog';
 import {
     Collapsible,
     CollapsibleContent,
     CollapsibleTrigger,
 } from '@/components/ui/collapsible';
+import { toast } from 'sonner';
 import { Reply } from 'lucide-react';
 import { PostCardCommentForm } from '@/components/feed/post-card/post-card-comment-form';
 import { PostCardReactions } from '@/components/feed/post-card/post-card-reactions';
@@ -18,6 +36,7 @@ import Link from 'next/link';
 import { useCommentsStore } from '@/lib/state/commentsStore';
 import { Skeleton } from '@/components/ui/skeleton';
 import { genInitials } from '@/lib/utils/strings';
+import { deleteComment } from '@/lib/actions/actions';
 
 export function PostCardComments({ postId, userId }) {
     const [replyCommentList, setReplyCommentList] = useState([]);
@@ -78,6 +97,35 @@ export function PostCardComments({ postId, userId }) {
         }
     };
 
+    // Delete comment
+    async function handleDeleteComment(commentId) {
+        let token = null;
+        if (
+            process.env.NODE_ENV === 'development' &&
+            typeof window !== 'undefined'
+        ) {
+            token = localStorage.getItem('token');
+        }
+
+        try {
+            const result = await deleteComment(token, commentId);
+            if (result.success) {
+                toast.success('Comment deleted!');
+                // Refresh comments in the store to update UI immediately
+                await fetchParentComments(postId, parentPage, pageSize, userId);
+            } else {
+                // Show backend error if available
+                const errorMsg =
+                    result.error ||
+                    'Failed to delete comment. Please try again.';
+                toast.error(errorMsg);
+            }
+        } catch (err) {
+            toast.error('something  went wrong');
+            console.error('deleteComment err: ', err);
+        }
+    }
+
     if (isLoading) {
         return <CommentsSkeleton />;
     }
@@ -106,7 +154,7 @@ export function PostCardComments({ postId, userId }) {
                             />
                         )}
                         <div className="flex flex-col">
-                            <Card className="flex bg-muted m-0 mr-4 p-1">
+                            <Card className="flex bg-muted m-0 mr-4 p-1 pb-2">
                                 <CardHeader className="m-0 px-2 pt-2">
                                     <CardTitle className="font-bold text-primary dark:text-primary-foreground">
                                         <Link
@@ -115,6 +163,64 @@ export function PostCardComments({ postId, userId }) {
                                             {comment.username}
                                         </Link>
                                     </CardTitle>
+                                    <CardAction className="pr-4">
+                                        <div className="flex">
+                                            <AlertDialog>
+                                                <AlertDialogTrigger asChild>
+                                                    <Button
+                                                        variant="link"
+                                                        className="cursor-pointer"
+                                                        size="xs"
+                                                    >
+                                                        <div className=" flex-shrink-0">
+                                                            <svg
+                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                fill="none"
+                                                                viewBox="0 0 24 24"
+                                                                strokeWidth={
+                                                                    1.5
+                                                                }
+                                                                stroke="currentColor"
+                                                                className="size-4"
+                                                            >
+                                                                <path
+                                                                    strokeLinecap="round"
+                                                                    strokeLinejoin="round"
+                                                                    d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
+                                                                />
+                                                            </svg>
+                                                        </div>
+                                                    </Button>
+                                                </AlertDialogTrigger>
+                                                <AlertDialogContent>
+                                                    <AlertDialogHeader>
+                                                        <AlertDialogTitle>
+                                                            Delete comment. Are
+                                                            you sure?
+                                                        </AlertDialogTitle>
+                                                        <AlertDialogDescription>
+                                                            This action cannot
+                                                            be undone.
+                                                        </AlertDialogDescription>
+                                                    </AlertDialogHeader>
+                                                    <AlertDialogFooter>
+                                                        <AlertDialogCancel>
+                                                            Cancel
+                                                        </AlertDialogCancel>
+                                                        <AlertDialogAction
+                                                            onClick={() => {
+                                                                handleDeleteComment(
+                                                                    comment.id
+                                                                );
+                                                            }}
+                                                        >
+                                                            Continue
+                                                        </AlertDialogAction>
+                                                    </AlertDialogFooter>
+                                                </AlertDialogContent>
+                                            </AlertDialog>
+                                        </div>
+                                    </CardAction>
                                 </CardHeader>
                                 <CardContent className="mt-[-25px] py-0 px-2">
                                     {comment.content}
@@ -166,12 +272,12 @@ export function PostCardComments({ postId, userId }) {
                                 }
                             >
                                 <span className="absolute -left-10 top-3 h-[1px] w-[30px] bg-border" />
-                                <CollapsibleTrigger className="font-medium text-primary dark:text-primary-foreground cursor-pointer">
+                                <CollapsibleTrigger className="font-medium text-primary dark:text-primary-foreground cursor-pointer mb-0">
                                     {comment.childrenCount > 1
                                         ? `See the ${comment.childrenCount} answers`
                                         : `See ${comment.childrenCount} answer`}
                                 </CollapsibleTrigger>
-                                <CollapsibleContent>
+                                <CollapsibleContent className="mt-2">
                                     <div className="relative">
                                         <span
                                             className="absolute left-[-40px] bg-border w-px"
