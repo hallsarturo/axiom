@@ -35,6 +35,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { ModeToggle } from '@/components/ui/themes/mode-toggle';
 import { SearchBar } from '@/components/nav-menu/search-bar';
+import { NotificationDropdown } from '@/components/notifications/notification-dropdown';
 import { useRouter, usePathname } from 'next/navigation';
 import { logoutUser } from '@/lib/actions/actions';
 import { useUser } from '@/components/context/UserProfileContext';
@@ -216,12 +217,7 @@ export function NavigationConnected() {
                     >
                         <NavigationMenuList>
                             <NavigationMenuItem className="flex cursor-pointer">
-                                <NavigationMenuTrigger className="text-primary dark:text-foreground gap-2 cursor-pointer">
-                                    <Badge className="text-xs h-5 min-w-5 rounded-full px-1 font-mono tabular-nums">
-                                        8
-                                    </Badge>
-                                    <Bell size="18" />
-                                </NavigationMenuTrigger>
+                                <NotificationDropdown userId={user?.id} />
                             </NavigationMenuItem>
 
                             <NavigationMenuItem>
