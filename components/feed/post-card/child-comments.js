@@ -1,9 +1,16 @@
 'use client';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+    Card,
+    CardAction,
+    CardContent,
+    CardHeader,
+    CardTitle,
+} from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { PostCardCommentForm } from '@/components/feed/post-card/post-card-comment-form';
+import { CommentsActions } from '@/components/feed/post-card/comments-actions';
 import { PostCardReactions } from '@/components/feed/post-card/post-card-reactions';
 import { useCommentsStore } from '@/lib/state/commentsStore';
 import { timeAgo } from '@/lib/utils/date';
@@ -15,7 +22,7 @@ export function ChildComments({
     childComments,
     postId,
     replyCommentList,
-    handleCommentReply,
+    userId,
 }) {
     const [page, setPage] = useState(1);
     const pageSize = 10;
@@ -57,6 +64,25 @@ export function ChildComments({
                                                 {comment.username}
                                             </Link>
                                         </CardTitle>
+                                        <CardAction>
+                                            <div className="flex">
+                                                <CommentsActions
+                                                    commentId={comment.id}
+                                                    postId={postId}
+                                                    userId={userId}
+                                                    pageSize={pageSize}
+                                                    onDeleteSuccess={() => {
+                                                        fetchChildComments(
+                                                            postId,
+                                                            comment.parentCommentId,
+                                                            1,
+                                                            pageSize,
+                                                            userId
+                                                        );
+                                                    }}
+                                                />
+                                            </div>
+                                        </CardAction>
                                     </CardHeader>
                                     <CardContent className="mt-[-25px] py-0 px-2">
                                         {comment.content}

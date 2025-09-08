@@ -37,7 +37,6 @@ import Link from 'next/link';
 import { useCommentsStore } from '@/lib/state/commentsStore';
 import { Skeleton } from '@/components/ui/skeleton';
 import { genInitials } from '@/lib/utils/strings';
-import { deleteComment } from '@/lib/actions/actions';
 
 export function PostCardComments({ postId, userId }) {
     const [replyCommentList, setReplyCommentList] = useState([]);
@@ -103,7 +102,7 @@ export function PostCardComments({ postId, userId }) {
     }
 
     return (
-        <div className="mt-2">
+        <div className="mt-3">
             {parentComments.map((comment, index) => (
                 <div
                     key={comment.id || index}
@@ -186,7 +185,7 @@ export function PostCardComments({ postId, userId }) {
                             </div>
                         </div>
                     </div>
-                    <div className="mt-1 mx-14 relative">
+                    <div className="mt-0 mx-14 relative">
                         {/* Show "See answers" button if comment has children */}
                         {comment.hasChildren && comment.childrenCount > 0 && (
                             <Collapsible

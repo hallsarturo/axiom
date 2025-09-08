@@ -23,6 +23,7 @@ import {
 import { toast } from 'sonner';
 import { deleteComment } from '@/lib/actions/actions';
 import { useCommentsStore } from '@/lib/state/commentsStore';
+import { useState } from 'react';
 
 export function CommentsActions({
     commentId,
@@ -30,7 +31,9 @@ export function CommentsActions({
     userId,
     parentPage = 1,
     pageSize = 20,
+    
 }) {
+    const [open, setOpen] = useState(false);
     // Get store functions
     const { fetchParentComments } = useCommentsStore();
 
@@ -61,62 +64,65 @@ export function CommentsActions({
             toast.error('Something went wrong');
             console.error('deleteComment err: ', err);
         }
+        setOpen(false);
     }
 
     return (
-        <DropdownMenu>
-            <DropdownMenuTrigger className="cursor-pointer">
-                <div className="flex-shrink-0">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="size-4"
-                    >
-                        <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
-                        />
-                    </svg>
-                </div>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-                <DropdownMenuItem>Edit</DropdownMenuItem>
-                <DropdownMenuItem>
-                    Delete
-                    <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                            <Button
-                                variant="link"
-                                className="cursor-pointer"
-                                size="xs"
-                            ></Button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                            <AlertDialogHeader>
-                                <AlertDialogTitle>
-                                    Delete comment. Are you sure?
-                                </AlertDialogTitle>
-                                <AlertDialogDescription>
-                                    This action cannot be undone.
-                                </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                <AlertDialogAction
-                                    onClick={handleDeleteComment}
-                                >
-                                    Continue
-                                </AlertDialogAction>
-                            </AlertDialogFooter>
-                        </AlertDialogContent>
-                    </AlertDialog>
-                </DropdownMenuItem>
-                <DropdownMenuItem>Report</DropdownMenuItem>
-            </DropdownMenuContent>
-        </DropdownMenu>
+        <>
+            <DropdownMenu>
+                <DropdownMenuTrigger className="cursor-pointer">
+                    <div className="flex-shrink-0">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={1.5}
+                            stroke="currentColor"
+                            className="size-4"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
+                            />
+                        </svg>
+                    </div>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                    <DropdownMenuItem>Edit</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setOpen(true)}>
+                        Delete
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>Report</DropdownMenuItem>
+                </DropdownMenuContent>
+            </DropdownMenu>
+            <AlertDialog open={open} onOpenChange={setOpen}>
+                <AlertDialogTrigger asChild>
+                    <Button
+                        variant="link"
+                        className="cursor-pointer"
+                        size="xs"
+                    ></Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>
+                            Delete comment. Are you sure?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                            This action cannot be undone.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel onClick={() => setOpen(false)}>
+                            Cancel
+                        </AlertDialogCancel>
+                        <AlertDialogAction onClick={handleDeleteComment}>
+                            Continue
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+        </>
     );
 }
