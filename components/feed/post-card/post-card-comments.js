@@ -18,7 +18,7 @@ import Link from 'next/link';
 import { useCommentsStore } from '@/lib/state/commentsStore';
 import { Skeleton } from '@/components/ui/skeleton';
 
-export function PostCardComments({ postId }) {
+export function PostCardComments({ postId, userId }) {
     const [replyCommentList, setReplyCommentList] = useState([]);
     const [expandedComments, setExpandedComments] = useState([]);
     const [parentPage, setParentPage] = useState(1);
@@ -44,10 +44,10 @@ export function PostCardComments({ postId }) {
     // Fetch parent comments when component mounts or postId/page changes
     useEffect(() => {
         const loadParents = async () => {
-            await fetchParentComments(postId, parentPage, pageSize);
+            await fetchParentComments(postId, parentPage, pageSize, userId);
         };
         loadParents();
-    }, [fetchParentComments, postId, parentPage]);
+    }, [fetchParentComments, postId, parentPage, userId]);
 
     // Handle comment replies toggle
     const handleCommentReply = (commentId) => {
@@ -127,7 +127,7 @@ export function PostCardComments({ postId }) {
                                             contentIconSizeClass="size-4.5"
                                             triggerButtonVariant="link"
                                             triggerTextClass="text-muted-foreground"
-                                            hover='disabled'
+                                            hover="disabled"
                                         />
                                     </div>
                                     <div>
