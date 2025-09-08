@@ -50,13 +50,13 @@ export function ChildComments({
                             <div className="flex flex-col">
                                 <Card className="flex bg-muted m-0 mr-4 p-1">
                                     <CardHeader className="m-0 px-2 pt-2">
-                                        <Link
-                                            href={`/profile/${comment.userId}`}
-                                        >
-                                            <CardTitle className="font-bold text-primary dark:text-primary-foreground">
+                                        <CardTitle className="font-bold text-primary dark:text-primary-foreground">
+                                            <Link
+                                                href={`/profile/${comment.userId}`}
+                                            >
                                                 {comment.username}
-                                            </CardTitle>
-                                        </Link>
+                                            </Link>
+                                        </CardTitle>
                                     </CardHeader>
                                     <CardContent className="mt-[-25px] py-0 px-2">
                                         {comment.content}
