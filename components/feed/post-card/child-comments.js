@@ -17,14 +17,25 @@ import { timeAgo } from '@/lib/utils/date';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { genInitials } from '@/lib/utils/strings';
+import {
+    Pagination,
+    PaginationContent,
+    PaginationItem,
+    PaginationLink,
+    PaginationNext,
+    PaginationPrevious,
+} from '@/components/ui/pagination';
+import { Separator } from '@/components/ui/separator';
 
 export function ChildComments({
     childComments,
     postId,
     replyCommentList,
     userId,
+    page = 1,
+    setPage,
+    totalCount = 0,
 }) {
-    const [page, setPage] = useState(1);
     const pageSize = 10;
 
     // Log child comments to help with debugging
@@ -35,10 +46,6 @@ export function ChildComments({
     const { fetchChildComments } = useCommentsStore.getState();
     return (
         <>
-            {/* {console.log(
-                `Child comments for parent: ${childComments.length}`,
-                childComments
-            )} */}
             <div className="">
                 {childComments.map((comment, index) => (
                     <div
@@ -152,6 +159,66 @@ export function ChildComments({
                     </div>
                 ))}
             </div>
+            {totalCount > pageSize && (
+                <>
+                    <Pagination className="mt-2 mb-2">
+                        <PaginationContent>
+                            <PaginationItem>
+                                <PaginationPrevious
+                                    className="text-xs"
+                                    href="#"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        setPage(Math.max(1, page - 1));
+                                    }}
+                                    disabled={page === 1}
+                                />
+                            </PaginationItem>
+                            {Array.from({
+                                length: Math.ceil(totalCount / pageSize),
+                            }).map((_, i) => (
+                                <PaginationItem key={i}>
+                                    <PaginationLink
+                                        className="text-xs"
+                                        href="#"
+                                        isActive={page === i + 1}
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            setPage(i + 1);
+                                        }}
+                                    >
+                                        {i + 1}
+                                    </PaginationLink>
+                                </PaginationItem>
+                            ))}
+                            <PaginationItem>
+                                <PaginationNext
+                                    className="text-xs"
+                                    href="#"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        setPage(
+                                            Math.min(
+                                                Math.ceil(
+                                                    totalCount / pageSize
+                                                ),
+                                                page + 1
+                                            )
+                                        );
+                                    }}
+                                    disabled={
+                                        page >= Math.ceil(totalCount / pageSize)
+                                    }
+                                />
+                            </PaginationItem>
+                        </PaginationContent>
+                    </Pagination>
+                    <p className="text-xs text-center">
+                        child comments pagination
+                    </p>
+                    <Separator className="mt-2" />
+                </>
+            )}
         </>
     );
 }

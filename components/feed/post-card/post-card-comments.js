@@ -10,22 +10,19 @@ import {
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import {
-    AlertDialog,
-    AlertDialogTrigger,
-    AlertDialogContent,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogCancel,
-    AlertDialogAction,
-} from '@/components/ui/alert-dialog';
-import {
     Collapsible,
     CollapsibleContent,
     CollapsibleTrigger,
 } from '@/components/ui/collapsible';
-import { toast } from 'sonner';
+import {
+    Pagination,
+    PaginationContent,
+    PaginationEllipsis,
+    PaginationItem,
+    PaginationLink,
+    PaginationNext,
+    PaginationPrevious,
+} from '@/components/ui/pagination';
 import { Reply } from 'lucide-react';
 import { PostCardCommentForm } from '@/components/feed/post-card/post-card-comment-form';
 import { PostCardReactions } from '@/components/feed/post-card/post-card-reactions';
@@ -42,6 +39,7 @@ export function PostCardComments({ postId, userId }) {
     const [replyCommentList, setReplyCommentList] = useState([]);
     const [expandedComments, setExpandedComments] = useState([]);
     const [parentPage, setParentPage] = useState(1);
+    const [childPages, setChildPages] = useState({});
     const pageSize = 20;
 
     // Get comments from Zustand store
@@ -80,19 +78,16 @@ export function PostCardComments({ postId, userId }) {
 
     // Handle click on "See answers"
     const handleExpandChildren = async (commentId) => {
-        // Toggle expanded state
         const isCurrentlyExpanded = expandedComments.includes(commentId);
-
         if (isCurrentlyExpanded) {
             setExpandedComments((prev) =>
                 prev.filter((id) => id !== commentId)
             );
         } else {
             setExpandedComments((prev) => [...prev, commentId]);
-
-            // Only fetch if not already loaded
+            const page = childPages[commentId] || 1;
             if (!areChildCommentsLoaded(postId, commentId)) {
-                await fetchChildComments(postId, commentId, 1, 20, userId);
+                await fetchChildComments(postId, commentId, page, 10, userId);
             }
         }
     };
@@ -185,33 +180,29 @@ export function PostCardComments({ postId, userId }) {
                             </div>
                         </div>
                     </div>
-                                   {/* Show reply form if comment is in replyCommentList */}
-                        {replyCommentList.includes(comment.id) && (
-                            <div className="ml-6 mr-12 mb-2">
-                                <PostCardCommentForm
-                                    postId={postId}
-                                    parentCommentId={comment.id}
-                                    onSubmitSuccess={() => {
-                                        handleCommentReply(comment.id);
-                                        // If this comment already had the child comments expanded,
-                                        // refresh them after replying
-                                        if (
-                                            expandedComments.includes(
-                                                comment.id
-                                            )
-                                        ) {
-                                            fetchChildComments(
-                                                postId,
-                                                comment.id,
-                                                1,
-                                                20
-                                            );
-                                        }
-                                    }}
-                                    placeHolder={`Reply to ${comment.username}`}
-                                />
-                            </div>
-                        )}
+                    {/* Show reply form if comment is in replyCommentList */}
+                    {replyCommentList.includes(comment.id) && (
+                        <div className="ml-6 mr-12 mb-2">
+                            <PostCardCommentForm
+                                postId={postId}
+                                parentCommentId={comment.id}
+                                onSubmitSuccess={() => {
+                                    handleCommentReply(comment.id);
+                                    // If this comment already had the child comments expanded,
+                                    // refresh them after replying
+                                    if (expandedComments.includes(comment.id)) {
+                                        fetchChildComments(
+                                            postId,
+                                            comment.id,
+                                            1,
+                                            20
+                                        );
+                                    }
+                                }}
+                                placeHolder={`Reply to ${comment.username}`}
+                            />
+                        </div>
+                    )}
                     <div className="mt-0 mx-14 relative">
                         {/* Show "See answers" button if comment has children */}
                         {comment.hasChildren && comment.childrenCount > 0 && (
@@ -257,8 +248,28 @@ export function PostCardComments({ postId, userId }) {
                                                 replyCommentList={
                                                     replyCommentList
                                                 }
-                                                handleCommentReply={
-                                                    handleCommentReply
+                                                userId={userId}
+                                                page={
+                                                    childPages[comment.id] || 1
+                                                }
+                                                setPage={(newPage) => {
+                                                    setChildPages((prev) => ({
+                                                        ...prev,
+                                                        [comment.id]: newPage,
+                                                    }));
+                                                    fetchChildComments(
+                                                        postId,
+                                                        comment.id,
+                                                        newPage,
+                                                        10,
+                                                        userId
+                                                    );
+                                                }}
+                                                totalCount={
+                                                    getChildComments(
+                                                        postId,
+                                                        comment.id
+                                                    ).totalCount
                                                 }
                                             />
                                         )}
@@ -266,37 +277,61 @@ export function PostCardComments({ postId, userId }) {
                                 </CollapsibleContent>
                             </Collapsible>
                         )}
-
-         
                     </div>
                 </div>
             ))}
 
             {/* Pagination controls if needed */}
             {totalCount > pageSize && (
-                <div className="flex justify-center mt-4">
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        disabled={parentPage === 1}
-                        onClick={() => setParentPage((p) => Math.max(1, p - 1))}
-                    >
-                        Previous
-                    </Button>
-                    <span className="mx-2 flex items-center">
-                        Page {parentPage} of {Math.ceil(totalCount / pageSize)}
-                    </span>
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        disabled={
-                            parentPage >= Math.ceil(totalCount / pageSize)
-                        }
-                        onClick={() => setParentPage((p) => p + 1)}
-                    >
-                        Next
-                    </Button>
-                </div>
+                <Pagination className="mt-4">
+                    <PaginationContent>
+                        <PaginationItem>
+                            <PaginationPrevious
+                                href="#"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    setParentPage((p) => Math.max(1, p - 1));
+                                }}
+                                disabled={parentPage === 1}
+                            />
+                        </PaginationItem>
+                        {/* Render page numbers */}
+                        {Array.from({
+                            length: Math.ceil(totalCount / pageSize),
+                        }).map((_, i) => (
+                            <PaginationItem key={i}>
+                                <PaginationLink
+                                    href="#"
+                                    isActive={parentPage === i + 1}
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        setParentPage(i + 1);
+                                    }}
+                                >
+                                    {i + 1}
+                                </PaginationLink>
+                            </PaginationItem>
+                        ))}
+                        <PaginationItem>
+                            <PaginationNext
+                                href="#"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    setParentPage((p) =>
+                                        Math.min(
+                                            Math.ceil(totalCount / pageSize),
+                                            p + 1
+                                        )
+                                    );
+                                }}
+                                disabled={
+                                    parentPage >=
+                                    Math.ceil(totalCount / pageSize)
+                                }
+                            />
+                        </PaginationItem>
+                    </PaginationContent>
+                </Pagination>
             )}
         </div>
     );
