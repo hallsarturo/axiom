@@ -29,6 +29,7 @@ import { toast } from 'sonner';
 import { Reply } from 'lucide-react';
 import { PostCardCommentForm } from '@/components/feed/post-card/post-card-comment-form';
 import { PostCardReactions } from '@/components/feed/post-card/post-card-reactions';
+import { CommentsActions } from '@/components/feed/post-card/comments-actions';
 import { ChildComments } from '@/components/feed/post-card/child-comments';
 import { timeAgo } from '@/lib/utils/date';
 import { useState, useEffect } from 'react';
@@ -97,35 +98,6 @@ export function PostCardComments({ postId, userId }) {
         }
     };
 
-    // Delete comment
-    async function handleDeleteComment(commentId) {
-        let token = null;
-        if (
-            process.env.NODE_ENV === 'development' &&
-            typeof window !== 'undefined'
-        ) {
-            token = localStorage.getItem('token');
-        }
-
-        try {
-            const result = await deleteComment(token, commentId);
-            if (result.success) {
-                toast.success('Comment deleted!');
-                // Refresh comments in the store to update UI immediately
-                await fetchParentComments(postId, parentPage, pageSize, userId);
-            } else {
-                // Show backend error if available
-                const errorMsg =
-                    result.error ||
-                    'Failed to delete comment. Please try again.';
-                toast.error(errorMsg);
-            }
-        } catch (err) {
-            toast.error('something  went wrong');
-            console.error('deleteComment err: ', err);
-        }
-    }
-
     if (isLoading) {
         return <CommentsSkeleton />;
     }
@@ -165,60 +137,13 @@ export function PostCardComments({ postId, userId }) {
                                     </CardTitle>
                                     <CardAction className="pr-4">
                                         <div className="flex">
-                                            <AlertDialog>
-                                                <AlertDialogTrigger asChild>
-                                                    <Button
-                                                        variant="link"
-                                                        className="cursor-pointer"
-                                                        size="xs"
-                                                    >
-                                                        <div className=" flex-shrink-0">
-                                                            <svg
-                                                                xmlns="http://www.w3.org/2000/svg"
-                                                                fill="none"
-                                                                viewBox="0 0 24 24"
-                                                                strokeWidth={
-                                                                    1.5
-                                                                }
-                                                                stroke="currentColor"
-                                                                className="size-4"
-                                                            >
-                                                                <path
-                                                                    strokeLinecap="round"
-                                                                    strokeLinejoin="round"
-                                                                    d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
-                                                                />
-                                                            </svg>
-                                                        </div>
-                                                    </Button>
-                                                </AlertDialogTrigger>
-                                                <AlertDialogContent>
-                                                    <AlertDialogHeader>
-                                                        <AlertDialogTitle>
-                                                            Delete comment. Are
-                                                            you sure?
-                                                        </AlertDialogTitle>
-                                                        <AlertDialogDescription>
-                                                            This action cannot
-                                                            be undone.
-                                                        </AlertDialogDescription>
-                                                    </AlertDialogHeader>
-                                                    <AlertDialogFooter>
-                                                        <AlertDialogCancel>
-                                                            Cancel
-                                                        </AlertDialogCancel>
-                                                        <AlertDialogAction
-                                                            onClick={() => {
-                                                                handleDeleteComment(
-                                                                    comment.id
-                                                                );
-                                                            }}
-                                                        >
-                                                            Continue
-                                                        </AlertDialogAction>
-                                                    </AlertDialogFooter>
-                                                </AlertDialogContent>
-                                            </AlertDialog>
+                                            <CommentsActions
+                                                commentId={comment.id}
+                                                postId={postId}
+                                                userId={userId}
+                                                parentPage={parentPage}
+                                                pageSize={pageSize}
+                                            />
                                         </div>
                                     </CardAction>
                                 </CardHeader>
