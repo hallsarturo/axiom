@@ -46,7 +46,7 @@ export function LoginForm({ className, ...props }) {
             if (process.env.NODE_ENV === 'development' && result.data.token) {
                 localStorage.setItem('token', result.data.token);
             }
-            router.push('/feed');
+            window.location.replace('/feed');
         } else {
             setMessage(`Loggin failed: ${result.error}`);
         }

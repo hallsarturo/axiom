@@ -12,7 +12,7 @@ export default function AuthSuccess() {
         if (token && process.env.NODE_ENV === 'development') {
             localStorage.setItem('token', token);
         }
-        router.push('/feed');
+        window.location.replace('/feed')
     }, [router, searchParams]);
 
     return null;
