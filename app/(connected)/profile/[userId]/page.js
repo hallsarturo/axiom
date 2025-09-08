@@ -33,6 +33,7 @@ import {
     getPostsById,
 } from '@/lib/actions/actions';
 import { timeAgo } from '@/lib/utils/date';
+import { genInitials } from '@/lib/utils/strings';
 import useSWR from 'swr';
 
 const fetchFollowers = async (userId) => {
@@ -146,7 +147,10 @@ export default function Profile() {
                                         'https://github.com/shadcn.png'
                                     }
                                 />
-                                <AvatarFallback>CN</AvatarFallback>
+                                <AvatarFallback>
+                                    {' '}
+                                    {genInitials(user ? user.username : null)}
+                                </AvatarFallback>
                             </Avatar>
                         </div>
                     </CardAction>

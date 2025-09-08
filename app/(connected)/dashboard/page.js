@@ -38,6 +38,7 @@ import { useForm } from 'react-hook-form';
 import { configFormSchema } from '@/lib/schemas/dashboard-config';
 import { updateUserConfig } from '@/lib/actions/actions';
 import { SkeletonCard } from '@/components/skeletons/skeletonCard';
+import { genInitials } from '@/lib/utils/strings';
 
 export default function Dashboard() {
     const { user, refreshUser } = useUser();
@@ -182,7 +183,11 @@ export default function Dashboard() {
                                                         }
                                                     />
                                                     <AvatarFallback>
-                                                        CN
+                                                        {genInitials(
+                                                            user
+                                                                ? user.username
+                                                                : null
+                                                        )}
                                                     </AvatarFallback>
                                                 </Avatar>
 

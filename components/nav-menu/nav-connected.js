@@ -39,6 +39,7 @@ import { logoutUser } from '@/lib/actions/actions';
 import { useUser } from '@/components/context/UserProfileContext';
 import { useState } from 'react';
 import { useParams } from 'next/navigation';
+import { genInitials } from '@/lib/utils/strings';
 
 const menuItems = [
     {
@@ -228,7 +229,9 @@ export function NavigationConnected() {
                                         <AvatarImage
                                             src={user ? user.photoUrl : null}
                                         />
-                                        <AvatarFallback>CN</AvatarFallback>
+                                        <AvatarFallback>
+                                            {genInitials(user?.username)}
+                                        </AvatarFallback>
                                     </Avatar>
                                 </NavigationMenuTrigger>
                                 <NavigationMenuContent>

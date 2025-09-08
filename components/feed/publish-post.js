@@ -37,6 +37,7 @@ import { publishPost } from '@/lib/actions/actions';
 import { useUser } from '@/components/context/UserProfileContext';
 import { useState } from 'react';
 import { useRequireAuth } from '@/hooks/useRequireAuth';
+import { genInitials } from '@/lib/utils/strings';
 
 const ACCEPTED_FORMATS = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif'];
 const MAX_IMAGE_SIZE_MB = 1;
@@ -150,7 +151,9 @@ export function PublishPost({ mutateFeed, onDialogOpenChange, ...props }) {
                                 <AvatarImage
                                     src={user ? user.photoUrl : null}
                                 />
-                                <AvatarFallback>CN</AvatarFallback>
+                                <AvatarFallback>
+                                    {genInitials(user ? user.username : null)}
+                                </AvatarFallback>
                             </Avatar>
                             <div className="flex w-full items-center justify-center">
                                 <Input

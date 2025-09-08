@@ -7,6 +7,7 @@ import { PostCardCommentForm } from '@/components/feed/post-card/post-card-comme
 import { timeAgo } from '@/lib/utils/date';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { genInitials } from '@/lib/utils/strings';
 
 export function ChildComments({
     childComments,
@@ -38,7 +39,10 @@ export function ChildComments({
                             <span className="absolute -left-12 top-4 h-[1px] w-[30px] bg-border" />
                             <Avatar>
                                 <AvatarImage src={comment.userProfilePic} />
-                                <AvatarFallback>CN</AvatarFallback>
+                                <AvatarFallback>
+                                    {' '}
+                                    {genInitials(comment.username)}
+                                </AvatarFallback>
                             </Avatar>
                             <div className="flex flex-col">
                                 <Card className="flex bg-muted m-0 mr-4 p-1">

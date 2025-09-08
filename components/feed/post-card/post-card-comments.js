@@ -17,6 +17,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useCommentsStore } from '@/lib/state/commentsStore';
 import { Skeleton } from '@/components/ui/skeleton';
+import { genInitials } from '@/lib/utils/strings';
 
 export function PostCardComments({ postId, userId }) {
     const [replyCommentList, setReplyCommentList] = useState([]);
@@ -91,7 +92,9 @@ export function PostCardComments({ postId, userId }) {
                     <div className="flex gap-2 relative">
                         <Avatar className="">
                             <AvatarImage src={comment.userProfilePic} />
-                            <AvatarFallback>CN</AvatarFallback>
+                            <AvatarFallback>
+                                {genInitials(comment.username)}
+                            </AvatarFallback>
                         </Avatar>
                         {comment.childrenCount > 0 && (
                             <span

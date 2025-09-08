@@ -21,6 +21,7 @@ import { useUser } from '@/components/context/UserProfileContext';
 import { useState } from 'react';
 import { useRequireAuth } from '@/hooks/useRequireAuth';
 import { mutate } from 'swr';
+import { genInitials } from '@/lib/utils/strings';
 
 export function PostCardCommentForm({
     postId,
@@ -113,7 +114,10 @@ export function PostCardCommentForm({
                         user ? user.userProfilePic || user.photoUrl : undefined
                     }
                 />
-                <AvatarFallback>CN</AvatarFallback>
+                <AvatarFallback>
+                    {' '}
+                    {genInitials(user ? user.username : null)}
+                </AvatarFallback>
             </Avatar>
             <div className="w-full mr-2">
                 {/* Step 1: Form structure with actual <form> element */}

@@ -20,6 +20,7 @@ import {
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { formatDate } from '@/lib/utils/date';
+import { genInitials } from '@/lib/utils/strings';
 
 export function PostCardHeader({
     badge,
@@ -43,7 +44,10 @@ export function PostCardHeader({
                     <CardDescription className="flex flex-row items-center gap-6 w-full mt-2">
                         <Avatar>
                             <AvatarImage src={avatarSrc} />
-                            <AvatarFallback>CN</AvatarFallback>
+                            <AvatarFallback>
+                                {' '}
+                                {genInitials(author)}
+                            </AvatarFallback>
                         </Avatar>
                         <div>
                             <p className="font-medium text-primary dark:text-foreground">
