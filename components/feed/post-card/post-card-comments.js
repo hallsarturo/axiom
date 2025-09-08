@@ -73,7 +73,7 @@ export function PostCardComments({ postId, userId }) {
 
             // Only fetch if not already loaded
             if (!areChildCommentsLoaded(postId, commentId)) {
-                await fetchChildComments(postId, commentId, 1, 20);
+                await fetchChildComments(postId, commentId, 1, 20, userId);
             }
         }
     };

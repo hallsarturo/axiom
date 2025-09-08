@@ -25,17 +25,18 @@ export function ChildComments({
         console.log(`Rendering ${childComments?.length || 0} child comments`);
     }, [childComments]);
 
+    const { fetchChildComments } = useCommentsStore.getState();
     return (
         <>
             {/* {console.log(
                 `Child comments for parent: ${childComments.length}`,
                 childComments
             )} */}
-            <div className="space-y-2">
+            <div className="">
                 {childComments.map((comment, index) => (
                     <div
                         key={comment.id || index}
-                        className="flex flex-col w-full px-2 py-2"
+                        className="flex flex-col w-full px-2 pt-0"
                     >
                         <div className="flex gap-2 relative">
                             <span className="absolute -left-12 top-4 h-[1px] w-[30px] bg-border" />
@@ -90,7 +91,7 @@ export function ChildComments({
                                         </div> */}
                                     </div>
                                     <div className="flex flex-row text-muted-foreground text-sm ml-4 mt-2 ">
-                                         {comment.totalReactions || 0} reactions
+                                        {comment.totalReactions || 0} reactions
                                     </div>
                                 </div>
                             </div>
@@ -101,7 +102,23 @@ export function ChildComments({
                                     postId={postId}
                                     parentCommentId={comment.id}
                                     onSubmitSuccess={() => {
-                                        // Close the reply form after successful submission
+                                        // Get the grandparent comment ID
+                                        const parentComment =
+                                            childComments.find(
+                                                (c) => c.id === comment.id
+                                            );
+                                        const grandparentId =
+                                            parentComment?.parentCommentId;
+
+                                        // Refresh the child comments list
+                                        if (grandparentId) {
+                                            fetchChildComments(
+                                                postId,
+                                                grandparentId,
+                                                1,
+                                                20
+                                            );
+                                        }
                                     }}
                                 />
                             ) : null}
