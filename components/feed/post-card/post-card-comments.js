@@ -210,7 +210,7 @@ export function PostCardComments({ postId, userId }) {
 
                         {/* Show reply form if comment is in replyCommentList */}
                         {replyCommentList.includes(comment.id) && (
-                            <div className="mx-3">
+                            <div className="ml-6 mr-12 mb-2">
                                 <PostCardCommentForm
                                     postId={postId}
                                     parentCommentId={comment.id}

@@ -4,6 +4,8 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { PostCardCommentForm } from '@/components/feed/post-card/post-card-comment-form';
+import { PostCardReactions } from '@/components/feed/post-card/post-card-reactions';
+import { useCommentsStore } from '@/lib/state/commentsStore';
 import { timeAgo } from '@/lib/utils/date';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -60,9 +62,20 @@ export function ChildComments({
                                     </CardContent>
                                 </Card>
                                 <div className="flex flex-row justify-between mr-6">
-                                    <div className="flex flex-row text-muted-foreground text-sm ml-4 mt-2 gap-5">
+                                    <div className="flex flex-row text-muted-foreground text-sm items-center ml-4 mt-0 gap-5">
                                         <div>{timeAgo(comment.createdAt)} </div>
-                                        <div>Like </div>
+                                        <div className="flex items-center">
+                                            <PostCardReactions
+                                                postId={postId}
+                                                commentId={comment.id}
+                                                type="comment"
+                                                triggerIconSizeClass="size-3.5"
+                                                contentIconSizeClass="size-4.5"
+                                                triggerButtonVariant="link"
+                                                triggerTextClass="text-muted-foreground"
+                                                hover="disabled"
+                                            />
+                                        </div>
                                         {/* <div>
                                             <Button
                                                 variant="link"
@@ -77,7 +90,7 @@ export function ChildComments({
                                         </div> */}
                                     </div>
                                     <div className="flex flex-row text-muted-foreground text-sm ml-4 mt-2 ">
-                                        0 reactions
+                                         {comment.totalReactions || 0} reactions
                                     </div>
                                 </div>
                             </div>
