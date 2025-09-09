@@ -1,5 +1,10 @@
+'use client';
+
 import { Geist, Geist_Mono } from 'next/font/google';
 import '@/app/globals.css';
+import { useUser } from '@/components/context/UserProfileContext';
+import { useEffect } from 'react';
+import {webSocketService} from '@/lib/utils/websockets';
 import { NavigationConnected } from '@/components/nav-menu/nav-connected';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { PostTypeProvider } from '@/components/context/post-type-provider';
@@ -16,6 +21,25 @@ const geistMono = Geist_Mono({
 });
 
 export default function ConnectedLayout({ children }) {
+    const { user } = useUser();
+
+    useEffect(() => {
+        if (user?.id) {
+            const token =
+                process.env.NODE_ENV === 'development'
+                    ? localStorage.getItem('token')
+                    : null;
+
+            // Connect WebSocket when user is authenticated
+            webSocketService.connect(user.id, token);
+
+            // Cleanup on unmount
+            return () => {
+                // Add a disconnect method to your WebSocketService
+                webSocketService.disconnect();
+            };
+        }
+    }, [user?.id]);
     return (
         <PostTypeProvider>
             <SidebarProvider>
