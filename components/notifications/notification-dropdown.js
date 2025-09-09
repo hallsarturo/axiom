@@ -14,6 +14,42 @@ import { genInitials } from '@/lib/utils/strings';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 
+function NotificationItem({ notification }) {
+    // Get icon and link based on notification type
+    const {
+        icon: Icon,
+        color,
+        link,
+    } = getNotificationTypeDetails(notification);
+
+    return (
+        <Link
+            href={link || '#'}
+            className="block px-4 py-3 hover:bg-accent transition-colors border-b border-border last:border-0"
+        >
+            <div className="flex gap-3">
+                <Avatar className="h-8 w-8">
+                    <AvatarImage src={notification.fromUser?.userProfilePic} />
+                    <AvatarFallback>
+                        {genInitials(notification.fromUser?.username)}
+                    </AvatarFallback>
+                </Avatar>
+                <div className="flex-1">
+                    <div className="flex items-center gap-2">
+                        {Icon && <Icon className={`size-4 ${color}`} />}
+                        <p className="text-sm line-clamp-2">
+                            {notification.content}
+                        </p>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-1">
+                        {timeAgo(notification.createdAt)}
+                    </p>
+                </div>
+            </div>
+        </Link>
+    );
+}
+
 export function NotificationDropdown({ userId }) {
     const { notifications, unseenCount, fetchNotifications, markAsSeen } =
         useNotificationsStore();
@@ -72,35 +108,10 @@ export function NotificationDropdown({ userId }) {
                 ) : (
                     <div>
                         {notifications.map((notification) => (
-                            <Link
+                            <NotificationItem
                                 key={notification.id}
-                                href={notification.link || '#'}
-                                className="block px-4 py-3 hover:bg-accent transition-colors border-b border-border last:border-0"
-                            >
-                                <div className="flex gap-3">
-                                    <Avatar className="h-8 w-8">
-                                        <AvatarImage
-                                            src={
-                                                notification.fromUser
-                                                    ?.userProfilePic
-                                            }
-                                        />
-                                        <AvatarFallback>
-                                            {genInitials(
-                                                notification.fromUser?.username
-                                            )}
-                                        </AvatarFallback>
-                                    </Avatar>
-                                    <div>
-                                        <p className="text-sm line-clamp-2">
-                                            {notification.content}
-                                        </p>
-                                        <p className="text-xs text-muted-foreground mt-1">
-                                            {timeAgo(notification.createdAt)}
-                                        </p>
-                                    </div>
-                                </div>
-                            </Link>
+                                notification={notification}
+                            />
                         ))}
                     </div>
                 )}

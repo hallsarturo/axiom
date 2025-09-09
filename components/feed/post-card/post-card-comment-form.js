@@ -22,6 +22,7 @@ import { useState } from 'react';
 import { useRequireAuth } from '@/hooks/useRequireAuth';
 import { mutate } from 'swr';
 import { genInitials } from '@/lib/utils/strings';
+import { webSocketService } from '@/lib/utils/websockets';
 
 export function PostCardCommentForm({
     postId,

@@ -243,7 +243,7 @@ export function NavigationConnected() {
                                 </NavigationMenuTrigger>
                                 <NavigationMenuContent>
                                     <NavigationMenuLink className="cursor-default text-center">
-                                        <p>{user ? user?.displayName : null}</p>
+                                        <p>{user ? user?.displayName || user?.username : null}</p>
                                     </NavigationMenuLink>
                                     <NavigationMenuLink
                                         asChild
