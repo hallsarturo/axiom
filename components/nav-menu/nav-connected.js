@@ -227,7 +227,8 @@ export function NavigationConnected() {
                                         <AvatarImage
                                             src={
                                                 user
-                                                    ? user.photoUrl
+                                                    ? user.photoUrl ||
+                                                      user.userProfilePic
                                                     : '/user_silhouette.png'
                                             }
                                             className=""
@@ -243,7 +244,12 @@ export function NavigationConnected() {
                                 </NavigationMenuTrigger>
                                 <NavigationMenuContent>
                                     <NavigationMenuLink className="cursor-default text-center">
-                                        <p>{user ? user?.displayName || user?.username : null}</p>
+                                        <p>
+                                            {user
+                                                ? user?.displayName ||
+                                                  user?.username
+                                                : null}
+                                        </p>
                                     </NavigationMenuLink>
                                     <NavigationMenuLink
                                         asChild

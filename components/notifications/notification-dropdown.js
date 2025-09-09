@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import { useNotificationsStore } from '@/lib/state/notificationsStore';
 import { Badge } from '@/components/ui/badge';
-import { Bell } from 'lucide-react';
+import { Bell, MessageCircle, Reply, Heart, UserPlus } from 'lucide-react'; // Import all necessary icons
 import {
     NavigationMenuContent,
     NavigationMenuTrigger,
@@ -13,6 +13,42 @@ import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { genInitials } from '@/lib/utils/strings';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+
+// Define the missing function to handle different notification types
+function getNotificationTypeDetails(notification) {
+    switch (notification.type) {
+        case 'comment':
+            return {
+                icon: MessageCircle,
+                color: 'text-blue-500',
+                link: `/posts/${notification.entityId}`,
+            };
+        case 'comment_reply':
+            return {
+                icon: Reply,
+                color: 'text-green-500',
+                link: `/posts/${notification.entityId}`,
+            };
+        case 'follow':
+            return {
+                icon: UserPlus,
+                color: 'text-green-500',
+                link: `/profile/${notification.senderId}`,
+            };
+        case 'like':
+            return {
+                icon: Heart,
+                color: 'text-red-500',
+                link: `/posts/${notification.entityId}`,
+            };
+        default:
+            return {
+                icon: Bell,
+                color: 'text-gray-500',
+                link: `/posts/${notification.entityId}`,
+            };
+    }
+}
 
 function NotificationItem({ notification }) {
     // Get icon and link based on notification type
