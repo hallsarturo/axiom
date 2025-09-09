@@ -227,8 +227,8 @@ export function NavigationConnected() {
                                         <AvatarImage
                                             src={
                                                 user
-                                                    ? user.photoUrl ||
-                                                      user.userProfilePic
+                                                    ? user.userProfilePic ||
+                                                      user.photoUrl
                                                     : '/user_silhouette.png'
                                             }
                                             className=""
