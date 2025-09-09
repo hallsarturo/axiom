@@ -11,6 +11,7 @@ import {
 import { timeAgo } from '@/lib/utils/date';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { genInitials } from '@/lib/utils/strings';
+import { normalizeImageUrl } from '@/lib/utils/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 
@@ -65,7 +66,11 @@ function NotificationItem({ notification }) {
         >
             <div className="flex gap-3">
                 <Avatar className="h-8 w-8">
-                    <AvatarImage src={notification.fromUser?.userProfilePic} />
+                    <AvatarImage
+                        src={normalizeImageUrl(
+                            notification.fromUser?.userProfilePic
+                        )}
+                    />
                     <AvatarFallback>
                         {genInitials(notification.fromUser?.username)}
                     </AvatarFallback>
@@ -110,7 +115,7 @@ export function NotificationDropdown({ userId }) {
     }, [fetchNotifications, userId, token]);
 
     return (
-        <>
+        <div>
             <NavigationMenuTrigger
                 className="text-primary dark:text-foreground gap-2 cursor-pointer"
                 onClick={markAsSeen}
@@ -123,8 +128,8 @@ export function NotificationDropdown({ userId }) {
                 <Bell size="18" />
             </NavigationMenuTrigger>
 
-            <NavigationMenuContent className="w-80 max-h-[70vh] overflow-y-auto">
-                <div className="py-2 px-3 border-b border-border">
+            <NavigationMenuContent className="w-80 max-h-[70vh] overflow-y-auto z-100">
+                <div className="py-2 px-3 border-b border-border ">
                     <div className="flex justify-between items-center">
                         <h3 className="font-medium">Notifications</h3>
                         <Button
@@ -161,6 +166,6 @@ export function NotificationDropdown({ userId }) {
                     </Link>
                 </div>
             </NavigationMenuContent>
-        </>
+        </div>
     );
 }
