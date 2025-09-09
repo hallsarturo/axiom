@@ -223,12 +223,21 @@ export function NavigationConnected() {
                             <NavigationMenuItem>
                                 {/* Avatar and dropdown menu */}
                                 <NavigationMenuTrigger className="text-primary font-medium dark:text-foreground cursor-pointer">
-                                    <Avatar>
+                                    <Avatar className="bg-muted">
                                         <AvatarImage
-                                            src={user ? user.photoUrl : null}
+                                            src={
+                                                user
+                                                    ? user.photoUrl
+                                                    : '/user_silhouette.png'
+                                            }
+                                            className=""
                                         />
                                         <AvatarFallback>
-                                            {genInitials(user?.username)}
+                                            {user ? (
+                                                genInitials(user?.username)
+                                            ) : (
+                                                <AvatarImage src="/user_silhouette.png"></AvatarImage>
+                                            )}
                                         </AvatarFallback>
                                     </Avatar>
                                 </NavigationMenuTrigger>
