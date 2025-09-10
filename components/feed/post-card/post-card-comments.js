@@ -34,6 +34,7 @@ import Link from 'next/link';
 import { useCommentsStore } from '@/lib/state/commentsStore';
 import { Skeleton } from '@/components/ui/skeleton';
 import { genInitials } from '@/lib/utils/strings';
+import { normalizeImageUrl } from '@/lib/utils/image';
 
 export function PostCardComments({ postId, userId }) {
     const [replyCommentList, setReplyCommentList] = useState([]);
@@ -105,7 +106,13 @@ export function PostCardComments({ postId, userId }) {
                 >
                     <div className="flex gap-2 relative">
                         <Avatar className="">
-                            <AvatarImage src={comment.userProfilePic} />
+                            <AvatarImage
+                                src={
+                                    normalizeImageUrl(comment.userProfilePic) ||
+                                    normalizeImageUrl(comment.photoUrl) ||
+                                    '/user_silhouette_2'
+                                }
+                            />
                             <AvatarFallback>
                                 {genInitials(comment.username)}
                             </AvatarFallback>

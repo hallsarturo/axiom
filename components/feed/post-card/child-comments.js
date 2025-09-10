@@ -17,6 +17,7 @@ import { timeAgo } from '@/lib/utils/date';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { genInitials } from '@/lib/utils/strings';
+import { normalizeImageUrl } from '@/lib/utils/image';
 import {
     Pagination,
     PaginationContent,
@@ -55,9 +56,16 @@ export function ChildComments({
                         <div className="flex gap-2 relative">
                             <span className="absolute -left-12 top-4 h-[1px] w-[30px] bg-border" />
                             <Avatar>
-                                <AvatarImage src={comment.userProfilePic} />
+                                <AvatarImage
+                                    src={
+                                        normalizeImageUrl(
+                                            comment.userProfilePic
+                                        ) ||
+                                        normalizeImageUrl(comment.photoUrl) ||
+                                        '/user_silhouette_2'
+                                    }
+                                />
                                 <AvatarFallback>
-                                    {' '}
                                     {genInitials(comment.username)}
                                 </AvatarFallback>
                             </Avatar>

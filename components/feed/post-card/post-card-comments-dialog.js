@@ -37,6 +37,8 @@ import { putReaction, putBookmarkByPostId } from '@/lib/actions/actions';
 import { toast } from 'sonner';
 import { useReactionsStore } from '@/lib/state/reactionsStore';
 import { useBookmarksStore } from '@/lib/state/bookmarksStore';
+import { getAvatarSrc } from '@/lib/utils/post-card';
+import { normalizeImageUrl } from '@/lib/utils/image';
 
 export function PostCardCommentsDialog({
     post,
@@ -92,6 +94,15 @@ export function PostCardCommentsDialog({
     // Use SWR data if available, else fallback to passed post
     const postData = data || post;
 
+    // Calculate avatarSrc using the same logic as in PostCard
+    const avatarSrc = getAvatarSrc(
+        postData.type,
+        postData.avatarPic || post.avatarPic,
+        postData.magazineImg || post.magazineImg,
+        postData.agencyImg || post.agencyImg,
+        normalizeImageUrl
+    );
+
     // Get reaction data AFTER we have postData:
     const reactionData = getReactionData(post.postId);
     // This ensures we have the latest data from the store
@@ -145,7 +156,7 @@ export function PostCardCommentsDialog({
                                 type={postData.type}
                                 cardTitle={post.cardTitle}
                                 identifier={post.identifier}
-                                avatarSrc={postData.avatarSrc}
+                                avatarSrc={avatarSrc} 
                                 author={postData.author}
                                 createdAt={postData.createdAt}
                                 userId={postData.userId}
