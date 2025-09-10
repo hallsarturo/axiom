@@ -40,6 +40,7 @@ import { logoutUser } from '@/lib/actions/actions';
 import { useUser } from '@/components/context/UserProfileContext';
 import { useState } from 'react';
 import { useParams } from 'next/navigation';
+import { normalizeImageUrl } from '@/lib/utils/image';
 import { genInitials } from '@/lib/utils/strings';
 
 const menuItems = [
@@ -226,8 +227,12 @@ export function NavigationConnected() {
                                         <AvatarImage
                                             src={
                                                 user
-                                                    ? user.userProfilePic ||
-                                                      user.photoUrl
+                                                    ? normalizeImageUrl(
+                                                          user.userProfilePic
+                                                      ) ||
+                                                      normalizeImageUrl(
+                                                          user.photoUrl
+                                                      )
                                                     : '/user_silhouette_2'
                                             }
                                         />
@@ -243,11 +248,13 @@ export function NavigationConnected() {
                                 <NavigationMenuContent>
                                     {user && (
                                         <NavigationMenuLink className="cursor-default text-center">
-                                            <p>
-                                                {user
-                                                    ? user?.displayName ||
-                                                      user?.username
-                                                    : null}
+                                            <p> logged as: {' '}
+                                                <span className="font-bold">
+                                                    {user
+                                                        ? user?.displayName ||
+                                                          user?.username
+                                                        : null}
+                                                </span>
                                             </p>
                                         </NavigationMenuLink>
                                     )}

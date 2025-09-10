@@ -14,6 +14,7 @@ import { genInitials } from '@/lib/utils/strings';
 import { normalizeImageUrl } from '@/lib/utils/image';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 // Define the missing function to handle different notification types
 function getNotificationTypeDetails(notification) {
@@ -60,35 +61,37 @@ function NotificationItem({ notification }) {
     } = getNotificationTypeDetails(notification);
 
     return (
-        <Link
-            href={link || '#'}
-            className="block px-4 py-3 hover:bg-accent hover:text-primary-foreground transition-colors border-b border-border last:border-0"
-        >
-            <div className="flex gap-3">
-                <Avatar className="h-8 w-8">
-                    <AvatarImage
-                        src={normalizeImageUrl(
-                            notification.sender?.userProfilePic ||
-                                notification.sender?.photoUrl
-                        )}
-                    />
-                    <AvatarFallback>
-                        {genInitials(notification.sender?.username)}
-                    </AvatarFallback>
-                </Avatar>
-                <div className="flex-1">
-                    <div className="flex items-center gap-2">
-                        {Icon && <Icon className={`size-4 ${color}`} />}
-                        <p className="text-sm line-clamp-2">
-                            {notification.content}
+        <>
+            <Link
+                href={link || '#'}
+                className="block px-4 py-3 hover:bg-accent hover:text-primary-foreground transition-colors border-b border-border last:border-0"
+            >
+                <div className="flex gap-3">
+                    <Avatar className="h-8 w-8">
+                        <AvatarImage
+                            src={normalizeImageUrl(
+                                notification.sender?.userProfilePic ||
+                                    notification.sender?.photoUrl
+                            )}
+                        />
+                        <AvatarFallback>
+                            {genInitials(notification.sender?.username)}
+                        </AvatarFallback>
+                    </Avatar>
+                    <div className="flex-1">
+                        <div className="flex items-center gap-2">
+                            {Icon && <Icon className={`size-4 ${color}`} />}
+                            <p className="text-sm line-clamp-2">
+                                {notification.content}
+                            </p>
+                        </div>
+                        <p className="text-xs text-muted-foreground mt-1">
+                            {timeAgo(notification.createdAt)}
                         </p>
                     </div>
-                    <p className="text-xs text-muted-foreground mt-1">
-                        {timeAgo(notification.createdAt)}
-                    </p>
                 </div>
-            </div>
-        </Link>
+            </Link>
+        </>
     );
 }
 

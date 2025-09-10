@@ -37,6 +37,7 @@ import { publishPost } from '@/lib/actions/actions';
 import { useUser } from '@/components/context/UserProfileContext';
 import { useState } from 'react';
 import { useRequireAuth } from '@/hooks/useRequireAuth';
+import { normalizeImageUrl } from '@/lib/utils/image';
 import { genInitials } from '@/lib/utils/strings';
 
 const ACCEPTED_FORMATS = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif'];
@@ -149,7 +150,14 @@ export function PublishPost({ mutateFeed, onDialogOpenChange, ...props }) {
                         <div className="flex flex-row gap-4 mb-0 items-center sm:items-start">
                             <Avatar>
                                 <AvatarImage
-                                    src={user ? user.photoUrl : null}
+                                    src={
+                                        user
+                                            ? normalizeImageUrl(
+                                                  user.userProfilePic
+                                              ) ||
+                                              normalizeImageUrl(user.photoUrl)
+                                            : '/user_silhouette_2'
+                                    }
                                 />
                                 <AvatarFallback>
                                     {genInitials(user ? user.username : null)}
