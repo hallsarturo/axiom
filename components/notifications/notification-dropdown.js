@@ -68,7 +68,8 @@ function NotificationItem({ notification }) {
                 <Avatar className="h-8 w-8">
                     <AvatarImage
                         src={normalizeImageUrl(
-                            notification.fromUser?.userProfilePic
+                            notification.fromUser?.userProfilePic ||
+                                notification.fromUser?.photoUrl
                         )}
                     />
                     <AvatarFallback>

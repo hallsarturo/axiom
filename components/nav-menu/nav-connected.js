@@ -30,7 +30,6 @@ import {
     IdCard,
     LogIn,
     LogOut,
-    Bell,
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { ModeToggle } from '@/components/ui/themes/mode-toggle';
@@ -223,15 +222,14 @@ export function NavigationConnected() {
                             <NavigationMenuItem>
                                 {/* Avatar and dropdown menu */}
                                 <NavigationMenuTrigger className="text-primary font-medium dark:text-foreground cursor-pointer">
-                                    <Avatar className="bg-muted">
+                                    <Avatar className="">
                                         <AvatarImage
                                             src={
                                                 user
                                                     ? user.userProfilePic ||
                                                       user.photoUrl
-                                                    : '/user_silhouette.png'
+                                                    : '/user_silhouette_2'
                                             }
-                                            className=""
                                         />
                                         <AvatarFallback>
                                             {user ? (
@@ -243,14 +241,16 @@ export function NavigationConnected() {
                                     </Avatar>
                                 </NavigationMenuTrigger>
                                 <NavigationMenuContent>
-                                    <NavigationMenuLink className="cursor-default text-center">
-                                        <p>
-                                            {user
-                                                ? user?.displayName ||
-                                                  user?.username
-                                                : null}
-                                        </p>
-                                    </NavigationMenuLink>
+                                    {user && (
+                                        <NavigationMenuLink className="cursor-default text-center">
+                                            <p>
+                                                {user
+                                                    ? user?.displayName ||
+                                                      user?.username
+                                                    : null}
+                                            </p>
+                                        </NavigationMenuLink>
+                                    )}
                                     <NavigationMenuLink
                                         asChild
                                         className="flex flex-col justify-center items-center w-[150px]"
