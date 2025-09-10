@@ -71,7 +71,8 @@ function NotificationItem({ notification }) {
                         <AvatarImage
                             src={normalizeImageUrl(
                                 notification.sender?.userProfilePic ||
-                                    notification.sender?.photoUrl
+                                    notification.sender?.photoUrl ||
+                                    '/user_silhouette_2.png'
                             )}
                         />
                         <AvatarFallback>
