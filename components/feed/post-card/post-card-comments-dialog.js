@@ -94,29 +94,30 @@ export function PostCardCommentsDialog({
     // Use SWR data if available, else fallback to passed post
     const postData = data || post;
 
-    // Enhanced avatar source resolution with better debugging
-    console.log('Post data in dialog:', {
-        type: postData.type,
-        avatarPic: postData.avatarPic || post.avatarPic,
-        userProfilePic: postData.userProfilePic || post.userProfilePic,
-        photoUrl: postData.photoUrl || post.photoUrl,
+    // IMPORTANT: Prioritize the original post's avatar data
+    // This ensures consistent avatar display regardless of login state
+    const avatarSrc =
+        post.avatarSrc ||
+        getAvatarSrc(
+            post.type, // Use the original post type
+            post.avatarPic, // Use original avatarPic first
+            post.magazineImg,
+            post.agencyImg,
+            normalizeImageUrl
+        );
+
+    // Debug what we're getting
+    console.log('Avatar sources:', {
+        originalAvatar: post.avatarSrc,
+        calculatedAvatar: avatarSrc,
+        userProfilePic: post.userProfilePic,
+        photoUrl: post.photoUrl,
     });
 
-    // Try standard avatar path first
-    let avatarSrc = getAvatarSrc(
-        postData.type,
-        postData.avatarPic || post.avatarPic,
-        postData.magazineImg || post.magazineImg,
-        postData.agencyImg || post.agencyImg,
-        normalizeImageUrl
-    );
-
-    // Always use the most direct path to get the avatar for the dialog
     const finalAvatarSrc =
         avatarSrc ||
-        postData.avatarSrc ||
-        normalizeImageUrl(postData.userProfilePic) ||
-        normalizeImageUrl(postData.photoUrl) ||
+        normalizeImageUrl(post.userProfilePic) ||
+        normalizeImageUrl(post.photoUrl) ||
         '/user_silhouette_2.png';
 
     // Get reaction data AFTER we have postData:
