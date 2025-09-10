@@ -106,14 +106,6 @@ export function PostCardCommentsDialog({
             normalizeImageUrl
         );
 
-    // Debug what we're getting
-    console.log('Avatar sources:', {
-        originalAvatar: post.avatarSrc,
-        calculatedAvatar: avatarSrc,
-        userProfilePic: post.userProfilePic,
-        photoUrl: post.photoUrl,
-    });
-
     const finalAvatarSrc =
         avatarSrc ||
         normalizeImageUrl(post.userProfilePic) ||

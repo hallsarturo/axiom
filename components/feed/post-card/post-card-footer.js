@@ -125,9 +125,9 @@ export function PostCardFooter({
                         onClick={() => handleBookmarkClick(userId, postId)}
                     >
                         {isBookmarked ? (
-                            <FaRegBookmark className="size-5.5" />
-                        ) : (
                             <FaBookmark className="size-5.5" />
+                        ) : (
+                            <FaRegBookmark className="size-5.5" />
                         )}
                     </Button>
 

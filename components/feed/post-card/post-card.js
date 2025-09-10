@@ -40,7 +40,23 @@ export function PostCard(props) {
     } = useReactionsStore();
 
     // Get the bookmarks store functions
-    const { setBookmarkData, fetchBookmarkCount } = useBookmarksStore();
+    const {
+        setBookmarkData,
+        fetchBookmarkCount,
+        initFromProps,
+        getBookmarkData,
+    } = useBookmarksStore();
+
+    // Initialize bookmark state from props if available
+    useEffect(() => {
+        if (props.postId) {
+            initFromProps(
+                props.postId,
+                props.isBookmarked,
+                props.totalBookmarks
+            );
+        }
+    }, [props.postId, props.isBookmarked, props.totalBookmarks, initFromProps]);
 
     const token =
         process.env.NODE_ENV === 'development'
@@ -157,6 +173,9 @@ export function PostCard(props) {
         props.totalReactions ||
         0;
 
+    // Get bookmark data from store (now initialized from props if available)
+    const { isBookmarked, bookmarkCount } = getBookmarkData(props.postId);
+
     return (
         <div
             className={`flex w-full justify-center mb-4 px-4 ${props.className ?? ''}`}
@@ -184,6 +203,7 @@ export function PostCard(props) {
                         imgSrc={props.imgSrc}
                     />
                 </ScrollArea>
+                {console.log('isBookmarked: ', data?.isBookmarked)}
                 <PostCardFooter
                     className="justify-center"
                     totalReactions={totalReactions}
@@ -205,6 +225,8 @@ export function PostCard(props) {
                     createdAt={props.createdAt}
                     description={props.description}
                     imgSrc={props.imgSrc}
+                    isBookmarked={isBookmarked} // Use the store value which includes props
+                    totalBookmarks={bookmarkCount} // Use the store value which includes props
                 />
             </Card>
         </div>
