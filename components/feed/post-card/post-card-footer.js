@@ -11,6 +11,7 @@ import { putBookmarkByPostId } from '@/lib/actions/actions';
 import { fetchPost } from '@/lib/utils/post-card';
 import { PostCardCommentsDialog } from '@/components/feed/post-card/post-card-comments-dialog';
 import { useRequireAuth } from '@/hooks/useRequireAuth';
+import { useCommentsStore } from '@/lib/state/commentsStore';
 import { useReactionsStore } from '@/lib/state/reactionsStore';
 import { useBookmarksStore } from '@/lib/state/bookmarksStore';
 import { useState } from 'react';
@@ -32,6 +33,9 @@ export function PostCardFooter({
     const { handleBookmark: storeHandleBookmark, getBookmarkData } =
         useBookmarksStore();
     const { isBookmarked, bookmarkCount } = getBookmarkData(postId);
+
+    // Get comment count from store with built-in fallback
+    const { totalCount: commentCount } = useCommentsStore().getComments(postId);
 
     const token =
         process.env.NODE_ENV === 'development' && typeof window !== 'undefined'
@@ -74,8 +78,8 @@ export function PostCardFooter({
             <div className="flex flex-col w-full gap-1.5">
                 <div className="flex flex-row w-full justify-between text-sm flex-wrap">
                     <p>{totalReactions} reactions</p>
-                    <p>{comments} comments</p>
-                    <p>{bookmarkCount} bookmarked</p>
+                    <p>{commentCount} comments</p>
+                    <p>{bookmarkCount } bookmarked</p>
                     <p>{shares} shares</p>
                 </div>
                 <Separator />

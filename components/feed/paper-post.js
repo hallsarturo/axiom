@@ -22,6 +22,7 @@ export function PaperPost({ mutateFeed, refreshFeed, ...props }) {
             mutateFeed={mutateFeed}
             refreshFeed={refreshFeed}
             isBookmarked={props.isBookmarked}
+            totalBookmarks={props.totalBookmarks}
         ></PostCard>
     );
 }
