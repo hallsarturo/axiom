@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { getBookmarksById } from '@/lib/actions/actions';
+import { getBookmarksByUserId } from '@/lib/actions/actions';
 import { normalizeImageUrl } from '@/lib/utils/image';
 import { formatDate } from '@/lib/utils/date';
 import {
@@ -33,7 +33,7 @@ export default function BookmarkedPosts() {
             ) {
                 token = localStorage.getItem('token');
             }
-            const result = await getBookmarksById(token, user.id, page, 10);
+            const result = await getBookmarksByUserId(token, user.id, page, 10);
             if (result && result.posts) {
                 setPosts(result.posts);
                 setTotalPages(result.pagination?.totalPages || 1);
