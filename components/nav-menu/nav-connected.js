@@ -222,7 +222,7 @@ export function NavigationConnected() {
                             <NavigationMenuItem>
                                 {/* Avatar and dropdown menu */}
                                 <NavigationMenuTrigger className="text-primary font-medium dark:text-foreground cursor-pointer">
-                                    <Avatar className="">
+                                    <Avatar className="hover: text-white">
                                         <AvatarImage
                                             src={
                                                 user

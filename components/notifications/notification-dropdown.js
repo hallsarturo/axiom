@@ -62,18 +62,18 @@ function NotificationItem({ notification }) {
     return (
         <Link
             href={link || '#'}
-            className="block px-4 py-3 hover:bg-accent transition-colors border-b border-border last:border-0"
+            className="block px-4 py-3 hover:bg-accent hover:text-primary-foreground transition-colors border-b border-border last:border-0"
         >
             <div className="flex gap-3">
                 <Avatar className="h-8 w-8">
                     <AvatarImage
                         src={normalizeImageUrl(
-                            notification.fromUser?.userProfilePic ||
-                                notification.fromUser?.photoUrl
+                            notification.sender?.userProfilePic ||
+                                notification.sender?.photoUrl
                         )}
                     />
                     <AvatarFallback>
-                        {genInitials(notification.fromUser?.username)}
+                        {genInitials(notification.sender?.username)}
                     </AvatarFallback>
                 </Avatar>
                 <div className="flex-1">
@@ -116,7 +116,7 @@ export function NotificationDropdown({ userId }) {
     }, [fetchNotifications, userId, token]);
 
     return (
-        <div>
+        <div className="">
             <NavigationMenuTrigger
                 className="text-primary dark:text-foreground gap-2 cursor-pointer"
                 onClick={markAsSeen}
