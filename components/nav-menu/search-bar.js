@@ -106,6 +106,30 @@ export function SearchBar() {
                                             ? res.username
                                             : res.title}
                                     </CommandItem>
+                                    <CommandItem
+                                        value={res.title}
+                                        onSelect={() => {
+                                            setValue(res.title);
+                                            setOpen(false);
+
+                                            // Add navigation to the post detail page
+                                            if (res.type !== 'user') {
+                                                window.location.href = `/posts/${res.id}`;
+                                            } else {
+                                                window.location.href = `/profile/${res.id}`;
+                                            }
+                                        }}
+                                    >
+                                        <CheckIcon
+                                            className={cn(
+                                                'mr-2 h-4 w-4',
+                                                value === res.title
+                                                    ? 'opacity-100'
+                                                    : 'opacity-0'
+                                            )}
+                                        />
+                                        {res.title}
+                                    </CommandItem>
                                     {/* <Separator className="my-1" /> */}
                                 </Fragment>
                             ))}

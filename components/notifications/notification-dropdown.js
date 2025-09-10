@@ -23,7 +23,7 @@ function getNotificationTypeDetails(notification) {
             return {
                 icon: MessageCircle,
                 color: 'text-blue-500',
-                link: `/posts/${notification.entityId}`,
+                link: `/posts/${notification.entityId}`, // This is correct
             };
         case 'comment_reply':
             return {

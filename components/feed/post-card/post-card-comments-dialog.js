@@ -161,7 +161,7 @@ export function PostCardCommentsDialog({
                     <div className="py-2 px-0">
                         <div className="mb-5">
                             <PostCardHeader
-                                badge={postData.badge}
+                                badge={post.badge}
                                 type={postData.type}
                                 cardTitle={post.cardTitle}
                                 identifier={post.identifier}
