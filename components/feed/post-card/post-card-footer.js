@@ -11,7 +11,6 @@ import { putBookmarkByPostId } from '@/lib/actions/actions';
 import { fetchPost } from '@/lib/utils/post-card';
 import { PostCardCommentsDialog } from '@/components/feed/post-card/post-card-comments-dialog';
 import { useRequireAuth } from '@/hooks/useRequireAuth';
-import { useCommentsStore } from '@/lib/state/commentsStore';
 import { useReactionsStore } from '@/lib/state/reactionsStore';
 import { useBookmarksStore } from '@/lib/state/bookmarksStore';
 import { useState } from 'react';
@@ -34,12 +33,6 @@ export function PostCardFooter({
         useBookmarksStore();
     const { isBookmarked, bookmarkCount } = getBookmarkData(postId);
 
-    // Get comment count from store with built-in fallback
-    const { totalCount: commentCount } = useCommentsStore().getComments(postId);
-
-    const { getReactionData } = useReactionsStore();
-    const { totalReactions: storeReactions } = getReactionData(postId);
-
     const token =
         process.env.NODE_ENV === 'development' && typeof window !== 'undefined'
             ? localStorage.getItem('token')
@@ -47,23 +40,28 @@ export function PostCardFooter({
 
     // Add logging to help diagnose issues
     const handleBookmarkClick = async (userId, postId) => {
-        if (!requireAuth()) return;
+        if (!userId) {
+            toast.error('Please sign in to bookmark posts');
+            return;
+        }
 
-        console.log(
-            'Before bookmark toggle - isBookmarked:',
-            isBookmarked,
-            'count:',
-            bookmarkCount
-        );
         try {
-            const result = await storeHandleBookmark(postId, userId, token);
-            console.log('After bookmark toggle - result:', result);
+            // Get token
+            const token = localStorage.getItem('token');
 
-            // Get fresh state after toggle
-            const newState = getBookmarkData(postId);
-            console.log('New bookmark state:', newState);
+            console.log('Bookmark click - current state:', {
+                isBookmarked,
+                bookmarkCount,
+            });
 
-            // SWR mutate for consistency
+            // Call store action
+            await storeHandleBookmark(postId, userId, token);
+
+            // No need to manually update counts - store handles it
+            // Just log the new state to verify
+            console.log('After toggle - new state:', getBookmarkData(postId));
+
+            // Optionally mutate SWR cache if needed
             if (mutatePost) {
                 mutatePost();
             }
@@ -80,9 +78,12 @@ export function PostCardFooter({
         <CardFooter className="justify-center">
             <div className="flex flex-col w-full gap-1.5">
                 <div className="flex flex-row w-full justify-between text-sm flex-wrap">
-                    <p>{storeReactions || totalReactions || 0} reactions</p>
-                    <p>{commentCount} comments</p>
-                    <p>{bookmarkCount} bookmarked</p>
+                    <p>{totalReactions} reactions</p>
+                    <p>{comments} comments</p>
+                    <p>
+                        {bookmarkCount !== undefined ? bookmarkCount : 0}{' '}
+                        bookmarked
+                    </p>
                     <p>{shares} shares</p>
                 </div>
                 <Separator />
