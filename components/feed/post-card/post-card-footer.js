@@ -13,6 +13,7 @@ import { PostCardCommentsDialog } from '@/components/feed/post-card/post-card-co
 import { useRequireAuth } from '@/hooks/useRequireAuth';
 import { useReactionsStore } from '@/lib/state/reactionsStore';
 import { useBookmarksStore } from '@/lib/state/bookmarksStore';
+import Link from 'next/link';
 import { useState } from 'react';
 
 export function PostCardFooter({
@@ -141,11 +142,16 @@ export function PostCardFooter({
 
                     {/* Share button */}
                     <Button
+                        asChild
                         variant="ghost"
                         className="text-primary dark:text-foreground flex-shrink-0"
                     >
-                        <IoShareSocialOutline className="size-5.5" />
-                        Share
+                        <Link
+                            href={`/posts/${postId} target="_blank" rel="noopener noreferrer"`}
+                        >
+                            <IoShareSocialOutline className="size-5.5" />
+                            Share
+                        </Link>
                     </Button>
                 </div>
             </div>

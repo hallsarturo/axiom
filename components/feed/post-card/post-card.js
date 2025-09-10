@@ -118,6 +118,17 @@ export function PostCard(props) {
         mutate();
     };
 
+    // Get comment count fetch function from comments store
+    const { fetchParentComments } = useCommentsStore();
+
+    // Fetch comments count on initial load
+    useEffect(() => {
+        if (props.postId) {
+            // Just fetch the first page with minimal pageSize to get the count
+            fetchParentComments(props.postId, 1, 1, user?.id);
+        }
+    }, [props.postId, fetchParentComments, user?.id]);
+
     // Get comment count from Zustand store
     const { getComments } = useCommentsStore();
     const storeComments = getComments(props.postId);
