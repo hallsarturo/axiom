@@ -37,6 +37,9 @@ export function PostCardFooter({
     // Get comment count from store with built-in fallback
     const { totalCount: commentCount } = useCommentsStore().getComments(postId);
 
+    const { getReactionData } = useReactionsStore();
+    const { totalReactions: storeReactions } = getReactionData(postId);
+
     const token =
         process.env.NODE_ENV === 'development' && typeof window !== 'undefined'
             ? localStorage.getItem('token')
@@ -77,9 +80,9 @@ export function PostCardFooter({
         <CardFooter className="justify-center">
             <div className="flex flex-col w-full gap-1.5">
                 <div className="flex flex-row w-full justify-between text-sm flex-wrap">
-                    <p>{totalReactions} reactions</p>
+                    <p>{storeReactions || totalReactions || 0} reactions</p>
                     <p>{commentCount} comments</p>
-                    <p>{bookmarkCount } bookmarked</p>
+                    <p>{bookmarkCount} bookmarked</p>
                     <p>{shares} shares</p>
                 </div>
                 <Separator />
