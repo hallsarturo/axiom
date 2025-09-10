@@ -22,6 +22,7 @@ import { useState } from 'react';
 import { useRequireAuth } from '@/hooks/useRequireAuth';
 import { mutate } from 'swr';
 import { genInitials } from '@/lib/utils/strings';
+import { normalizeImageUrl } from '@/lib/utils/image';
 import { webSocketService } from '@/lib/utils/websockets';
 
 export function PostCardCommentForm({
@@ -112,12 +113,18 @@ export function PostCardCommentForm({
             <Avatar>
                 <AvatarImage
                     src={
-                        user ? user.userProfilePic || user.photoUrl : undefined
+                        user
+                            ? normalizeImageUrl(user.userProfilePic) ||
+                              normalizeImageUrl(user.photoUrl)
+                            : '/user_silhouette_2'
                     }
                 />
                 <AvatarFallback>
-                    {' '}
-                    {genInitials(user ? user.username : null)}
+                    {user ? (
+                        genInitials(user?.username)
+                    ) : (
+                        <AvatarImage src="/user_silhouette.png"></AvatarImage>
+                    )}
                 </AvatarFallback>
             </Avatar>
             <div className="w-full mr-2">

@@ -21,6 +21,7 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { formatDate } from '@/lib/utils/date';
 import { genInitials } from '@/lib/utils/strings';
+import { normalizeImageUrl } from '@/lib/utils/image';
 
 export function PostCardHeader({
     badge,
@@ -43,9 +44,18 @@ export function PostCardHeader({
                 <div className="flex mb-4">
                     <CardDescription className="flex flex-row items-center gap-6 w-full mt-2">
                         <Avatar>
-                            <AvatarImage src={avatarSrc} />
+                            {/* Clearer debugging to isolate the issue */}
+                            <AvatarImage
+                                src={avatarSrc}
+                                alt={`${author}'s avatar`}
+                                onError={(e) => {
+                                    console.log(
+                                        'Avatar image failed to load:',
+                                        avatarSrc
+                                    );
+                                }}
+                            />
                             <AvatarFallback>
-                                {' '}
                                 {genInitials(author)}
                             </AvatarFallback>
                         </Avatar>

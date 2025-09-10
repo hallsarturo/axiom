@@ -94,14 +94,30 @@ export function PostCardCommentsDialog({
     // Use SWR data if available, else fallback to passed post
     const postData = data || post;
 
-    // Calculate avatarSrc using the same logic as in PostCard
-    const avatarSrc = getAvatarSrc(
+    // Enhanced avatar source resolution with better debugging
+    console.log('Post data in dialog:', {
+        type: postData.type,
+        avatarPic: postData.avatarPic || post.avatarPic,
+        userProfilePic: postData.userProfilePic || post.userProfilePic,
+        photoUrl: postData.photoUrl || post.photoUrl,
+    });
+
+    // Try standard avatar path first
+    let avatarSrc = getAvatarSrc(
         postData.type,
         postData.avatarPic || post.avatarPic,
         postData.magazineImg || post.magazineImg,
         postData.agencyImg || post.agencyImg,
         normalizeImageUrl
     );
+
+    // Always use the most direct path to get the avatar for the dialog
+    const finalAvatarSrc =
+        avatarSrc ||
+        postData.avatarSrc ||
+        normalizeImageUrl(postData.userProfilePic) ||
+        normalizeImageUrl(postData.photoUrl) ||
+        '/user_silhouette_2';
 
     // Get reaction data AFTER we have postData:
     const reactionData = getReactionData(post.postId);
@@ -156,7 +172,7 @@ export function PostCardCommentsDialog({
                                 type={postData.type}
                                 cardTitle={post.cardTitle}
                                 identifier={post.identifier}
-                                avatarSrc={avatarSrc} 
+                                avatarSrc={finalAvatarSrc}
                                 author={postData.author}
                                 createdAt={postData.createdAt}
                                 userId={postData.userId}
