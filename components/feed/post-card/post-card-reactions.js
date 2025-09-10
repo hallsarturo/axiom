@@ -120,8 +120,10 @@ export function PostCardReactions({
             default:
                 return (
                     <div className="flex flex-row gap-2 items-center">
-                        <BiLike className={triggerIconSizeOnly} />
-                        <span className={finalTriggerTextClass}>
+                        <span className={iconWrapperColorClass}>
+                            <BiLike className={triggerIconSizeOnly} />
+                        </span>
+                        <span className={textWrapperColorClass}>
                             {reactionCounts.likes} Likes
                         </span>
                     </div>
