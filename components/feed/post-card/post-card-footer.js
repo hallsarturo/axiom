@@ -79,7 +79,7 @@ export function PostCardFooter({
             <div className="flex flex-col w-full gap-1.5">
                 <div className="flex flex-row w-full justify-between text-sm flex-wrap">
                     <p>{totalReactions} reactions</p>
-                    <p>{comments} comments</p>
+                    <p>{comments !== undefined ? comments : 0} comments</p>
                     <p>
                         {bookmarkCount !== undefined ? bookmarkCount : 0}{' '}
                         bookmarked
