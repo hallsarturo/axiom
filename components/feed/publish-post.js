@@ -156,7 +156,7 @@ export function PublishPost({ mutateFeed, onDialogOpenChange, ...props }) {
                                                   user.userProfilePic
                                               ) ||
                                               normalizeImageUrl(user.photoUrl)
-                                            : '/user_silhouette_2'
+                                            : '/user_silhouette_2.png'
                                     }
                                 />
                                 <AvatarFallback>

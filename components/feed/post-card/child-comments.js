@@ -62,7 +62,7 @@ export function ChildComments({
                                             comment.userProfilePic
                                         ) ||
                                         normalizeImageUrl(comment.photoUrl) ||
-                                        '/user_silhouette_2'
+                                        '/user_silhouette_2.png'
                                     }
                                 />
                                 <AvatarFallback>

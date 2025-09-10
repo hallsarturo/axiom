@@ -48,12 +48,6 @@ export function PostCardHeader({
                             <AvatarImage
                                 src={avatarSrc}
                                 alt={`${author}'s avatar`}
-                                onError={(e) => {
-                                    console.log(
-                                        'Avatar image failed to load:',
-                                        avatarSrc
-                                    );
-                                }}
                             />
                             <AvatarFallback>
                                 {genInitials(author)}

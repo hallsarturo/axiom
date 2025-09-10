@@ -110,7 +110,7 @@ export function PostCardComments({ postId, userId }) {
                                 src={
                                     normalizeImageUrl(comment.userProfilePic) ||
                                     normalizeImageUrl(comment.photoUrl) ||
-                                    '/user_silhouette_2'
+                                    '/user_silhouette_2.png_2'
                                 }
                             />
                             <AvatarFallback>

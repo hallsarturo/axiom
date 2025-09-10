@@ -233,14 +233,14 @@ export function NavigationConnected() {
                                                       normalizeImageUrl(
                                                           user.photoUrl
                                                       )
-                                                    : '/user_silhouette_2'
+                                                    : '/user_silhouette_2.png'
                                             }
                                         />
                                         <AvatarFallback>
                                             {user ? (
                                                 genInitials(user?.username)
                                             ) : (
-                                                <AvatarImage src="/user_silhouette.png"></AvatarImage>
+                                                <AvatarImage src="/user_silhouette_2.png"></AvatarImage>
                                             )}
                                         </AvatarFallback>
                                     </Avatar>

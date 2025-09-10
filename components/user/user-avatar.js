@@ -15,14 +15,14 @@ export function UserAvatar({ user, className, size = 'md' }) {
                 src={
                     user?.userProfilePic ||
                     user?.photoUrl ||
-                    '/user_silhouette_2'
+                    '/user_silhouette_2.png'
                 }
             />
             <AvatarFallback>
                 {user ? (
                     genInitials(user.username)
                 ) : (
-                    <AvatarImage src="/user_silhouette.png" />
+                    <AvatarImage src="/user_silhouette_2.png" />
                 )}
             </AvatarFallback>
         </Avatar>

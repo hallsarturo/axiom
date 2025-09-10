@@ -117,7 +117,7 @@ export function PostCardCommentsDialog({
         postData.avatarSrc ||
         normalizeImageUrl(postData.userProfilePic) ||
         normalizeImageUrl(postData.photoUrl) ||
-        '/user_silhouette_2';
+        '/user_silhouette_2.png';
 
     // Get reaction data AFTER we have postData:
     const reactionData = getReactionData(post.postId);
