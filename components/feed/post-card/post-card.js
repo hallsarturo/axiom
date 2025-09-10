@@ -31,7 +31,6 @@ import { useBookmarksStore } from '@/lib/state/bookmarksStore';
 export function PostCard(props) {
     const { user } = useUser();
     const [seeMore, setSeeMore] = useState(false);
-    
 
     // Get the reaction store functions
     const {
@@ -50,12 +49,16 @@ export function PostCard(props) {
                 : null
             : null;
 
+    // Modified fetch key - allow anonymous fetching
+    const fetchKey = props.postId
+        ? [`post`, props.postId, token, user?.id || 'anonymous']
+        : null;
+
     // Fetch data with SWR
     const { data, mutate } = useSWR(
-        props.postId && token && user?.id
-            ? [`post`, props.postId, token, user.id]
-            : null,
-        ([, postId, token, userId]) => fetchPost(postId, token, userId),
+        fetchKey,
+        ([, postId, token, userId]) =>
+            fetchPost(postId, token, userId === 'anonymous' ? null : userId),
         {
             onSuccess: (data) => {
                 if (data) {
@@ -63,10 +66,13 @@ export function PostCard(props) {
                     setReactionData(props.postId, data);
 
                     // Set bookmark data from post response
-                    setBookmarkData(props.postId, {
-                        isBookmarked: data.isBookmarked,
-                        // Don't set bookmarkCount here as it might not be accurate
-                    });
+                    if (user?.id) {
+                        // Only set bookmark data for logged-in users
+                        setBookmarkData(props.postId, {
+                            isBookmarked: data.isBookmarked,
+                            // Don't set bookmarkCount here as it might not be accurate
+                        });
+                    }
                 }
             },
         }
@@ -144,8 +150,12 @@ export function PostCard(props) {
         }
     }
 
-    // Use total reactions from store
-    const totalReactions = reactionCounts.totalReactions;
+    // Use total reactions from store or fallback to props or data
+    const totalReactions =
+        reactionCounts.totalReactions ||
+        data?.totalReactions ||
+        props.totalReactions ||
+        0;
 
     return (
         <div
