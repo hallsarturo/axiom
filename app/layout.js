@@ -39,7 +39,7 @@ export default function RootLayout({ children }) {
 
                         <main className="flex-1">{children}</main>
 
-                        <footer className="relative z-10 flex flex-col items-center justify-center min-h-20 w-full gap-4 p-4 sm:p-8 text-white bg-gradient-to-b from-violet-600 to-violet-900 dark:from-zinc-900 dark:to-zinc-950 text-xs">
+                        <footer className="relative z-10 flex flex-col items-center justify-center w-full gap-4 p-4 sm:p-8 text-white bg-gradient-to-b from-violet-600 to-violet-900 dark:from-zinc-900 dark:to-zinc-950 text-xs">
                             {/* Buttons section */}
                             <div className="flex flex-col items-center w-full">
                                 <div className="flex flex-col sm:flex-row w-full justify-center items-center gap-4 sm:gap-20">
@@ -98,13 +98,14 @@ export default function RootLayout({ children }) {
                             </div>
 
                             {/* Logo section - now will appear below buttons */}
-                            <div className="flex justify-center items-center w-full">
+                            <div className="flex justify-center items-center w-full mt-0 -mb-8">
                                 <Link href="/" className="text-xs">
                                     <Image
                                         src="/axiom_logo_white.png"
                                         width={75}
                                         height={50}
                                         alt="Axiom logo"
+                                        className="my-0"
                                     />
                                 </Link>
                             </div>
