@@ -1,22 +1,7 @@
 'use client';
 
-import { PaperClipIcon } from '@heroicons/react/20/solid';
-import {
-    AlertCircleIcon,
-    BadgeCheckIcon,
-    CheckIcon,
-    UserPlus,
-    UserMinus,
-} from 'lucide-react';
-import {
-    Card,
-    CardAction,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from '@/components/ui/card';
+import { BadgeCheckIcon, CheckIcon, UserPlus, UserMinus } from 'lucide-react';
+import { Card, CardAction } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -33,6 +18,7 @@ import {
     getPostsById,
 } from '@/lib/actions/actions';
 import { timeAgo } from '@/lib/utils/date';
+import { normalizeImageUrl } from '@/lib/utils/image';
 import { genInitials } from '@/lib/utils/strings';
 import useSWR from 'swr';
 
@@ -142,14 +128,21 @@ export default function Profile() {
                             <Avatar className="w-20 h-20 sm:w-24 sm:h-24">
                                 <AvatarImage
                                     src={
-                                        profileInfo?.photoUrl ||
-                                        profileInfo?.userProfilePic ||
-                                        'https://github.com/shadcn.png'
+                                        normalizeImageUrl(
+                                            profileInfo?.photoUrl
+                                        ) ||
+                                        normalizeImageUrl(
+                                            profileInfo?.userProfilePic
+                                        ) ||
+                                        '/user_silhouette_2.png'
                                     }
                                 />
                                 <AvatarFallback>
-                                    {' '}
-                                    {genInitials(user ? user.username : null)}
+                                    {genInitials(
+                                        profileInfo
+                                            ? profileInfo.username
+                                            : null
+                                    )}
                                 </AvatarFallback>
                             </Avatar>
                         </div>
