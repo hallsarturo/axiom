@@ -13,6 +13,7 @@ import { useRequireAuth } from '@/hooks/useRequireAuth';
 import { useReactionsStore } from '@/lib/state/reactionsStore';
 import { useUser } from '@/components/context/UserProfileContext';
 import { useEffect, useState } from 'react';
+import useSWR from 'swr';
 
 export function PostCardReactions({
     postId,
@@ -33,6 +34,10 @@ export function PostCardReactions({
     const [popoverOpen, setPopoverOpen] = useState(false);
     const requireAuth = useRequireAuth();
     const { user } = useUser();
+    const token =
+        process.env.NODE_ENV === 'development' && typeof window !== 'undefined'
+            ? localStorage.getItem('token')
+            : null;
 
     // Get reaction data from Zustand store
     const { getReactionData, handlePostReaction, handleCommentReaction } =
@@ -131,13 +136,6 @@ export function PostCardReactions({
         }
     })();
 
-    const token =
-        process.env.NODE_ENV === 'development'
-            ? typeof window !== 'undefined'
-                ? localStorage.getItem('token')
-                : null
-            : null;
-
     // Handle reaction directly with the store
     const handleReactionClick = (e, reactionType) => {
         e.preventDefault();
@@ -176,6 +174,33 @@ export function PostCardReactions({
         // Toggle the popover state manually
         setPopoverOpen((prev) => !prev);
     };
+
+    // Add this SWR fetch to ensure reaction data is fresh
+    // Only fetch if we're dealing with a post (not a comment)
+    const { data: postData } = useSWR(
+        type === 'post' && postId && !commentDialogOpen
+            ? [`post-reaction-data`, postId, token, user?.id]
+            : null,
+        ([, pid, tkn, uid]) => fetchPost(pid, tkn, uid),
+        {
+            onSuccess: (data) => {
+                if (data && type === 'post') {
+                    // Update the reaction store with fresh data
+                    useReactionsStore.getState().setReactionData(postId, data);
+                }
+            },
+            // Don't revalidate too often to avoid unnecessary API calls
+            revalidateOnFocus: false,
+            dedupingInterval: 30000, // 30 seconds
+        }
+    );
+
+    // Add debugging to help you see what's happening
+    useEffect(() => {
+        if (userReaction) {
+            console.log(`Reaction for ${type} ${id}: ${userReaction}`);
+        }
+    }, [userReaction, id, type]);
 
     return (
         <Popover

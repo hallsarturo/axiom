@@ -14,7 +14,7 @@ import { useRequireAuth } from '@/hooks/useRequireAuth';
 import { useReactionsStore } from '@/lib/state/reactionsStore';
 import { useBookmarksStore } from '@/lib/state/bookmarksStore';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export function PostCardFooter({
     totalReactions,
@@ -30,9 +30,20 @@ export function PostCardFooter({
     const requireAuth = useRequireAuth();
 
     // Get bookmark data directly from Zustand store
-    const { handleBookmark: storeHandleBookmark, getBookmarkData } =
-        useBookmarksStore();
+    const {
+        handleBookmark: storeHandleBookmark,
+        getBookmarkData,
+        fetchBookmarkCount,
+    } = useBookmarksStore();
+
     const { isBookmarked, bookmarkCount } = getBookmarkData(postId);
+
+    // Add this useEffect to fetch bookmark data on component mount
+    useEffect(() => {
+        if (postId) {
+            fetchBookmarkCount(postId);
+        }
+    }, [postId, fetchBookmarkCount]);
 
     const token =
         process.env.NODE_ENV === 'development' && typeof window !== 'undefined'

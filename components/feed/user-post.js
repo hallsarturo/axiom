@@ -26,6 +26,7 @@ export function UserPost({ mutateFeed, refreshFeed, ...props }) {
             refreshFeed={refreshFeed}
             isBookmarked={props.isBookmarked}
             totalBookmarks={props.totalBookmarks}
+            currentReactionIcon={props.currentReactionIcon}
         ></PostCard>
     );
 }

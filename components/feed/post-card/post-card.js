@@ -214,7 +214,7 @@ export function PostCard(props) {
                         imgSrc={props.imgSrc}
                     />
                 </ScrollArea>
-                {console.log('isBookmarked: ', data?.isBookmarked)}
+                {/* {console.log('isBookmarked: ', data?.isBookmarked)} */}
                 <PostCardFooter
                     className="justify-center"
                     totalReactions={totalReactions}
