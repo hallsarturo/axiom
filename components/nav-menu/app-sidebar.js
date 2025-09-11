@@ -28,6 +28,7 @@ import {
 import { SelectPostType } from '@/components/feed/select-post-type';
 import { useUser } from '@/components/context/UserProfileContext';
 import { usePathname } from 'next/navigation';
+import Link from 'next/link';
 
 export function AppSidebar() {
     const { user } = useUser();
@@ -51,7 +52,7 @@ export function AppSidebar() {
         },
         {
             title: 'Saved Posts',
-            url: user ? `/saved-posts` : '/#',
+            url: user ? `/saved-posts/${user.id}` : '/#',
             icon: Bookmark,
         },
         {
@@ -93,13 +94,13 @@ export function AppSidebar() {
                                         size=""
                                         variant=""
                                     >
-                                        <a
+                                        <Link
                                             href={item.url}
                                             className="text-primary dark:text-foreground"
                                         >
                                             <item.icon />
                                             <span>{item.title}</span>
-                                        </a>
+                                        </Link>
                                     </SidebarMenuButton>
                                 </SidebarMenuItem>
                             ))}
