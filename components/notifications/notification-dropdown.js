@@ -8,6 +8,11 @@ import {
     NavigationMenuContent,
     NavigationMenuTrigger,
 } from '@/components/ui/navigation-menu';
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from '@/components/ui/popover';
 import { timeAgo } from '@/lib/utils/date';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { genInitials } from '@/lib/utils/strings';
@@ -120,20 +125,22 @@ export function NotificationDropdown({ userId }) {
     }, [fetchNotifications, userId, token]);
 
     return (
-        <div className="">
-            <NavigationMenuTrigger
+        <Popover className="">
+            <PopoverTrigger
                 className="text-primary dark:text-foreground gap-2 cursor-pointer"
                 onClick={markAsSeen}
             >
-                {unseenCount > 0 && (
-                    <Badge className="text-xs h-5 min-w-5 rounded-full px-1 font-mono tabular-nums">
-                        {unseenCount}
-                    </Badge>
-                )}
-                <Bell size="18" />
-            </NavigationMenuTrigger>
+                <div className="flex gap-2">
+                    {unseenCount > 0 && (
+                        <Badge className="text-xs h-5 min-w-5 rounded-full px-1 font-mono tabular-nums">
+                            {unseenCount}
+                        </Badge>
+                    )}
+                    <Bell size="22" />
+                </div>
+            </PopoverTrigger>
 
-            <NavigationMenuContent className="w-80 max-h-[70vh] overflow-y-auto z-100">
+            <PopoverContent className="w-80 max-h-[70vh] z-100">
                 <div className="py-2 px-3 border-b border-border ">
                     <div className="flex justify-between items-center">
                         <h3 className="font-medium">Notifications</h3>
@@ -152,13 +159,15 @@ export function NotificationDropdown({ userId }) {
                         No notifications yet
                     </div>
                 ) : (
-                    <div>
-                        {notifications.map((notification) => (
-                            <NotificationItem
-                                key={notification.id}
-                                notification={notification}
-                            />
-                        ))}
+                    <div className="max-h-[50vh] overflow-y-auto">
+                        <ScrollArea>
+                            {notifications.map((notification) => (
+                                <NotificationItem
+                                    key={notification.id}
+                                    notification={notification}
+                                />
+                            ))}
+                        </ScrollArea>
                     </div>
                 )}
 
@@ -170,7 +179,7 @@ export function NotificationDropdown({ userId }) {
                         View all notifications
                     </Link>
                 </div>
-            </NavigationMenuContent>
-        </div>
+            </PopoverContent>
+        </Popover>
     );
 }

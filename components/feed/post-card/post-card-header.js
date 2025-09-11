@@ -132,7 +132,7 @@ export function PostCardHeader({
                                                 Delete Post. Are you sure?
                                             </AlertDialogTitle>
                                             <AlertDialogDescription>
-                                                This action cannot be undone.
+                                               Deleting a post will also remove its comments. This action cannot be undone.
                                             </AlertDialogDescription>
                                         </AlertDialogHeader>
                                         <AlertDialogFooter>
