@@ -29,19 +29,20 @@ import { PostCardReactions } from '@/components/feed/post-card/post-card-reactio
 import { CommentsActions } from '@/components/feed/post-card/comments-actions';
 import { ChildComments } from '@/components/feed/post-card/child-comments';
 import { timeAgo } from '@/lib/utils/date';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useCommentsStore } from '@/lib/state/commentsStore';
 import { Skeleton } from '@/components/ui/skeleton';
 import { genInitials } from '@/lib/utils/strings';
 import { normalizeImageUrl } from '@/lib/utils/image';
 
-export function PostCardComments({ postId, userId }) {
+export function PostCardComments({ postId, userId, scrollToCommentId }) {
     const [replyCommentList, setReplyCommentList] = useState([]);
     const [expandedComments, setExpandedComments] = useState([]);
     const [parentPage, setParentPage] = useState(1);
     const [childPages, setChildPages] = useState({});
     const pageSize = 20;
+    const commentRefs = useRef({});
 
     // Get comments from Zustand store
     const {
@@ -92,6 +93,14 @@ export function PostCardComments({ postId, userId }) {
             }
         }
     };
+    useEffect(() => {
+        if (scrollToCommentId && commentRefs.current[scrollToCommentId]) {
+            commentRefs.current[scrollToCommentId].scrollIntoView({
+                behavior: 'smooth',
+                block: 'center',
+            });
+        }
+    }, [scrollToCommentId]);
 
     if (isLoading) {
         return <CommentsSkeleton />;
@@ -102,6 +111,7 @@ export function PostCardComments({ postId, userId }) {
             {parentComments.map((comment, index) => (
                 <div
                     key={comment.id || index}
+                    ref={el => commentRefs.current[comment.id] = el}
                     className="flex flex-col w-full px-2 pb-1"
                 >
                     <div className="flex gap-2 relative">

@@ -44,6 +44,7 @@ export function PostCardCommentsDialog({
     post,
     commentDialogOpen,
     setCommentDialogOpen,
+    scrollToCommentId,
 }) {
     const { user } = useUser();
     const token =
@@ -200,7 +201,11 @@ export function PostCardCommentsDialog({
                         />
                     </div>
                     <Separator className="ml-5 pr-5" />
-                    <PostCardComments postId={post.postId} userId={user?.id} />
+                    <PostCardComments
+                        postId={post.postId}
+                        userId={user?.id}
+                        scrollToCommentId={scrollToCommentId}
+                    />
                 </ScrollArea>
                 <DialogFooter className="flex justify-start border-t-1 px-2 py-4 max-h-[50vh] overflow-hidden">
                     <PostCardCommentForm

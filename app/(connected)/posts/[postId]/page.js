@@ -1,18 +1,23 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useParams } from 'next/navigation';
+import { useState, useEffect, useRef } from 'react';
+import { useParams, useSearchParams } from 'next/navigation';
 import { fetchSinglePost } from '@/lib/actions/actions';
 import { UserPost } from '@/components/feed/user-post';
 import { PaperPost } from '@/components/feed/paper-post';
 import { SkeletonCard } from '@/components/skeletons/skeletonCard';
+import {PostCardCommentsDialog} from '@/components/feed/post-card/post-card-comments-dialog'
 import { toast } from 'sonner';
 
 export default function PostDetailPage() {
     const { postId } = useParams();
+    const searchParams = useSearchParams();
+    const commentId = searchParams.get('commentId');
     const [post, setPost] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [commentDialogOpen, setCommentDialogOpen] = useState(false);
+    const commentRef = useRef(null);
 
     useEffect(() => {
         async function loadPost() {
@@ -44,6 +49,12 @@ export default function PostDetailPage() {
         }
     }, [postId]);
 
+    useEffect(() => {
+        if (commentId) {
+            setCommentDialogOpen(true);
+        }
+    }, [commentId]);
+
     if (loading) {
         return (
             <div className="w-full flex justify-center mt-8">
@@ -60,6 +71,7 @@ export default function PostDetailPage() {
         );
     }
 
+    // Pass commentId to PostCardCommentsDialog
     return (
         <div className="w-full flex justify-center py-8">
             {post.type === 'user' ? (
@@ -67,6 +79,12 @@ export default function PostDetailPage() {
             ) : (
                 <PaperPost {...post} />
             )}
+            <PostCardCommentsDialog
+                post={post}
+                commentDialogOpen={commentDialogOpen}
+                setCommentDialogOpen={setCommentDialogOpen}
+                scrollToCommentId={commentId}
+            />
         </div>
     );
 }

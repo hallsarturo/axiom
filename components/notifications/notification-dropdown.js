@@ -23,36 +23,52 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 
 // Define the missing function to handle different notification types
 function getNotificationTypeDetails(notification) {
-    switch (notification.type) {
+    // Default to empty objects for nested properties to prevent undefined errors
+    const { type, postId, entityId, commentId, senderId } = notification || {};
+
+    switch (type) {
         case 'comment':
             return {
                 icon: MessageCircle,
                 color: 'text-blue-500',
-                link: `/posts/${notification.entityId}`, // This is correct
+                // Make sure we use postId for the post, and entityId (which is the commentId) for the comment to scroll to
+                link: postId ? `/posts/${postId}?commentId=${entityId}` : '#',
             };
+
         case 'comment_reply':
             return {
                 icon: Reply,
-                color: 'text-green-500',
-                link: `/posts/${notification.entityId}`,
+                color: 'text-blue-500',
+                // Similar to comments, but for replies
+                link: postId ? `/posts/${postId}?commentId=${entityId}` : '#',
             };
+
+        case 'like':
+            // Check if this is a comment like or post like
+            return {
+                icon: Heart,
+                color: 'text-red-500',
+                // If commentId exists, it's a comment like, otherwise it's a post like
+                link: postId
+                    ? commentId
+                        ? `/posts/${postId}?commentId=${commentId}`
+                        : `/posts/${postId}`
+                    : '#',
+            };
+
         case 'follow':
             return {
                 icon: UserPlus,
                 color: 'text-green-500',
-                link: `/profile/${notification.senderId}`,
+                link: senderId ? `/profile/${senderId}` : '#',
             };
-        case 'like':
-            return {
-                icon: Heart,
-                color: 'text-red-500',
-                link: `/posts/${notification.entityId}`,
-            };
+
         default:
+            // For any other notification types, default to postId if available
             return {
                 icon: Bell,
                 color: 'text-gray-500',
-                link: `/posts/${notification.entityId}`,
+                link: postId ? `/posts/${postId}` : '#',
             };
     }
 }
