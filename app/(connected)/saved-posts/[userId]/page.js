@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { getBookmarksByUserId } from '@/lib/actions/actions';
 import { normalizeImageUrl } from '@/lib/utils/image';
-import { formatDate } from '@/lib/utils/date';
+import { timeAgo } from '@/lib/utils/date';
 import {
     Pagination,
     PaginationContent,
@@ -89,7 +89,7 @@ export default function BookmarkedPosts() {
                                         )}
                                         <div className="mt-4 flex flex-col">
                                             <div className="flex flex-col">
-                                                <h3 className="text-sm font-medium text-primary">
+                                                <h3 className="text-sm font-bold text-primary">
                                                     <Link
                                                         href={`/posts/${post.id}`}
                                                     >
@@ -100,8 +100,11 @@ export default function BookmarkedPosts() {
                                                         {post.title}
                                                     </Link>
                                                 </h3>
+                                                <p className="mt-1 text-sm text-primary dark:text-primary-foreground">
+                                                    {post.author}
+                                                </p>
                                                 <p className="mt-1 text-sm text-gray-500">
-                                                    {formatDate(post.createdAt)}
+                                                    {timeAgo(post.createdAt)}
                                                 </p>
                                             </div>
                                             <p className="text-sm font-medium text-gray-900"></p>
