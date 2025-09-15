@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { CircleCheckIcon, CircleHelpIcon, CircleIcon } from 'lucide-react';
 import {
@@ -36,7 +37,6 @@ export function NavigationMenuHome() {
     const pathname = usePathname();
 
     const menuItems = [
-        { href: '/', label: 'Home' },
         { href: '/sign-up', label: 'Sign Up' },
         { href: '/sign-in', label: 'Sign In' },
     ];
@@ -45,13 +45,23 @@ export function NavigationMenuHome() {
         <>
             {/* Desktop menu */}
             <div className="hidden md:flex w-full justify-center items-center">
-                <div className="">
+                <div className="flex w-2/2 justify-end">
                     <NavigationMenu
                         position="popper"
                         viewport={false}
                         className="min-w-0 bg-transparent"
                     >
-                        <NavigationMenuList className="gap-4 bg-transparent">
+                        <NavigationMenuList className="gap-14 bg-transparent">
+                            <NavigationMenuItem className="">
+                                <Link href="/">
+                                    <Image
+                                        src="/axiom_purple.png"
+                                        width={60}
+                                        height={40}
+                                        alt="Axiom logo"
+                                    />
+                                </Link>
+                            </NavigationMenuItem>
                             {menuItems.map((item, idx) => {
                                 const isActive = pathname === item.href;
                                 return (
@@ -93,7 +103,7 @@ export function NavigationMenuHome() {
                                             </NavigationMenuLink>
                                             <NavigationMenuLink asChild>
                                                 <Link
-                                                    href="#"
+                                                    href="/legal"
                                                     className="flex-row items-center gap-2"
                                                 >
                                                     <CircleIcon />
@@ -116,7 +126,7 @@ export function NavigationMenuHome() {
                         </NavigationMenuList>
                     </NavigationMenu>
                 </div>
-                <div className="">
+                <div className="flex w-1/2 justify-end mr-4">
                     <NavigationMenu
                         position="popper"
                         viewport={false}

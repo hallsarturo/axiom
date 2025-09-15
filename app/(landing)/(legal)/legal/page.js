@@ -63,8 +63,8 @@ const itemVariants = {
 
 export default function Legal() {
     return (
-        <div>
-            <Card className="m-8">
+        <div className="flex w-full justify-center mt-8">
+            <Card className="flex justify-center mx-auto md:max-w-3xl md:m-18">
                 <motion.div
                     className="flex flex-col justify-center m-10"
                     variants={containerVariants}
