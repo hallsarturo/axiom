@@ -17,20 +17,11 @@ import {
     putFollower,
     getPostsById,
 } from '@/lib/actions/actions';
+import { AvatarList } from '@/components/profile/avatar-list';
 import { timeAgo } from '@/lib/utils/date';
 import { normalizeImageUrl } from '@/lib/utils/image';
 import { genInitials } from '@/lib/utils/strings';
 import useSWR from 'swr';
-
-const fetchFollowers = async (userId) => {
-    const result = await getFollowersById(userId);
-    return result || { followers: [], totalFollowers: 0 };
-};
-
-const fetchFollowings = async (userId) => {
-    const result = await getFollowingsById(userId);
-    return result || { following: [], totalFollowings: 0 };
-};
 
 export default function Profile() {
     const { userId } = useParams();
@@ -41,6 +32,17 @@ export default function Profile() {
     const [following, setFollowing] = useState([]);
     const [followingCount, setFollowingCount] = useState(0);
     const [totalPosts, setTotalPosts] = useState();
+
+    const fetchFollowers = async (userId) => {
+        const result = await getFollowersById(userId);
+        setFollowers(result?.followers || null);
+        return result || { followers: [], totalFollowers: 0 };
+    };
+
+    const fetchFollowings = async (userId) => {
+        const result = await getFollowingsById(userId);
+        return result || { following: [], totalFollowings: 0 };
+    };
 
     // SWR hooks for followers and following
     const {
@@ -209,10 +211,16 @@ export default function Profile() {
                                 Posts
                             </dt>
                             <dd className="mt-2 sm:mt-0 text-sm/6 text-muted-foreground w-full">
-                                {totalPosts ? totalPosts : null} |{' '}
-                                <Link href={`/my-posts/${userId}`}>
-                                    see posts
-                                </Link>
+                                <Button
+                                    asChild
+                                    variant="link"
+                                    className="mx-0 px-0 text-muted-foreground"
+                                >
+                                    <Link href={`/my-posts/${userId}`}>
+                                        see all {totalPosts ? totalPosts : null}{' '}
+                                        posts
+                                    </Link>
+                                </Button>
                             </dd>
                         </div>
                         <div className="px-4 py-6 flex flex-col sm:flex-row sm:items-center items-start sm:px-0">
@@ -230,10 +238,40 @@ export default function Profile() {
                                 Followers
                             </dt>
                             <dd className="mt-2 sm:mt-0 text-sm/6 text-muted-foreground w-full">
-                                {followersData?.totalFollowers ?? 0} |{' '}
-                                <Link href={`/followers/${userId}`}>
-                                    see followers
-                                </Link>
+                                <div className="flex items-center gap-4">
+                                    {followers.slice(0, 30).map((f, idx) => (
+                                        <div
+                                            key={f.id}
+                                            className={`relative ${idx !== 0 ? '-ml-6' : ''}`}
+                                            style={{ zIndex: 30 - idx }}
+                                        >
+                                            <Link href={`/profile/${f.id}`}>
+                                                <AvatarList
+                                                    size="h-6 w-6"
+                                                    userProfilePic={
+                                                        f.userProfilePic
+                                                    }
+                                                    photoUrl={f.photoUrl}
+                                                    username={
+                                                        f.username ||
+                                                        f.displayName
+                                                    }
+                                                />
+                                            </Link>
+                                        </div>
+                                    ))}
+                                    <Button
+                                        asChild
+                                        variant="link"
+                                        className="mx-0 px-0 text-muted-foreground"
+                                    >
+                                        <Link href={`/followers/${userId}`}>
+                                            see all{' '}
+                                            {followersData?.totalFollowers ?? 0}{' '}
+                                            followers
+                                        </Link>
+                                    </Button>
+                                </div>
                             </dd>
                         </div>
                         <div className="px-4 py-6 flex flex-col sm:flex-row sm:items-center items-start sm:px-0">
