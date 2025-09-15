@@ -35,12 +35,13 @@ export default function Profile() {
 
     const fetchFollowers = async (userId) => {
         const result = await getFollowersById(userId);
-        setFollowers(result?.followers || null);
+        setFollowers(result?.followers || []);
         return result || { followers: [], totalFollowers: 0 };
     };
 
     const fetchFollowings = async (userId) => {
         const result = await getFollowingsById(userId);
+        setFollowing(result?.following || []);
         return result || { following: [], totalFollowings: 0 };
     };
 
@@ -279,10 +280,41 @@ export default function Profile() {
                                 Following
                             </dt>
                             <dd className="mt-2 sm:mt-0 text-sm/6 text-muted-foreground w-full">
-                                {followingData?.totalFollowings ?? 0} |{' '}
-                                <Link href={`/following/${userId}`}>
-                                    see followings
-                                </Link>
+                                <div className="flex items-center gap-4">
+                                    {following.slice(0, 30).map((f, idx) => (
+                                        <div
+                                            key={f.id}
+                                            className={`relative ${idx !== 0 ? '-ml-6' : ''}`}
+                                            style={{ zIndex: 30 - idx }}
+                                        >
+                                            <Link href={`/profile/${f.id}`}>
+                                                <AvatarList
+                                                    size="h-6 w-6"
+                                                    userProfilePic={
+                                                        f.userProfilePic
+                                                    }
+                                                    photoUrl={f.photoUrl}
+                                                    username={
+                                                        f.username ||
+                                                        f.displayName
+                                                    }
+                                                />
+                                            </Link>
+                                        </div>
+                                    ))}
+                                    <Button
+                                        asChild
+                                        variant="link"
+                                        className="mx-0 px-0 text-muted-foreground"
+                                    >
+                                        <Link href={`/following/${userId}`}>
+                                            see all{' '}
+                                            {followingData?.totalFollowings ??
+                                                0}{' '}
+                                            followings
+                                        </Link>
+                                    </Button>
+                                </div>
                             </dd>
                         </div>
                     </dl>
