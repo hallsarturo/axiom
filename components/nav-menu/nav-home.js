@@ -44,80 +44,92 @@ export function NavigationMenuHome() {
     return (
         <>
             {/* Desktop menu */}
-            <nav className="hidden md:block">
-                <NavigationMenu
-                    position="popper"
-                    viewport={false}
-                    className="min-w-0 bg-transparent"
-                >
-                    <NavigationMenuList className="gap-4 bg-transparent">
-                        {menuItems.map((item, idx) => {
-                            const isActive = pathname === item.href;
-                            return (
-                                <NavigationMenuItem
-                                    key={idx}
-                                    className="bg-transparent"
-                                >
-                                    <NavigationMenuLink
-                                        asChild
-                                        className={
-                                            `bg-transparent font-medium ` +
-                                            (isActive
-                                                ? 'text-primary dark:text-accent-foreground'
-                                                : '')
-                                        }
+            <div className="hidden md:flex w-full justify-center items-center">
+                <div className="">
+                    <NavigationMenu
+                        position="popper"
+                        viewport={false}
+                        className="min-w-0 bg-transparent"
+                    >
+                        <NavigationMenuList className="gap-4 bg-transparent">
+                            {menuItems.map((item, idx) => {
+                                const isActive = pathname === item.href;
+                                return (
+                                    <NavigationMenuItem
+                                        key={idx}
+                                        className="bg-transparent"
                                     >
-                                        <Link href={item.href}>
-                                            {item.label}
-                                        </Link>
-                                    </NavigationMenuLink>
-                                </NavigationMenuItem>
-                            );
-                        })}
-                        <NavigationMenuItem>
-                            <NavigationMenuTrigger className="bg-transparent">
-                                About
-                            </NavigationMenuTrigger>
-                            <NavigationMenuContent>
-                                <ul className="grid w-[200px] gap-4">
-                                    <li>
-                                        <NavigationMenuLink asChild>
-                                            <Link
-                                                href="#"
-                                                className="flex-row items-center gap-2"
-                                            >
-                                                <CircleHelpIcon />
-                                                About
+                                        <NavigationMenuLink
+                                            asChild
+                                            className={
+                                                `bg-transparent font-medium ` +
+                                                (isActive
+                                                    ? 'text-primary dark:text-accent-foreground'
+                                                    : '')
+                                            }
+                                        >
+                                            <Link href={item.href}>
+                                                {item.label}
                                             </Link>
                                         </NavigationMenuLink>
-                                        <NavigationMenuLink asChild>
-                                            <Link
-                                                href="#"
-                                                className="flex-row items-center gap-2"
-                                            >
-                                                <CircleIcon />
-                                                Legal
-                                            </Link>
-                                        </NavigationMenuLink>
-                                        <NavigationMenuLink asChild>
-                                            <Link
-                                                href="#"
-                                                className="flex-row items-center gap-2"
-                                            >
-                                                <CircleCheckIcon />
-                                                Terms & Conditions
-                                            </Link>
-                                        </NavigationMenuLink>
-                                    </li>
-                                </ul>
-                            </NavigationMenuContent>
-                        </NavigationMenuItem>
-                        <NavigationMenuItem className="ml-4">
-                            <ModeToggle />
-                        </NavigationMenuItem>
-                    </NavigationMenuList>
-                </NavigationMenu>
-            </nav>
+                                    </NavigationMenuItem>
+                                );
+                            })}
+                            <NavigationMenuItem>
+                                <NavigationMenuTrigger className="bg-transparent">
+                                    About
+                                </NavigationMenuTrigger>
+                                <NavigationMenuContent>
+                                    <ul className="grid w-[200px] gap-4">
+                                        <li>
+                                            <NavigationMenuLink asChild>
+                                                <Link
+                                                    href="#"
+                                                    className="flex-row items-center gap-2"
+                                                >
+                                                    <CircleHelpIcon />
+                                                    About
+                                                </Link>
+                                            </NavigationMenuLink>
+                                            <NavigationMenuLink asChild>
+                                                <Link
+                                                    href="#"
+                                                    className="flex-row items-center gap-2"
+                                                >
+                                                    <CircleIcon />
+                                                    Legal
+                                                </Link>
+                                            </NavigationMenuLink>
+                                            <NavigationMenuLink asChild>
+                                                <Link
+                                                    href="#"
+                                                    className="flex-row items-center gap-2"
+                                                >
+                                                    <CircleCheckIcon />
+                                                    Terms & Conditions
+                                                </Link>
+                                            </NavigationMenuLink>
+                                        </li>
+                                    </ul>
+                                </NavigationMenuContent>
+                            </NavigationMenuItem>
+                        </NavigationMenuList>
+                    </NavigationMenu>
+                </div>
+                <div className="">
+                    <NavigationMenu
+                        position="popper"
+                        viewport={false}
+                        className="min-w-0 bg-transparent"
+                    >
+                        <NavigationMenuList className="gap-4 bg-transparent">
+                            <NavigationMenuItem className="ml-4">
+                                <ModeToggle />
+                            </NavigationMenuItem>
+                        </NavigationMenuList>
+                    </NavigationMenu>
+                </div>
+            </div>
             {/* Mobile menu */}
             <nav className="md:hidden">
                 <Sheet

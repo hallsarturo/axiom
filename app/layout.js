@@ -85,10 +85,8 @@ export default function RootLayout({ children }) {
                                             size="sm"
                                         >
                                             <Link
-                                                href="/"
+                                                href="/legal"
                                                 className="text-xs"
-                                                target="_blank"
-                                                rel="noopener noreferrer"
                                             >
                                                 Legal
                                             </Link>
