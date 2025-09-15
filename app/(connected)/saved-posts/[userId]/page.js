@@ -13,6 +13,7 @@ import {
     PaginationNext,
     PaginationPrevious,
 } from '@/components/ui/pagination';
+import { Card } from '@/components/ui/card';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useUser } from '@/components/context/UserProfileContext';
@@ -47,9 +48,9 @@ export default function BookmarkedPosts() {
 
     return (
         <div>
-            <div className=" bg-white rounded-2xl m-8">
+            <Card className="m-8">
                 <div className="mx-auto max-w-2xl px-4 py-6 sm:px-6 sm:py-10 lg:max-w-7xl lg:px-8">
-                    <h2 className="text-2xl font-bold tracking-tight text-primary dark:text-foreground">
+                    <h2 className="text-2xl font-bold tracking-tight text-primary dark:text-foreground -mt-8">
                         {user ? (
                             <Link href={`/profile/${user.id}`}>
                                 {user ? user.username : ''}&apos;s{' '}
@@ -115,7 +116,7 @@ export default function BookmarkedPosts() {
                         )}
                     </div>
                 </div>
-            </div>
+            </Card>
             <div className="mb-4">
                 <Pagination>
                     <PaginationContent>
