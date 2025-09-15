@@ -1,50 +1,8 @@
 'use client';
 
-import { RadarChart } from '@/components/echo-meter/radar-chart';
-import {
-    Card,
-    CardAction,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
-
-const data = [
-    {
-        taste: 'realist',
-        politics: 89,
-        science: 86,
-        philosophy: 90,
-    },
-    {
-        taste: 'scientist',
-        politics: 62,
-        science: 99,
-        philosophy: 88,
-    },
-    {
-        taste: 'tech',
-        politics: 114,
-        science: 38,
-        philosophy: 61,
-    },
-    {
-        taste: 'idealist',
-        politics: 74,
-        science: 99,
-        philosophy: 45,
-    },
-    {
-        taste: 'pragmatist',
-        politics: 38,
-        science: 58,
-        philosophy: 32,
-    },
-];
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -61,7 +19,7 @@ const itemVariants = {
     visible: { opacity: 1, y: 0, transition: { duration: 0.7 } },
 };
 
-export default function Legal() {
+export default function TermsAndConditions() {
     return (
         <div className="flex w-full justify-center mt-8">
             <Card className="flex justify-center mx-auto md:max-w-3xl md:m-18">

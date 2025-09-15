@@ -88,7 +88,7 @@ export default function RootLayout({ children }) {
                                                 href="/legal"
                                                 className="text-xs"
                                             >
-                                                Legal
+                                                Legal notice
                                             </Link>
                                         </Button>
                                     </div>
