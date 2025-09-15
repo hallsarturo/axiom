@@ -94,10 +94,10 @@ export function NavigationMenuHome() {
                                         <li>
                                             <NavigationMenuLink asChild>
                                                 <Link
-                                                    href="#"
+                                                    href="/about"
                                                     className="flex-row items-center gap-2"
                                                 >
-                                                    <CircleHelpIcon />
+                                                    <CircleIcon />
                                                     About
                                                 </Link>
                                             </NavigationMenuLink>
@@ -112,10 +112,10 @@ export function NavigationMenuHome() {
                                             </NavigationMenuLink>
                                             <NavigationMenuLink asChild>
                                                 <Link
-                                                    href="#"
+                                                    href="terms-and-conditions"
                                                     className="flex-row items-center gap-2"
                                                 >
-                                                    <CircleCheckIcon />
+                                                    <CircleIcon />
                                                     Terms & Conditions
                                                 </Link>
                                             </NavigationMenuLink>

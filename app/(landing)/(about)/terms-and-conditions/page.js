@@ -2,6 +2,7 @@
 
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 
 const containerVariants = {
@@ -37,167 +38,186 @@ export default function TermsAndConditions() {
                             className="flex flex-col justify-center w-full max-w-2xl text-center mb-8 px-4"
                             variants={itemVariants}
                         >
+                            <div className="flex w-full justify-center mb-6">
+                                <Image
+                                    src="/axiom_purple.png"
+                                    width={75}
+                                    height={50}
+                                    alt="Axiom logo"
+                                />
+                            </div>
                             <motion.h2
                                 className="text-2xl font-bold mb-4 text-primary dark:text-foreground"
                                 variants={itemVariants}
                             >
-                                Legal Notice – Alpha Version
+                                Terms &amp; Conditions (Alpha/MVP Version)
                             </motion.h2>
-                            <motion.p
-                                className="text-md mb-4"
-                                variants={itemVariants}
-                            >
-                                This platform (“the Social Network”) is
-                                currently in its{' '}
-                                <strong>Alpha testing phase</strong>. By
-                                accessing and using this service, you
-                                acknowledge and agree to the following:
-                            </motion.p>
-                            <motion.h2
+
+                            <motion.h3
                                 className="text-xl font-semibold mt-6 mb-2"
                                 variants={itemVariants}
                             >
-                                1. Ownership
-                            </motion.h2>
+                                1. Ownership and Intellectual Property
+                            </motion.h3>
                             <motion.p
                                 className="text-md mb-4"
                                 variants={itemVariants}
                             >
                                 All rights to the design, code, and intellectual
                                 property of this platform belong exclusively to{' '}
-                                <strong>Arturo Proal Walls</strong>.
+                                <strong>Arturo Proal Walls</strong>. Users are
+                                granted a limited, non-transferable right to
+                                access and use the platform for personal,
+                                non-commercial purposes.
                             </motion.p>
-                            <motion.h2
+
+                            <motion.h3
                                 className="text-xl font-semibold mt-6 mb-2"
                                 variants={itemVariants}
                             >
-                                2. Data Sources
-                            </motion.h2>
+                                2. User Content
+                            </motion.h3>
                             <motion.p
-                                className="text-md mb-2"
+                                className="text-md mb-4"
                                 variants={itemVariants}
                             >
-                                The data integrated into this Alpha version
-                                comes exclusively from{' '}
-                                <strong>open-access sources</strong>.
-                                Specifically:
+                                Users are responsible for any content they
+                                upload, post, or share on this platform. By
+                                submitting content, you grant the platform a
+                                non-exclusive license to display and distribute
+                                it within the service.
                             </motion.p>
+
+                            <motion.h3
+                                className="text-xl font-semibold mt-6 mb-2"
+                                variants={itemVariants}
+                            >
+                                3. Prohibited Content
+                            </motion.h3>
                             <motion.ul
-                                className="list-disc pt-4 px-18 text-md mb-4 space-y-2"
+                                className="list-disc text-left pl-8 text-md mb-4 space-y-2"
                                 variants={itemVariants}
                             >
                                 <li>
-                                    Metadata and bibliographic information have
-                                    been accessed through the
-                                    <strong>
-                                        {' '}
-                                        Open Access content version
-                                    </strong>{' '}
-                                    of <em>PhilPapers</em> and{' '}
-                                    <em>PhilArchive</em>.
+                                    Content that infringes intellectual property
+                                    rights or copyrights.
+                                </li>
+                                <li>Illegal or unlawful material.</li>
+                                <li>
+                                    Defamatory, harassing, or harmful content.
                                 </li>
                                 <li>
-                                    No copyrighted content or full texts have
-                                    been copied or reproduced.
-                                </li>
-                                <li>
-                                    Only bibliographic and metadata information
-                                    provided via the
-                                    <strong>
-                                        {' '}
-                                        Dublin Core API (OAI-PMH)
-                                    </strong>{' '}
-                                    has been used, in accordance with{' '}
-                                    <Button variant="link">
-                                        <a
-                                            href="https://philpapers.org/help/terms.html"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                        >
-                                            PhilPapers&apos; Terms
-                                        </a>{' '}
-                                    </Button>
-                                    and{' '}
-                                    <Button variant="link">
-                                        <a
-                                            href="https://philpapers.org/help/oai.html"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                        >
-                                            PhilPapers&apos; OAI Policy.
-                                        </a>
-                                    </Button>
+                                    Content deemed inappropriate for the
+                                    website’s purpose or community.
                                 </li>
                             </motion.ul>
-                            <motion.h1
+                            <motion.p
+                                className="text-md mb-4"
+                                variants={itemVariants}
+                            >
+                                Respectful free thought and open discussion are
+                                encouraged, provided they do not violate these
+                                rules.
+                            </motion.p>
+
+                            <motion.h3
                                 className="text-xl font-semibold mt-6 mb-2"
                                 variants={itemVariants}
                             >
-                                3. Attribution
-                            </motion.h1>
+                                4. Account Termination
+                            </motion.h3>
                             <motion.p
                                 className="text-md mb-4"
                                 variants={itemVariants}
                             >
-                                This platform uses third-party resources that
-                                require attribution:
+                                The platform owner reserves the right to suspend
+                                or delete any user account or content that
+                                violates these Terms, without prior notice.
                             </motion.p>
-                            <motion.p
-                                className="text-md mb-4"
-                                variants={itemVariants}
-                            >
-                                <Button variant="link">
-                                    <a
-                                        href="https://www.flaticon.com/free-icons/user"
-                                        title="user icons"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                    >
-                                        User icons created by Smashicons -
-                                        Flaticon
-                                    </a>
-                                </Button>
-                            </motion.p>
-                            <motion.h2
+
+                            <motion.h3
                                 className="text-xl font-semibold mt-6 mb-2"
                                 variants={itemVariants}
                             >
-                                4. Disclaimer
-                            </motion.h2>
+                                5. Use Restrictions
+                            </motion.h3>
+                            <motion.ul
+                                className="list-disc text-left pl-8 text-md mb-4 space-y-2"
+                                variants={itemVariants}
+                            >
+                                <li>
+                                    Scraping, automated data collection, or
+                                    reverse engineering of the platform is
+                                    strictly prohibited.
+                                </li>
+                                <li>
+                                    Users may not attempt to bypass security
+                                    measures or misuse the platform in any way.
+                                </li>
+                            </motion.ul>
+
+                            <motion.h3
+                                className="text-xl font-semibold mt-6 mb-2"
+                                variants={itemVariants}
+                            >
+                                6. Disclaimer of Liability
+                            </motion.h3>
                             <motion.p
                                 className="text-md mb-4"
                                 variants={itemVariants}
                             >
-                                This platform is experimental and may contain
-                                errors or incomplete features. It is provided{' '}
+                                This platform is provided on an “as is” basis,
+                                without warranties of any kind. The platform
+                                owner is not liable for errors, downtime, data
+                                loss, or damages arising from use of the
+                                service.
+                            </motion.p>
+
+                            <motion.h3
+                                className="text-xl font-semibold mt-6 mb-2"
+                                variants={itemVariants}
+                            >
+                                7. Governing Law
+                            </motion.h3>
+                            <motion.p
+                                className="text-md mb-4"
+                                variants={itemVariants}
+                            >
+                                These Terms are governed by the laws of{' '}
+                                <strong>Mexico</strong>, without regard to
+                                conflict of law principles.
+                            </motion.p>
+                            <motion.h3
+                                className="text-xl font-semibold mt-6 mb-2"
+                                variants={itemVariants}
+                            >
+                                8. Advertisements
+                            </motion.h3>
+                            <motion.p
+                                className="text-md mb-4"
+                                variants={itemVariants}
+                            >
+                                This platform may display third-party
+                                advertisements in the future. Any advertisements
+                                shown will be limited to content that is
+                                consistent with the mission of supporting{' '}
                                 <strong>
-                                    “as is” without warranties of any kind
+                                    academic, educational, and intellectual
+                                    growth
                                 </strong>
-                                . The creator assumes no liability for any
-                                damages or issues arising from its use.
-                            </motion.p>
-                            <motion.h2
-                                className="text-xl font-semibold mt-6 mb-2"
-                                variants={itemVariants}
-                            >
-                                5. Future Terms
-                            </motion.h2>
-                            <motion.p
-                                className="text-md"
-                                variants={itemVariants}
-                            >
-                                This is a temporary legal notice for the Alpha
-                                release. A complete{' '}
-                                <strong>Terms of Service</strong> and{' '}
-                                <strong>Privacy Policy</strong> will be
-                                published prior to public launch.
+                                .<br></br>
+                                <br></br>
+                                The platform owner will not knowingly permit
+                                advertisements that are misleading,
+                                exploitative, or contrary to these values.
+                                However, the platform does not endorse or assume
+                                responsibility for the accuracy or quality of
+                                third-party advertisements, products, or
+                                services. Any dealings between users and
+                                advertisers are solely between those parties.
                             </motion.p>
                         </motion.div>
                     </motion.div>
-                    <motion.div
-                        className="flex w-full justify-center"
-                        variants={itemVariants}
-                    ></motion.div>
                 </motion.div>
             </Card>
         </div>

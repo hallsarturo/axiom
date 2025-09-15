@@ -2,6 +2,7 @@
 
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 
 const containerVariants = {
@@ -37,6 +38,14 @@ export default function Legal() {
                             className="flex flex-col justify-center w-full max-w-2xl text-center mb-8 px-4"
                             variants={itemVariants}
                         >
+                            <div className="flex w-full justify-center mb-6">
+                                <Image
+                                    src="/axiom_purple.png"
+                                    width={75}
+                                    height={50}
+                                    alt="Axiom logo"
+                                />
+                            </div>
                             <motion.h2
                                 className="text-2xl font-bold mb-4 text-primary dark:text-foreground"
                                 variants={itemVariants}
@@ -47,9 +56,8 @@ export default function Legal() {
                                 className="text-md mb-4"
                                 variants={itemVariants}
                             >
-                                This platform (“the Social Network”) is
-                                currently in its{' '}
-                                <strong>Alpha testing phase</strong>. By
+                                This platform &#34;AXIOM&#34; is currently in
+                                its <strong>Alpha testing phase</strong>. By
                                 accessing and using this service, you
                                 acknowledge and agree to the following:
                             </motion.p>
