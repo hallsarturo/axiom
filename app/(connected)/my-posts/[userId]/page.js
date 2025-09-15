@@ -53,7 +53,7 @@ export default function MyPosts() {
         <div>
             <Card className="m-8">
                 <div className="mx-auto max-w-2xl px-4 py-6 sm:px-6 sm:py-10 lg:max-w-7xl lg:px-8">
-                    <h2 className="text-2xl font-bold tracking-tight text-primary dark:text-foreground">
+                    <h2 className="text-2xl font-bold tracking-tight text-primary dark:text-primary-foreground -mt-8">
                         <Link href={`/profile/${userId}`}>
                             {profile ? profile.username : ''}&apos;s{' '}
                             <span className="font-normal ml-2">Posts:</span>
