@@ -96,7 +96,7 @@ export function SignupForm({ className, ...props }) {
                             </Button>
                         </div>
                     </div>
-                    <Form {...form}>
+                    {/* <Form {...form}>
                         <form onSubmit={form.handleSubmit(onSubmit)}>
                             <div className="grid gap-6">
                                 <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
@@ -227,7 +227,7 @@ export function SignupForm({ className, ...props }) {
                                 </div>
                             </div>
                         </form>
-                    </Form>
+                    </Form> */}
                 </CardContent>
             </Card>
             <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
