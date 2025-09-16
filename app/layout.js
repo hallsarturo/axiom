@@ -46,23 +46,6 @@ export default function RootLayout({ children }) {
                                     <div>
                                         <Button
                                             asChild
-                                            className="text-white dark:text-primary-foreground text-xs px-2 py-1"
-                                            variant="link"
-                                            size="sm"
-                                        >
-                                            <Link
-                                                href="https://arturoproal.com"
-                                                className="text-xs"
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                            >
-                                                Arturo Proal Walls ©
-                                            </Link>
-                                        </Button>
-                                    </div>
-                                    <div>
-                                        <Button
-                                            asChild
                                             className="bg-transparent text-xs px-2 py-1"
                                             variant="outline"
                                             size="xs"
@@ -85,7 +68,52 @@ export default function RootLayout({ children }) {
                                             size="sm"
                                         >
                                             <Link
-                                                href="/legal"
+                                                href="/about"
+                                                className="text-xs"
+                                            >
+                                                About
+                                            </Link>
+                                        </Button>
+                                    </div>
+                                    <div>
+                                        <Button
+                                            asChild
+                                            className="text-white dark:text-primary-foreground text-xs px-2 py-1"
+                                            variant="link"
+                                            size="sm"
+                                        >
+                                            <Link
+                                                href="/privacy-policy"
+                                                className="text-xs"
+                                            >
+                                                Privacy Policy
+                                            </Link>
+                                        </Button>
+                                    </div>
+                                    <div>
+                                        <Button
+                                            asChild
+                                            className="text-white dark:text-primary-foreground text-xs px-2 py-1"
+                                            variant="link"
+                                            size="sm"
+                                        >
+                                            <Link
+                                                href="/terms-and-conditions"
+                                                className="text-xs"
+                                            >
+                                                Terms & Conditions
+                                            </Link>
+                                        </Button>
+                                    </div>
+                                    <div>
+                                        <Button
+                                            asChild
+                                            className="text-white dark:text-primary-foreground text-xs px-2 py-1"
+                                            variant="link"
+                                            size="sm"
+                                        >
+                                            <Link
+                                                href="/legal-notice"
                                                 className="text-xs"
                                             >
                                                 Legal notice
@@ -95,8 +123,8 @@ export default function RootLayout({ children }) {
                                 </div>
                             </div>
 
-                            {/* Logo section - now will appear below buttons */}
-                            <div className="flex justify-center items-center w-full mt-0 -mb-8">
+                            {/* Logo section - */}
+                            <div className="flex justify-center items-center w-full mt-0 -mb-3">
                                 <Link href="/" className="text-xs">
                                     <Image
                                         src="/axiom_logo_white.png"
@@ -106,6 +134,25 @@ export default function RootLayout({ children }) {
                                         className="my-0"
                                     />
                                 </Link>
+                            </div>
+                            {/* Copyright section - */}
+                            <div>
+                                <Button
+                                    asChild
+                                    className="text-white dark:text-primary-foreground text-xs px-2 py-1"
+                                    variant="link"
+                                    size="sm"
+                                >
+                                    <Link
+                                        href="https://arturoproal.com"
+                                        className="text-xs"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        © 2025 Arturo Proal Walls. All rights
+                                        reserved.
+                                    </Link>
+                                </Button>
                             </div>
                         </footer>
                     </ThemeProvider>

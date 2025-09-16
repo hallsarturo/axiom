@@ -20,7 +20,7 @@ const itemVariants = {
     visible: { opacity: 1, y: 0, transition: { duration: 0.7 } },
 };
 
-export default function Legal() {
+export default function LegalNotice() {
     return (
         <div className="flex w-full justify-center mt-8">
             <Card className="flex justify-center mx-auto md:max-w-3xl md:m-18">
@@ -52,6 +52,9 @@ export default function Legal() {
                             >
                                 Legal Notice – Alpha Version
                             </motion.h2>
+                            <motion.p className="text-xs italic mb-4">
+                                Last updated: 15 September 2025
+                            </motion.p>
                             <motion.p
                                 className="text-md mb-4"
                                 variants={itemVariants}

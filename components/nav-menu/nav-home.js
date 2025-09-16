@@ -121,7 +121,7 @@ export function NavigationMenuHome() {
                                             </NavigationMenuLink>
                                             <NavigationMenuLink asChild>
                                                 <Link
-                                                    href="/legal"
+                                                    href="/legal-notice"
                                                     className="flex-row items-center gap-2"
                                                 >
                                                     <CircleIcon />

@@ -52,7 +52,9 @@ export default function TermsAndConditions() {
                             >
                                 Terms &amp; Conditions (Alpha/MVP Version)
                             </motion.h2>
-
+                            <motion.p className="text-xs italic mb-4">
+                                Last updated: 15 September 2025
+                            </motion.p>
                             <motion.h3
                                 className="text-xl font-semibold mt-6 mb-2"
                                 variants={itemVariants}
