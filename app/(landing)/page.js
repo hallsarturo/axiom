@@ -66,7 +66,7 @@ export default function Home() {
             {/* Section 1 */}
             <section>
                 <motion.div
-                    className="flex flex-col mx-auto max-w-4xl py-32 sm:py-32 lg:py-48"
+                    className="flex flex-col mx-auto max-w-4xl py-32 sm:py-32 lg:pt-38"
                     variants={containerVariants}
                     initial="hidden"
                     animate="visible"
@@ -127,7 +127,7 @@ export default function Home() {
                         </motion.p>
                         <motion.div
                             variants={itemVariants}
-                            className="mt-15 flex flex-col gap-8 md:flex-row items-center justify-center gap-x-6"
+                            className="mt-20 flex flex-col gap-8 md:flex-row items-center justify-center gap-x-6"
                         >
                             <Button asChild className="">
                                 <Link href="/sign-up">Get started</Link>
@@ -145,7 +145,7 @@ export default function Home() {
                         </motion.div>
                         <motion.div
                             variants={itemVariants}
-                            className="mt-10 flex flex-col gap-8 md:flex-row items-center justify-center gap-x-6"
+                            className="mt-15 flex flex-col gap-8 md:flex-row items-center justify-center gap-x-6"
                         >
                             <div className="flex flex-col justify-center items-center text-sm gap-2">
                                 <p className="">scroll down</p>
