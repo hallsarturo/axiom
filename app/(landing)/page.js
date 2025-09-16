@@ -284,7 +284,7 @@ export default function Home() {
                                         <Image
                                             alt=""
                                             src="/about/4.png"
-                                            className="w-full max-lg:max-w-xs dark:hidden"
+                                            className="w-full  max-lg:max-w-xs dark:hidden"
                                             height={1000}
                                             width={500}
                                         />
