@@ -4,7 +4,11 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import Image from 'next/image';
 import { H2Marquee } from '@/components/hero-elements/h2-marquee';
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+import {
+    CloudArrowUpIcon,
+    LockClosedIcon,
+    ServerIcon,
+} from '@heroicons/react/20/solid';
 import { motion } from 'motion/react';
 
 const containerVariants = {
@@ -16,6 +20,27 @@ const containerVariants = {
         },
     },
 };
+
+const features = [
+    {
+        name: 'Push to deploy.',
+        description:
+            'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque, iste dolor cupiditate blanditiis ratione.',
+        icon: CloudArrowUpIcon,
+    },
+    {
+        name: 'SSL certificates.',
+        description:
+            'Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo.',
+        icon: LockClosedIcon,
+    },
+    {
+        name: 'Database backups.',
+        description:
+            'Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus. Et magna sit morbi lobortis.',
+        icon: ServerIcon,
+    },
+];
 
 const itemVariants = {
     hidden: { opacity: 0, y: 30 },
@@ -37,85 +62,148 @@ export default function Home() {
                     className="absolute left-[calc(50%-11rem)] aspect-1155/678 w-144.5 -translate-x-1/2 rotate-30 bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-30rem)] sm:w-288.75 dark:from-[#22223b] dark:to-[#4a4e69] dark:opacity-50"
                 />
             </div>
-            <motion.div
-                className="flex flex-col mx-auto max-w-4xl py-32 sm:py-32 lg:py-48"
-                variants={containerVariants}
-                initial="hidden"
-                animate="visible"
-            >
+            {/* Section 1 */}
+            <section>
                 <motion.div
-                    variants={itemVariants}
-                    className="flex flex-col w-full mt-3 mb-16 sm:my-6 md:mt-0"
+                    className="flex flex-col mx-auto max-w-4xl py-32 sm:py-32 lg:py-48"
+                    variants={containerVariants}
+                    initial="hidden"
+                    animate="visible"
                 >
-                    <H2Marquee />
-                </motion.div>
-                <motion.div
-                    variants={itemVariants}
-                    className="hidden sm:mb-8 sm:flex sm:justify-center"
-                >
-                    <div className="relative rounded-full px-3 py-1 text-sm/6 text-muted-foreground ring-1 ring-border hover:ring-ring">
-                        Announcing our next round of funding.{' '}
-                        <a href="#" className="font-semibold text-primary">
-                            <span
-                                aria-hidden="true"
-                                className="absolute inset-0"
-                            />
-                            Read more <span aria-hidden="true">&rarr;</span>
-                        </a>
-                    </div>
-                </motion.div>
-                <motion.div
-                    variants={itemVariants}
-                    className="flex flex-col text-center"
-                >
-                    <div className="">
-                        <motion.h1
-                            variants={itemVariants}
-                            className="text-8xl sm:text-9xl md:text-[11rem] font-semibold tracking-tight text-balance text-foreground"
-                        >
-                            <Image
-                                src="/axiom_purple.png"
-                                width={600}
-                                height={400}
-                                alt="AXIOM logo"
-                                className="mx-auto"
-                                style={{ objectFit: 'contain' }}
-                                priority
-                            />
-                        </motion.h1>
-                        <motion.p
-                            variants={itemVariants}
-                            className="ml-60 mt-[-25px] sm:mt-[-40px] sm:ml-80 md:ml-130"
-                        >
-                            alpha v0.1.0
-                        </motion.p>
-                    </div>
-                    <motion.p
-                        variants={itemVariants}
-                        className="mt-13 text-lg font-medium text-pretty text-muted-foreground sm:text-xl/8"
-                    >
-                        Knowledge-focused social network for serious
-                        intellectuals
-                    </motion.p>
                     <motion.div
                         variants={itemVariants}
-                        className="mt-20 flex flex-col gap-8 md:flex-row items-center justify-center gap-x-6"
+                        className="flex flex-col w-full mt-3 mb-16 sm:my-6 md:mt-0"
                     >
-                        <Button asChild className="">
-                            <Link href="/sign-up">Get started</Link>
-                        </Button>
-                        <Button
-                            asChild
-                            variant="link"
-                            className="text-sm/6 font-semibold text-foreground"
+                        <H2Marquee />
+                    </motion.div>
+                    <motion.div
+                        variants={itemVariants}
+                        className="hidden sm:mb-8 sm:flex sm:justify-center"
+                    >
+                        <div className="relative rounded-full px-3 py-1 text-sm/6 text-muted-foreground ring-1 ring-border hover:ring-ring">
+                            Announcing our next round of funding.{' '}
+                            <a href="#" className="font-semibold text-primary">
+                                <span
+                                    aria-hidden="true"
+                                    className="absolute inset-0"
+                                />
+                                Read more <span aria-hidden="true">&rarr;</span>
+                            </a>
+                        </div>
+                    </motion.div>
+                    <motion.div
+                        variants={itemVariants}
+                        className="flex flex-col text-center"
+                    >
+                        <div className="">
+                            <motion.h1
+                                variants={itemVariants}
+                                className="text-8xl sm:text-9xl md:text-[11rem] font-semibold tracking-tight text-balance text-foreground"
+                            >
+                                <Image
+                                    src="/axiom_purple.png"
+                                    width={600}
+                                    height={400}
+                                    alt="AXIOM logo"
+                                    className="mx-auto"
+                                    style={{ objectFit: 'contain' }}
+                                    priority
+                                />
+                            </motion.h1>
+                            <motion.p
+                                variants={itemVariants}
+                                className="ml-60 mt-[-25px] sm:mt-[-40px] sm:ml-80 md:ml-130"
+                            >
+                                alpha v0.1.0
+                            </motion.p>
+                        </div>
+                        <motion.p
+                            variants={itemVariants}
+                            className="mt-13 text-lg font-medium text-pretty text-muted-foreground sm:text-xl/8"
                         >
-                            <Link href="/feed">
-                                take a look <span aria-hidden="true">→</span>
-                            </Link>
-                        </Button>
+                            Knowledge-focused social network for serious
+                            intellectuals
+                        </motion.p>
+                        <motion.div
+                            variants={itemVariants}
+                            className="mt-20 flex flex-col gap-8 md:flex-row items-center justify-center gap-x-6"
+                        >
+                            <Button asChild className="">
+                                <Link href="/sign-up">Get started</Link>
+                            </Button>
+                            <Button
+                                asChild
+                                variant="link"
+                                className="text-sm/6 font-semibold text-foreground"
+                            >
+                                <Link href="/feed">
+                                    take a look{' '}
+                                    <span aria-hidden="true">→</span>
+                                </Link>
+                            </Button>
+                        </motion.div>
                     </motion.div>
                 </motion.div>
-            </motion.div>
+            </section>
+            {/* Section 2 */}
+            <section className="min-h-screen">
+                <div className="overflow-hidden  py-24 sm:py-32 dark:bg-gray-900">
+                    <div className="mx-auto max-w-7xl px-6 lg:px-8">
+                        <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 sm:gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-2">
+                            <div className="lg:pt-4 lg:pr-8">
+                                <div className="lg:max-w-lg">
+                                    <h2 className="text-base/7 font-semibold text-indigo-600 dark:text-indigo-400">
+                                        Deploy faster
+                                    </h2>
+                                    <p className="mt-2 text-4xl font-semibold tracking-tight text-pretty text-primary sm:text-5xl dark:text-primary-foreground">
+                                        A better workflow
+                                    </p>
+                                    <p className="mt-6 text-lg/8 text-gray-700 dark:text-gray-300">
+                                        Lorem ipsum, dolor sit amet consectetur
+                                        adipisicing elit. Maiores impedit
+                                        perferendis suscipit eaque, iste dolor
+                                        cupiditate blanditiis ratione.
+                                    </p>
+                                    <dl className="mt-10 max-w-xl space-y-8 text-base/7 text-gray-600 lg:max-w-none dark:text-gray-400">
+                                        {features.map((feature) => (
+                                            <div
+                                                key={feature.name}
+                                                className="relative pl-9"
+                                            >
+                                                <dt className="inline font-semibold text-gray-900 dark:text-white">
+                                                    <feature.icon
+                                                        aria-hidden="true"
+                                                        className="absolute top-1 left-1 size-5 text-indigo-600 dark:text-indigo-400"
+                                                    />
+                                                    {feature.name}
+                                                </dt>{' '}
+                                                <dd className="inline">
+                                                    {feature.description}
+                                                </dd>
+                                            </div>
+                                        ))}
+                                    </dl>
+                                </div>
+                            </div>
+                            <Image
+                                alt="Product screenshot"
+                                src="/about/2.png"
+                                width={2432}
+                                height={1442}
+                                className="w-3xl max-w-none rounded-xl shadow-xl ring-1 ring-gray-400/10 not-dark:hidden sm:w-228 md:-ml-4 lg:-ml-0 dark:ring-white/10"
+                            />
+                            <Image
+                                alt="Product screenshot"
+                                src="/about/2.png"
+                                width={2432}
+                                height={1442}
+                                className="w-3xl max-w-none rounded-xl shadow-xl ring-1 ring-gray-400/10 sm:w-228 md:-ml-4 lg:-ml-0 dark:hidden dark:ring-white/10"
+                            />
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             <div
                 aria-hidden="true"
                 className="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]"
