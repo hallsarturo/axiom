@@ -103,11 +103,11 @@ export function NavigationMenuHome() {
                                             </NavigationMenuLink>
                                             <NavigationMenuLink asChild>
                                                 <Link
-                                                    href="/legal"
+                                                    href="/privacy-policy"
                                                     className="flex-row items-center gap-2"
                                                 >
                                                     <CircleIcon />
-                                                    Legal notice
+                                                    Privacy Policy
                                                 </Link>
                                             </NavigationMenuLink>
                                             <NavigationMenuLink asChild>
@@ -117,6 +117,15 @@ export function NavigationMenuHome() {
                                                 >
                                                     <CircleIcon />
                                                     Terms & Conditions
+                                                </Link>
+                                            </NavigationMenuLink>
+                                            <NavigationMenuLink asChild>
+                                                <Link
+                                                    href="/legal"
+                                                    className="flex-row items-center gap-2"
+                                                >
+                                                    <CircleIcon />
+                                                    Legal notice
                                                 </Link>
                                             </NavigationMenuLink>
                                         </li>
