@@ -4,7 +4,7 @@ import * as React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { CircleCheckIcon, CircleHelpIcon, CircleIcon } from 'lucide-react';
+import { ChevronRight, CircleIcon } from 'lucide-react';
 import {
     NavigationMenu,
     NavigationMenuContent,
@@ -97,7 +97,7 @@ export function NavigationMenuHome() {
                                                     href="/about"
                                                     className="flex-row items-center gap-2"
                                                 >
-                                                    <CircleIcon />
+                                                    <ChevronRight />
                                                     About
                                                 </Link>
                                             </NavigationMenuLink>
@@ -106,7 +106,7 @@ export function NavigationMenuHome() {
                                                     href="/privacy-policy"
                                                     className="flex-row items-center gap-2"
                                                 >
-                                                    <CircleIcon />
+                                                    <ChevronRight />
                                                     Privacy Policy
                                                 </Link>
                                             </NavigationMenuLink>
@@ -115,7 +115,7 @@ export function NavigationMenuHome() {
                                                     href="terms-and-conditions"
                                                     className="flex-row items-center gap-2"
                                                 >
-                                                    <CircleIcon />
+                                                    <ChevronRight />
                                                     Terms & Conditions
                                                 </Link>
                                             </NavigationMenuLink>
@@ -124,7 +124,7 @@ export function NavigationMenuHome() {
                                                     href="/legal-notice"
                                                     className="flex-row items-center gap-2"
                                                 >
-                                                    <CircleIcon />
+                                                    <ChevronRight />
                                                     Legal notice
                                                 </Link>
                                             </NavigationMenuLink>
