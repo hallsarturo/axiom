@@ -125,17 +125,20 @@ export default function RootLayout({ children }) {
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
-                                    <img
-                                        src="https://cdn.buymeacoffee.com/buttons/v2/default-violet.png"
+                                    <Image
+                                        src="https://cdn.buymeacoffee.com/buttons/v2/default-white.png"
                                         alt="Buy Me A Coffee"
                                         className="rounded-lg"
-                                        style={{
-                                            height: '30px',
-                                            width: '103px',
-                                        }}
+                                        width={103}
+                                        height={30}
+                                        // style={{
+                                        //     height: '30px',
+                                        //     width: '103px',
+                                        // }}
                                     />
                                 </a>
                             </div>
+
                             {/* Copyright section - */}
                             <div>
                                 <Button
