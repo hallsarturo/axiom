@@ -9,6 +9,7 @@ import {
     LockClosedIcon,
     ServerIcon,
 } from '@heroicons/react/20/solid';
+import { ChevronsDown } from 'lucide-react';
 import { motion } from 'motion/react';
 
 const containerVariants = {
@@ -80,7 +81,7 @@ export default function Home() {
                         variants={itemVariants}
                         className="hidden sm:mb-8 sm:flex sm:justify-center"
                     >
-                        <div className="relative rounded-full px-3 py-1 text-sm/6 text-muted-foreground ring-1 ring-border hover:ring-ring">
+                        {/* <div className="relative rounded-full px-3 py-1 text-sm/6 text-muted-foreground ring-1 ring-border hover:ring-ring">
                             Announcing our next round of funding.{' '}
                             <a href="#" className="font-semibold text-primary">
                                 <span
@@ -89,34 +90,34 @@ export default function Home() {
                                 />
                                 Read more <span aria-hidden="true">&rarr;</span>
                             </a>
-                        </div>
+                        </div> */}
+                    </motion.div>
+                    <motion.div className="">
+                        <motion.h1
+                            variants={itemVariants}
+                            className="text-8xl sm:text-9xl md:text-[11rem] font-semibold tracking-tight text-balance text-foreground"
+                        >
+                            <Image
+                                src="/axiom_purple.png"
+                                width={600}
+                                height={400}
+                                alt="AXIOM logo"
+                                className="mx-auto"
+                                style={{ objectFit: 'contain' }}
+                                priority
+                            />
+                        </motion.h1>
+                        <motion.p
+                            variants={itemVariants}
+                            className="ml-60 mt-[-25px] sm:mt-[-40px] sm:ml-80 md:ml-130"
+                        >
+                            alpha v0.1.0
+                        </motion.p>
                     </motion.div>
                     <motion.div
                         variants={itemVariants}
                         className="flex flex-col text-center"
                     >
-                        <div className="">
-                            <motion.h1
-                                variants={itemVariants}
-                                className="text-8xl sm:text-9xl md:text-[11rem] font-semibold tracking-tight text-balance text-foreground"
-                            >
-                                <Image
-                                    src="/axiom_purple.png"
-                                    width={600}
-                                    height={400}
-                                    alt="AXIOM logo"
-                                    className="mx-auto"
-                                    style={{ objectFit: 'contain' }}
-                                    priority
-                                />
-                            </motion.h1>
-                            <motion.p
-                                variants={itemVariants}
-                                className="ml-60 mt-[-25px] sm:mt-[-40px] sm:ml-80 md:ml-130"
-                            >
-                                alpha v0.1.0
-                            </motion.p>
-                        </div>
                         <motion.p
                             variants={itemVariants}
                             className="mt-13 text-lg font-medium text-pretty text-muted-foreground sm:text-xl/8"
@@ -126,7 +127,7 @@ export default function Home() {
                         </motion.p>
                         <motion.div
                             variants={itemVariants}
-                            className="mt-20 flex flex-col gap-8 md:flex-row items-center justify-center gap-x-6"
+                            className="mt-15 flex flex-col gap-8 md:flex-row items-center justify-center gap-x-6"
                         >
                             <Button asChild className="">
                                 <Link href="/sign-up">Get started</Link>
@@ -141,6 +142,28 @@ export default function Home() {
                                     <span aria-hidden="true">→</span>
                                 </Link>
                             </Button>
+                        </motion.div>
+                        <motion.div
+                            variants={itemVariants}
+                            className="mt-10 flex flex-col gap-8 md:flex-row items-center justify-center gap-x-6"
+                        >
+                            <div className="flex flex-col justify-center items-center text-sm gap-2">
+                                <p className="">scroll down</p>
+                                <motion.div
+                                    animate={{
+                                        y: [0, 12, 0],
+                                        scale: [1, 1.2, 1],
+                                    }}
+                                    transition={{
+                                        duration: 1.5,
+                                        repeat: Infinity,
+                                        repeatType: 'loop',
+                                        ease: 'easeInOut',
+                                    }}
+                                >
+                                    <ChevronsDown size="20" />
+                                </motion.div>
+                            </div>
                         </motion.div>
                     </motion.div>
                 </motion.div>
@@ -332,7 +355,6 @@ export default function Home() {
                                                     </div>
                                                 </div>
                                             </div>
-                                           
                                         </div>
                                     </div>
                                 </div>
