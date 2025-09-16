@@ -46,23 +46,6 @@ export default function RootLayout({ children }) {
                                     <div>
                                         <Button
                                             asChild
-                                            className="bg-transparent text-xs px-2 py-1"
-                                            variant="outline"
-                                            size="xs"
-                                        >
-                                            <Link
-                                                href="/"
-                                                className="text-xs"
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                            >
-                                                Buy me a coffee
-                                            </Link>
-                                        </Button>
-                                    </div>
-                                    <div>
-                                        <Button
-                                            asChild
                                             className="text-white dark:text-primary-foreground text-xs px-2 py-1"
                                             variant="link"
                                             size="sm"
@@ -134,6 +117,24 @@ export default function RootLayout({ children }) {
                                         className="my-0"
                                     />
                                 </Link>
+                            </div>
+                            {/* Buy me a coffee section - */}
+                            <div>
+                                <a
+                                    href="https://www.buymeacoffee.com/arturoproal"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    <img
+                                        src="https://cdn.buymeacoffee.com/buttons/v2/default-violet.png"
+                                        alt="Buy Me A Coffee"
+                                        className="rounded-lg"
+                                        style={{
+                                            height: '30px',
+                                            width: '103px',
+                                        }}
+                                    />
+                                </a>
                             </div>
                             {/* Copyright section - */}
                             <div>
