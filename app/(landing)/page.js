@@ -101,15 +101,17 @@ export default function Home() {
                         variants={itemVariants}
                         className="mt-20 flex flex-col gap-8 md:flex-row items-center justify-center gap-x-6"
                     >
-                        <Button href="#" className="">
-                            Get started
+                        <Button asChild className="">
+                            <Link href="/sign-up">Get started</Link>
                         </Button>
                         <Button
+                            asChild
                             variant="link"
-                            href="#"
                             className="text-sm/6 font-semibold text-foreground"
                         >
-                            Learn more <span aria-hidden="true">→</span>
+                            <Link href="/feed">
+                                take a look <span aria-hidden="true">→</span>
+                            </Link>
                         </Button>
                     </motion.div>
                 </motion.div>
