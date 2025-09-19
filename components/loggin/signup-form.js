@@ -44,7 +44,7 @@ export function SignupForm({ className, ...props }) {
     });
 
     async function onSubmit(values) {
-        console.log(values);
+        //console.log(values);
 
         const result = await createUser(values);
 
