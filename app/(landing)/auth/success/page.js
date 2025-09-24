@@ -1,9 +1,10 @@
 'use client';
 
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, Suspense } from 'react';
 
-export default function AuthSuccess() {
+// Create a client component that uses useSearchParams
+function AuthSuccessContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
 
@@ -12,8 +13,17 @@ export default function AuthSuccess() {
         if (token && process.env.NODE_ENV === 'development') {
             localStorage.setItem('token', token);
         }
-        window.location.replace('/feed')
+        window.location.replace('/feed');
     }, [router, searchParams]);
 
     return null;
+}
+
+// Wrap the component that uses useSearchParams in Suspense
+export default function AuthSuccess() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <AuthSuccessContent />
+        </Suspense>
+    );
 }
