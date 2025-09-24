@@ -1,4 +1,5 @@
 import { Analytics } from '@vercel/analytics/next';
+import { SpeedInsights } from "@vercel/speed-insights/next"
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
@@ -41,6 +42,7 @@ export default function RootLayout({ children }) {
                         <main className="flex-1">
                             {children}
                             <Analytics />
+                            <SpeedInsights />
                         </main>
 
                         <footer className="relative z-10 flex flex-col items-center justify-center w-full gap-4 p-4 sm:p-8 text-white bg-gradient-to-b from-violet-600 to-violet-900 dark:from-zinc-900 dark:to-zinc-950 text-xs">
