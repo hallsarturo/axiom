@@ -46,7 +46,25 @@ export function LoginForm({ className, ...props }) {
             if (process.env.NODE_ENV === 'development' && result.data.token) {
                 localStorage.setItem('token', result.data.token);
             }
-            window.location.replace('/feed');
+
+            // Verify auth was successful before redirecting
+            try {
+                const verifyResult = await fetch(
+                    `${process.env.NEXT_PUBLIC_API_URL}/api/verify-auth`,
+                    {
+                        method: 'GET',
+                        credentials: 'include', // Important!
+                    }
+                );
+
+                if (verifyResult.ok) {
+                    window.location.replace('/feed');
+                } else {
+                    setMessage('Authentication failed. Please try again.');
+                }
+            } catch (err) {
+                setMessage('Network error during authentication verification');
+            }
         } else {
             setMessage(`Loggin failed: ${result.error}`);
         }
@@ -83,7 +101,7 @@ export function LoginForm({ className, ...props }) {
                                 }}
                             >
                                 <Image
-                                    src="/google/signin-assets/Web (mobile + desktop)/svg/neutral/web_neutral_rd_na.svg"
+                                    src="/google/web_neutral_rd_na.svg"
                                     width={24}
                                     height={24}
                                     alt="Google Logo"
