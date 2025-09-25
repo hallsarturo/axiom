@@ -10,6 +10,12 @@ const nextConfig = {
             },
             {
                 protocol: 'https',
+                hostname: '.axiomlab.space',
+                port: '4010',
+                pathname: '/uploads/**',
+            },
+            {
+                protocol: 'https',
                 hostname: 'picsum.photos',
                 pathname: '/**',
             },
