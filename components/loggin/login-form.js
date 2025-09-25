@@ -25,7 +25,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { loginFormSchema } from '@/lib/schemas/auth';
-import { loginUser } from '@/lib/actions/actions';
 
 export function LoginForm({ className, ...props }) {
     const router = useRouter();
@@ -39,25 +38,43 @@ export function LoginForm({ className, ...props }) {
     });
 
     async function onSubmit(values) {
-        const result = await loginUser(values);
+        try {
+            const res = await fetch(
+                `${process.env.NEXT_PUBLIC_API_URL}/api/login`,
+                {
+                    method: 'POST',
+                    credentials: 'include', // Critical for cookies
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(values),
+                }
+            );
 
-        if (result.success) {
-            // DEV: Save token in localStorage
-            if (process.env.NODE_ENV === 'development' && result.data.token) {
-                localStorage.setItem('token', result.data.token);
+            const data = await res.json();
+
+            if (!res.ok) {
+                setMessage(`Login failed: ${data.message || 'Unknown error'}`);
+                return;
             }
 
-            // Verify auth was successful before redirecting
+            // For development environment only
+            if (process.env.NODE_ENV === 'development' && data.token) {
+                localStorage.setItem('token', data.token);
+            }
+
+            // Verify authentication before redirecting
             try {
                 const verifyResult = await fetch(
                     `${process.env.NEXT_PUBLIC_API_URL}/api/verify-auth`,
                     {
                         method: 'GET',
-                        credentials: 'include', // Important!
+                        credentials: 'include',
                     }
                 );
 
                 if (verifyResult.ok) {
+                    // Successful login, redirect to feed
                     window.location.replace('/feed');
                 } else {
                     setMessage('Authentication failed. Please try again.');
@@ -65,8 +82,9 @@ export function LoginForm({ className, ...props }) {
             } catch (err) {
                 setMessage('Network error during authentication verification');
             }
-        } else {
-            setMessage(`Loggin failed: ${result.error}`);
+        } catch (err) {
+            console.error('Login error:', err);
+            setMessage('Network error. Please try again later.');
         }
     }
 
