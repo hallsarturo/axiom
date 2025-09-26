@@ -90,8 +90,13 @@ export function NavigationConnected() {
     const handleLogout = async () => {
         const result = await logoutUser();
         if (result.success) {
-            localStorage.removeItem('token');
-            // router.push('/sign-in');
+            // Clear localStorage token (for development)
+            if (typeof window !== 'undefined') {
+                localStorage.removeItem('token');
+            }
+
+            // Force page reload to clear any cached state
+            window.location.href = '/sign-in';
         }
     };
 
