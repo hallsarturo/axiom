@@ -24,7 +24,7 @@ import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { createUser } from '@/lib/actions/actions';
+import { createUser } from '@/lib/actions/client-actions';
 import { useRouter } from 'next/navigation';
 import { signupFormSchema } from '@/lib/schemas/auth';
 

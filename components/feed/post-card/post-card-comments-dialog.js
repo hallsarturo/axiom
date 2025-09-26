@@ -33,7 +33,7 @@ import { fetchPost } from '@/lib/utils/post-card';
 import { useCommentsStore } from '@/lib/state/commentsStore';
 import { useState, useEffect } from 'react';
 import { useUser } from '@/components/context/UserProfileContext';
-import { putReaction, putBookmarkByPostId } from '@/lib/actions/actions';
+import { putReaction, putBookmarkByPostId } from '@/lib/actions/client-actions';
 import { toast } from 'sonner';
 import { useReactionsStore } from '@/lib/state/reactionsStore';
 import { useBookmarksStore } from '@/lib/state/bookmarksStore';

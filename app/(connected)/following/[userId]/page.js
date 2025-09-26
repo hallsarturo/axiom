@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { getFollowingsById, getUserProfileById } from '@/lib/actions/actions';
+import { getFollowingsById, getUserProfileById } from '@/lib/actions/client-actions';
 import { timeAgo } from '@/lib/utils/date';
 import {
     Pagination,

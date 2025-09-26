@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useParams, useSearchParams } from 'next/navigation';
-import { fetchSinglePost } from '@/lib/actions/actions';
+import { fetchSinglePost } from '@/lib/actions/client-actions';
 import { UserPost } from '@/components/feed/user-post';
 import { PaperPost } from '@/components/feed/paper-post';
 import { SkeletonCard } from '@/components/skeletons/skeletonCard';

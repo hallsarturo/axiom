@@ -18,7 +18,7 @@ import {
 } from '@/components/ui/popover';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
-import { getSearchResults } from '@/lib/actions/actions';
+import { getSearchResults } from '@/lib/actions/client-actions';
 import { useState, useEffect, Fragment } from 'react';
 
 export function SearchBar() {
