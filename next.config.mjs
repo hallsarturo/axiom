@@ -9,6 +9,20 @@ const nextConfig = {
                 hostname: 'api.axiomlab.space',
                 pathname: '/uploads/**',
             },
+            {
+                protocol: 'https',
+                hostname: 'cdn.buymeacoffee.com', // Added pattern for Buy Me A Coffee
+                pathname: '/buttons/**',
+            },
+            {
+                protocol: 'https',
+                hostname: 'picsum.photos',
+                pathname: '/**',
+            },
+            {
+                protocol: 'https',
+                hostname: 'tailwindcss.com',
+            },
         ],
     },
     // Add security headers
