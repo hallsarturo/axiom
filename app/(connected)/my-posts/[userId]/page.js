@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { getPostsById, getUserProfileById } from '@/lib/actions/actions';
+import { getPostsById, getUserProfileById } from '@/lib/actions/client-actions';
 import { normalizeImageUrl } from '@/lib/utils/image';
 import { timeAgo } from '@/lib/utils/date';
 import {

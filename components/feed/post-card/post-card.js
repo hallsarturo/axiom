@@ -16,7 +16,7 @@ import { useCommentsStore } from '@/lib/state/commentsStore';
 import { useUser } from '@/components/context/UserProfileContext';
 import { useEffect, useState } from 'react';
 import useSWR from 'swr';
-import { putReaction, deleteUserPost } from '@/lib/actions/actions';
+import { putReaction, deleteUserPost } from '@/lib/actions/client-actions';
 import { normalizeImageUrl } from '@/lib/utils/image';
 import {
     getAvatarSrc,

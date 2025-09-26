@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/form';
 import { useRouter } from 'next/navigation';
 import { signupVerifySchema } from '@/lib/schemas/auth';
-import { sendOtpCode } from '@/lib/actions/actions';
+import { sendOtpCode } from '@/lib/actions/client-actions';
 
 export function OtpForm() {
     const router = useRouter();

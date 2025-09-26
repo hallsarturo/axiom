@@ -25,6 +25,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { loginFormSchema } from '@/lib/schemas/auth';
+import { AuthDebugger } from '@/lib/state/auth-debugger';
 
 export function LoginForm({ className, ...props }) {
     const router = useRouter();
@@ -94,7 +95,7 @@ export function LoginForm({ className, ...props }) {
                 <CardHeader className="text-center">
                     <CardTitle className="text-xl">Sign in</CardTitle>
                     <CardDescription>
-                        Login with your ORCID or Google account
+                        <AuthDebugger />
                     </CardDescription>
                 </CardHeader>
                 <CardContent>

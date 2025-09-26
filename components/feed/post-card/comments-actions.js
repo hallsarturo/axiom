@@ -21,7 +21,7 @@ import {
     AlertDialogAction,
 } from '@/components/ui/alert-dialog';
 import { toast } from 'sonner';
-import { deleteComment } from '@/lib/actions/actions';
+import { deleteComment } from '@/lib/actions/client-actions';
 import { useCommentsStore } from '@/lib/state/commentsStore';
 import { useState } from 'react';
 

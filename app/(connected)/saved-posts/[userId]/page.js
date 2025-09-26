@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { getBookmarksByUserId } from '@/lib/actions/actions';
+import { getBookmarksByUserId } from '@/lib/actions/client-actions';
 import { normalizeImageUrl } from '@/lib/utils/image';
 import { timeAgo } from '@/lib/utils/date';
 import {

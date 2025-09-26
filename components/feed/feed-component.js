@@ -8,7 +8,7 @@ import {
     getPaperPosts,
     getUserPosts,
     getNewsPosts,
-} from '@/lib/actions/actions';
+} from '@/lib/actions/client-actions';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import useSWR from 'swr';
 import InfiniteScroll from 'react-infinite-scroll-component';

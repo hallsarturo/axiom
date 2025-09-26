@@ -16,7 +16,7 @@ import {
     getFollowingsById,
     putFollower,
     getPostsById,
-} from '@/lib/actions/actions';
+} from '@/lib/actions/client-actions';
 import { AvatarList } from '@/components/profile/avatar-list';
 import { timeAgo } from '@/lib/utils/date';
 import { normalizeImageUrl } from '@/lib/utils/image';

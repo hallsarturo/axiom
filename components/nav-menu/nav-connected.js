@@ -41,7 +41,7 @@ import { ModeToggle } from '@/components/ui/themes/mode-toggle';
 import { SearchBar } from '@/components/nav-menu/search-bar';
 import { NotificationDropdown } from '@/components/notifications/notification-dropdown';
 import { useRouter, usePathname } from 'next/navigation';
-import { logoutUser } from '@/lib/actions/actions';
+import { logoutUser } from '@/lib/actions/client-actions';
 import { useUser } from '@/components/context/UserProfileContext';
 import { useState } from 'react';
 import { useParams } from 'next/navigation';
@@ -91,7 +91,7 @@ export function NavigationConnected() {
         const result = await logoutUser();
         if (result.success) {
             localStorage.removeItem('token');
-            router.push('/sign-in');
+            // router.push('/sign-in');
         }
     };
 

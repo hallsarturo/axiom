@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext, useState, useEffect } from 'react';
-import { getUserProfile } from '@/lib/actions/actions';
+import { getUserProfile } from '@/lib/actions/client-actions';
 
 const UserContext = createContext();
 
@@ -12,11 +12,14 @@ export function UserProvider({ children }) {
         let token = null;
         if (process.env.NODE_ENV === 'development') {
             token = localStorage.getItem('token');
-        } else {
-            token = null;
         }
-        const userData = await getUserProfile(token);
-        setUser(userData?.user || null);
+        try {
+            const userData = await getUserProfile(token || null);
+            setUser(userData?.user || null);
+        } catch (err) {
+            console.error('Error fetching user:', err);
+            setUser(null);
+        }
     }
 
     useEffect(() => {
