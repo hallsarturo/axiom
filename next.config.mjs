@@ -10,9 +10,14 @@ const nextConfig = {
             },
             {
                 protocol: 'https',
-                hostname: '.axiomlab.space',
-                port: '4010',
+                hostname: 'api.axiomlab.space',
+                port: '',
                 pathname: '/uploads/**',
+            },
+            {
+                protocol: 'https',
+                hostname: 'axiomlab.space',
+                pathname: '/**',
             },
             {
                 protocol: 'https',
