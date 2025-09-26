@@ -36,7 +36,7 @@ import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { configFormSchema } from '@/lib/schemas/dashboard-config';
-import { updateUserConfig } from '@/lib/actions/actions';
+import { updateUserConfig } from '@/lib/actions/client-actions';
 import { SkeletonCard } from '@/components/skeletons/skeletonCard';
 import { genInitials } from '@/lib/utils/strings';
 
