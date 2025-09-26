@@ -65,24 +65,25 @@ export function LoginForm({ className, ...props }) {
             }
 
             // Verify authentication before redirecting
-            try {
-                const verifyResult = await fetch(
-                    `${process.env.NEXT_PUBLIC_API_URL}/api/verify-auth`,
-                    {
-                        method: 'GET',
-                        credentials: 'include',
-                    }
-                );
+            // try {
+            //     const verifyResult = await fetch(
+            //         `${process.env.NEXT_PUBLIC_API_URL}/api/verify-auth`,
+            //         {
+            //             method: 'GET',
+            //             credentials: 'include',
+            //         }
+            //     );
 
-                if (verifyResult.ok) {
-                    // Successful login, redirect to feed
-                    window.location.replace('/feed');
-                } else {
-                    setMessage('Authentication failed. Please try again.');
-                }
-            } catch (err) {
-                setMessage('Network error during authentication verification');
-            }
+            //     if (verifyResult.ok) {
+            //         // Successful login, redirect to feed
+            //         window.location.replace('/feed');
+            //     } else {
+            //         setMessage('Authentication failed. Please try again.');
+            //     }
+            // } catch (err) {
+            //     setMessage('Network error during authentication verification');
+            // }
+            window.location.replace('/feed');
         } catch (err) {
             console.error('Login error:', err);
             setMessage('Network error. Please try again later.');
