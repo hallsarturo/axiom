@@ -217,6 +217,7 @@ export function FeedComponent() {
     return (
         <div className="flex flex-col items-center justify-center">
             <div className="flex w-full justify-center">
+                {console.log('API URL:', process.env.NEXT_PUBLIC_API_URL)}
                 <PublishPost
                     mutateFeed={handlePostPublished}
                     onDialogOpenChange={handleDialogOpen}

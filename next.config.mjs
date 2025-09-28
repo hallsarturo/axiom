@@ -11,6 +11,12 @@ const nextConfig = {
             },
             {
                 protocol: 'https',
+                hostname: 'localhost',
+                port: '4010',
+                pathname: '/uploads/**',
+            },
+            {
+                protocol: 'https',
                 hostname: 'cdn.buymeacoffee.com', // Added pattern for Buy Me A Coffee
                 pathname: '/buttons/**',
             },
