@@ -5,9 +5,9 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { H2Marquee } from '@/components/hero-elements/h2-marquee';
 import {
-    CloudArrowUpIcon,
-    LockClosedIcon,
-    ServerIcon,
+    ClipboardDocumentCheckIcon,
+    AdjustmentsHorizontalIcon,
+    FunnelIcon,
 } from '@heroicons/react/20/solid';
 import { ChevronsDown } from 'lucide-react';
 import { motion } from 'motion/react';
@@ -27,19 +27,19 @@ const features = [
         name: 'Pick your feed sources',
         description:
             'Follow the authors, journals, and media you trust. Your feed starts with what you choose — not what an algorithm forces on you.',
-        icon: CloudArrowUpIcon,
+        icon: ClipboardDocumentCheckIcon,
     },
     {
         name: 'configure your algorithm',
         description:
             'Tune your feed to your curiosity. Prioritize papers, authors, or topics. Control how information flows, instead of being controlled by it.',
-        icon: LockClosedIcon,
+        icon: AdjustmentsHorizontalIcon,
     },
     {
         name: 'filter your feed',
         description:
             'Cut through the noise. Apply filters to focus on quality discussions, relevant research, and expert insights — not clickbait.',
-        icon: ServerIcon,
+        icon: FunnelIcon,
     },
 ];
 
@@ -95,24 +95,23 @@ export default function Home() {
                     <motion.div className="">
                         <motion.h1
                             variants={itemVariants}
-                            className="text-8xl sm:text-9xl md:text-[11rem] font-semibold tracking-tight text-balance text-foreground"
+                            className="flex justify-center"
                         >
-                            <Image
-                                src="/axiom_purple.png"
-                                width={600}
-                                height={400}
-                                alt="AXIOM logo"
-                                className="mx-auto"
-                                style={{ objectFit: 'contain' }}
-                                priority
-                            />
+                            <div className="relative">
+                                <Image
+                                    src="/axiom_purple.png"
+                                    width={600}
+                                    height={400}
+                                    alt="AXIOM logo"
+                                    className=""
+                                    style={{ objectFit: 'contain' }}
+                                    priority
+                                />
+                                <p className="absolute right-0 bottom-5 text-sm">
+                                    {process.env.NEXT_PUBLIC_APP_VERSION}
+                                </p>
+                            </div>
                         </motion.h1>
-                        <motion.p
-                            variants={itemVariants}
-                            className="ml-60 mt-[-25px] sm:mt-[-40px] sm:ml-80 md:ml-130"
-                        >
-                            alpha v0.1.0
-                        </motion.p>
                     </motion.div>
                     <motion.div
                         variants={itemVariants}
@@ -197,7 +196,7 @@ export default function Home() {
                                                 <dt className="inline font-semibold text-gray-900 dark:text-white">
                                                     <feature.icon
                                                         aria-hidden="true"
-                                                        className="absolute top-1 left-1 size-5 text-indigo-600 dark:text-indigo-400"
+                                                        className="absolute top-1 left-1 size-5 text-primary dark:text-primary-foreground"
                                                     />
                                                     {feature.name}
                                                 </dt>{' '}
