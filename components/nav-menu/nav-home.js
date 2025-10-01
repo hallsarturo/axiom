@@ -30,11 +30,77 @@ import {
     IdCard,
     LogIn,
 } from 'lucide-react';
+import {
+    CalendarIcon,
+    IdentificationIcon,
+    ArrowDownOnSquareIcon,
+    InformationCircleIcon,
+    HomeIcon,
+    EnvelopeIcon,
+    BriefcaseIcon,
+    BuildingLibraryIcon,
+    ClipboardDocumentCheckIcon,
+} from '@heroicons/react/24/outline';
 import { ModeToggle } from '@/components/ui/themes/mode-toggle';
+
+const navigation = [
+    { name: 'Home', href: '/', icon: HomeIcon, current: true },
+    {
+        name: 'Login',
+        href: '/sign-in',
+        icon: ArrowDownOnSquareIcon,
+        current: false,
+    },
+    {
+        name: 'Signup',
+        href: '/sign-up',
+        icon: IdentificationIcon,
+        current: false,
+    },
+    {
+        name: 'About',
+        href: '/about',
+        icon: InformationCircleIcon,
+        current: false,
+    },
+    {
+        name: 'Terms & Conditions',
+        href: '/terms-and-conditions',
+        icon: ClipboardDocumentCheckIcon,
+        current: false,
+    },
+    {
+        name: 'Legal Notice',
+        href: '/legal-notice',
+        icon: BuildingLibraryIcon,
+        current: false,
+    },
+    {
+        name: 'Privacy Policy',
+        href: '/privacy-policy',
+        icon: BriefcaseIcon,
+        current: false,
+    },
+    {
+        name: 'Contact',
+        href: 'https://arturoproal.com/contact',
+        icon: EnvelopeIcon,
+        current: false,
+    },
+];
+
+function classNames(...classes) {
+    return classes.filter(Boolean).join(' ');
+}
 
 export function NavigationMenuHome() {
     const [open, setOpen] = React.useState(false);
     const pathname = usePathname();
+
+    const dynamicNavigation = navigation.map((item) => ({
+        ...item,
+        current: pathname === item.href,
+    }));
 
     const menuItems = [
         { href: '/sign-up', label: 'Sign Up' },
@@ -154,7 +220,7 @@ export function NavigationMenuHome() {
                 <Sheet
                     open={open}
                     onOpenChange={setOpen}
-                    className="md:hidden flex flex-col"
+                    className="md:hidden flex flex-col "
                 >
                     <SheetTrigger
                         className="cursor-pointer"
@@ -177,7 +243,7 @@ export function NavigationMenuHome() {
                     </SheetTrigger>
                     <SheetContent
                         side="top"
-                        className="flex flex-col items-center justify-center min-h-screen w-full p-4 overflow-hidden"
+                        className="flex flex-col items-center min-h-screen w-full overflow-hidden"
                     >
                         <div
                             aria-hidden="true"
@@ -191,78 +257,50 @@ export function NavigationMenuHome() {
                                 className="absolute left-0 top-0 w-full h-full bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30"
                             />
                         </div>
-                        <SheetHeader className="flex flex-col items-center justify-center w-full text-2xl">
+
+                        <SheetHeader className="flex flex-col items-center min-h-screen w-full text-2xl p-15">
                             <SheetTitle className="flex justify-center items-center w-full text-5xl text-primary dark:text-foreground mb-12">
-                                AXIOM
+                                <Image
+                                    src="/axiom_purple.png"
+                                    height={100}
+                                    width={150}
+                                    alt="Axiom logo"
+                                />
                             </SheetTitle>
-                            <nav className="flex flex-col gap-8 mt-4 items-center justify-center w-full">
-                                {menuItems.map((item, idx) => {
-                                    const isActive = pathname === item.href;
-                                    return (
-                                        <Button
-                                            key={idx}
-                                            variant="link"
-                                            size="lg"
-                                            className={
-                                                isActive
-                                                    ? 'bg-accent text-accent-foreground dark:bg-accent dark:text-accent-foreground'
-                                                    : 'text-primary dark:text-foreground'
-                                            }
-                                            onClick={() => setOpen(false)}
-                                        >
-                                            <Link
+                            <nav
+                                aria-label="Sidebar"
+                                className="flex flex-1 flex-col m-4 h-full"
+                            >
+                                <ul role="list" className="space-y-4">
+                                    {dynamicNavigation.map((item) => (
+                                        <li key={item.name}>
+                                            <a
                                                 href={item.href}
-                                                className="w-full text-center text-[1.5625rem] font-light"
+                                                className={classNames(
+                                                    item.current
+                                                        ? 'bg-transparent text-primary font-bold dark:bg-white/5 dark:text-white'
+                                                        : 'text-secondary-foreground hover:bg-red-100 hover:text-primary dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-white',
+                                                    'group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold'
+                                                )}
                                             >
-                                                {item.label}
-                                            </Link>
-                                        </Button>
-                                    );
-                                })}
-                                <Button
-                                    variant="link"
-                                    size="lg"
-                                    className=""
-                                    onClick={() => setOpen(false)}
-                                >
-                                    <UserRound className="mr-4 w-36 h-36 text-primary dark:text-foreground" />
-                                    <Link
-                                        href="#"
-                                        className="w-full text-center text-2xl font-light text-primary dark:text-foreground"
-                                    >
-                                        About
-                                    </Link>
-                                </Button>
-                                <Button
-                                    variant="link"
-                                    size="lg"
-                                    className=""
-                                    onClick={() => setOpen(false)}
-                                >
-                                    <Scale className="mr-4 w-36 h-36 text-primary dark:text-foreground" />
-                                    <Link
-                                        href="#"
-                                        className="w-full text-center text-2xl font-light text-primary dark:text-foreground"
-                                    >
-                                        Legal
-                                    </Link>
-                                </Button>
-                                <Button
-                                    variant="link"
-                                    size="lg"
-                                    className=" "
-                                    onClick={() => setOpen(false)}
-                                >
-                                    <NotebookPen className="mr-4 w-36 h-36 text-primary dark:text-foreground" />
-                                    <Link
-                                        href="#"
-                                        className="w-full text-center text-2xl font-light text-primary dark:text-foreground"
-                                    >
-                                        Terms & Conditions
-                                    </Link>
-                                </Button>
-                                <ModeToggle />
+                                                <item.icon
+                                                    aria-hidden="true"
+                                                    className={classNames(
+                                                        item.current
+                                                            ? 'text-primary dark:text-white'
+                                                            : 'text-secondary-foreground group-hover:text-primary dark:text-primary-foreground dark:group-hover:text-white',
+                                                        'size-6 shrink-0'
+                                                    )}
+                                                />
+                                                {item.name}
+                                            </a>
+                                        </li>
+                                    ))}
+                                </ul>
                             </nav>
+                            <div className="pb-5">
+                                <ModeToggle />
+                            </div>
                         </SheetHeader>
                     </SheetContent>
                 </Sheet>

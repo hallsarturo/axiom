@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { OtpVerification } from '@/components/loggin/otp-verification';
+import { OtpVerification } from '@/components/login/otp-verification';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';

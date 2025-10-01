@@ -1,5 +1,5 @@
 import { GalleryVerticalEnd } from 'lucide-react';
-import { OtpForm } from '@/components/loggin/otp-form';
+import { OtpForm } from '@/components/login/otp-form';
 
 export default function SignUpVerification() {
     return (
