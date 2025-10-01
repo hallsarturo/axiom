@@ -50,7 +50,7 @@ const itemVariants = {
 
 export default function Home() {
     return (
-        <div className="relative isolate min-h-screen px-6 lg:px-8 pb-15 overflow-hidden">
+        <div className="relative isolate min-h-screen px-6 lg:px-8 pb-20 sm:pb-30 overflow-hidden">
             <div
                 aria-hidden="true"
                 className="fixed inset-x-0 -top-40 -z-10 w-full h-full transform-gpu overflow-hidden blur-3xl"
@@ -372,7 +372,7 @@ export default function Home() {
                 </div>
                 <motion.div
                     variants={itemVariants}
-                    className="mt-15 flex flex-col gap-8 md:flex-row items-center justify-center gap-x-6"
+                    className="mt-15 sm:mt-20 flex flex-col gap-8 md:flex-row items-center justify-center gap-x-6"
                 >
                     <Button asChild className="">
                         <Link href="/sign-up">Get started</Link>
