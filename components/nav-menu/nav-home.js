@@ -50,42 +50,49 @@ const navigation = [
         href: '/sign-in',
         icon: ArrowDownOnSquareIcon,
         current: false,
+        newTab: false,
     },
     {
         name: 'Signup',
         href: '/sign-up',
         icon: IdentificationIcon,
         current: false,
+        newTab: false,
     },
     {
         name: 'About',
         href: '/about',
         icon: InformationCircleIcon,
         current: false,
+        newTab: false,
     },
     {
         name: 'Terms & Conditions',
         href: '/terms-and-conditions',
         icon: ClipboardDocumentCheckIcon,
         current: false,
+        newTab: false,
     },
     {
         name: 'Legal Notice',
         href: '/legal-notice',
         icon: BuildingLibraryIcon,
         current: false,
+        newTab: false,
     },
     {
         name: 'Privacy Policy',
         href: '/privacy-policy',
         icon: BriefcaseIcon,
         current: false,
+        newTab: false,
     },
     {
         name: 'Contact',
         href: 'https://arturoproal.com/contact',
         icon: EnvelopeIcon,
         current: false,
+        newTab: true,
     },
 ];
 
@@ -259,13 +266,15 @@ export function NavigationMenuHome() {
                         </div>
 
                         <SheetHeader className="flex flex-col items-center min-h-screen w-full text-2xl p-15">
-                            <SheetTitle className="flex justify-center items-center w-full text-5xl text-primary dark:text-foreground mb-12">
-                                <Image
-                                    src="/axiom_purple.png"
-                                    height={100}
-                                    width={150}
-                                    alt="Axiom logo"
-                                />
+                            <SheetTitle className="flex justify-center items-center w-full text-5xl text-primary dark:text-foreground mb-0">
+                                <Link href="/" onClick={() => setOpen(false)}>
+                                    <Image
+                                        src="/axiom_purple.png"
+                                        height={100}
+                                        width={150}
+                                        alt="Axiom logo"
+                                    />
+                                </Link>
                             </SheetTitle>
                             <nav
                                 aria-label="Sidebar"
