@@ -17,7 +17,11 @@ import {
     PopoverTrigger,
 } from '@/components/ui/popover';
 import { Button } from '@/components/ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import {
+    Avatar as SCNAvatar,
+    AvatarFallback,
+    AvatarImage,
+} from '@/components/ui/avatar';
 import {
     Sheet,
     SheetClose,
@@ -36,6 +40,13 @@ import {
     LogIn,
     LogOut,
 } from 'lucide-react';
+import {
+    RssIcon,
+    BookmarkIcon,
+    CubeTransparentIcon,
+    ClipboardDocumentListIcon,
+    EnvelopeIcon,
+} from '@heroicons/react/24/outline';
 import { Badge } from '@/components/ui/badge';
 import { ModeToggle } from '@/components/ui/themes/mode-toggle';
 import { SearchBar } from '@/components/nav-menu/search-bar';
@@ -48,6 +59,35 @@ import { useParams } from 'next/navigation';
 import { useRequireAuth } from '@/hooks/useRequireAuth';
 import { normalizeImageUrl } from '@/lib/utils/image';
 import { genInitials } from '@/lib/utils/strings';
+
+import { Avatar as TWAvatar } from '@/components/tailwind/avatar';
+import {
+    Dropdown,
+    DropdownButton,
+    DropdownDivider,
+    DropdownItem,
+    DropdownLabel,
+    DropdownMenu,
+} from '@/components/tailwind/dropdown';
+import {
+    Navbar,
+    NavbarDivider,
+    NavbarItem,
+    NavbarLabel,
+    NavbarSection,
+    NavbarSpacer,
+} from '@/components/tailwind/navbar';
+import {
+    ArrowRightStartOnRectangleIcon,
+    ChevronDownIcon,
+    Cog8ToothIcon,
+    LightBulbIcon,
+    PlusIcon,
+    ShieldCheckIcon,
+    UserIcon,
+} from '@heroicons/react/16/solid';
+import { InboxIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid';
+import { Combobox } from '@/components/tailwind/combobox';
 
 const mobileMenuItems = [
     {
@@ -80,12 +120,58 @@ const mobileMenuItems = [
     },
 ];
 
+const navigation = [
+    {
+        name: 'Feed',
+        href: '/feed',
+        icon: RssIcon,
+        current: true,
+        newTab: false,
+    },
+    {
+        name: 'Echo meter',
+        href: '/echo-meter',
+        icon: CubeTransparentIcon,
+        current: false,
+        newTab: false,
+    },
+    {
+        name: 'Bookmarks',
+        href: '/saved-posts',
+        icon: BookmarkIcon,
+        current: false,
+        newTab: false,
+    },
+    {
+        name: 'Contrast',
+        href: '#',
+        icon: ClipboardDocumentListIcon,
+        current: false,
+        newTab: false,
+    },
+    {
+        name: 'Contact',
+        href: 'https://arturoproal.com/contact',
+        icon: EnvelopeIcon,
+        current: false,
+        newTab: true,
+    },
+];
+
+function classNames(...classes) {
+    return classes.filter(Boolean).join(' ');
+}
 export function NavigationConnected() {
     const router = useRouter();
     const { user } = useUser();
     const [open, setOpen] = useState(false);
     const pathname = usePathname();
     const requireAuth = useRequireAuth();
+
+    const dynamicNavigation = navigation.map((item) => ({
+        ...item,
+        current: pathname === item.href,
+    }));
 
     const handleLogout = async () => {
         const result = await logoutUser();
@@ -248,7 +334,7 @@ export function NavigationConnected() {
                             <NavigationMenuItem>
                                 {/* Avatar and dropdown menu */}
                                 <NavigationMenuTrigger className="text-primary font-medium dark:text-foreground cursor-pointer">
-                                    <Avatar className="hover: text-white">
+                                    <SCNAvatar className="hover: text-white">
                                         <AvatarImage
                                             src={
                                                 user
@@ -268,7 +354,7 @@ export function NavigationConnected() {
                                                 <AvatarImage src="/user_silhouette_2.png"></AvatarImage>
                                             )}
                                         </AvatarFallback>
-                                    </Avatar>
+                                    </SCNAvatar>
                                 </NavigationMenuTrigger>
                                 <NavigationMenuContent>
                                     {user && (
@@ -335,88 +421,103 @@ export function NavigationConnected() {
                 </div>
             </div>
 
-            {/* Mobile full-screen menu */}
-            <nav className="md:hidden">
-                <Sheet
-                    open={open}
-                    onOpenChange={setOpen}
-                    className="md:hidden flex flex-col"
-                >
-                    <SheetTrigger
-                        className="cursor-pointer"
-                        onClick={() => setOpen(true)}
+            {/* Mobile menu */}
+            <div className="md:hidden flex w-full items-center justify-around">
+                {/* HABMBURGER MENU */}
+                <nav className="md:hidden">
+                    <Sheet
+                        open={open}
+                        onOpenChange={setOpen}
+                        className="md:hidden flex flex-col "
                     >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth={1.5}
-                            stroke="currentColor"
-                            className="size-6 text-primary dark:text-foreground"
+                        <SheetTrigger
+                            className="cursor-pointer"
+                            onClick={() => setOpen(true)}
                         >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
-                            />
-                        </svg>
-                    </SheetTrigger>
-                    <SheetContent
-                        side="top"
-                        className="flex flex-col items-center justify-center min-h-screen w-full p-4 overflow-hidden"
-                    >
-                        <div
-                            aria-hidden="true"
-                            className="absolute inset-0 -z-10 transform-gpu overflow-hidden blur-3xl"
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                strokeWidth={1.5}
+                                stroke="currentColor"
+                                className="size-6 text-primary dark:text-foreground"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+                                />
+                            </svg>
+                        </SheetTrigger>
+                        <SheetContent
+                            side="top"
+                            className="flex flex-col items-center min-h-screen w-full overflow-hidden"
                         >
                             <div
-                                style={{
-                                    clipPath:
-                                        'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
-                                }}
-                                className="absolute left-0 top-0 w-full h-full bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30"
-                            />
-                        </div>
-                        <SheetHeader className="flex flex-col items-center justify-center w-full text-2xl">
-                            <SheetTitle className="flex justify-center items-center w-full text-5xl text-primary dark:text-foreground mb-12">
-                                AXIOM
-                            </SheetTitle>
-                            <nav className="flex flex-col gap-8 mt-4 items-center justify-center w-full">
-                                {mobileMenuItems.map((item, idx) => (
-                                    <Button
-                                        key={idx}
-                                        variant="link"
-                                        size="lg"
-                                        className=""
+                                aria-hidden="true"
+                                className="absolute inset-0 -z-10 transform-gpu overflow-hidden blur-3xl"
+                            >
+                                <div
+                                    style={{
+                                        clipPath:
+                                            'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
+                                    }}
+                                    className="absolute left-0 top-0 w-full h-full bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30"
+                                />
+                            </div>
+                            <SheetHeader className="flex flex-col items-center min-h-screen w-full text-2xl p-15">
+                                <SheetTitle className="flex justify-center items-center w-full text-5xl text-primary dark:text-foreground mb-0">
+                                    <Link
+                                        href="/"
                                         onClick={() => setOpen(false)}
                                     >
-                                        {item.icon}
-                                        <Link
-                                            href={item.href}
-                                            className="w-full text-center text-2xl font-light text-primary dark:text-foreground"
-                                        >
-                                            {item.label}
-                                        </Link>
-                                    </Button>
-                                ))}
-                                <Button
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        handleLogout();
-                                    }}
-                                    variant="link"
-                                    size="lg"
-                                    className="text-2xl font-light text-primary dark:text-foreground"
+                                        <Image
+                                            src="/axiom_purple.png"
+                                            height={100}
+                                            width={150}
+                                            alt="Axiom logo"
+                                        />
+                                    </Link>
+                                </SheetTitle>
+                                <nav
+                                    aria-label="Sidebar"
+                                    className="flex flex-1 flex-col m-4 h-full"
                                 >
-                                    <IdCard className="mr-4 w-36 h-36 text-primary dark:text-foreground" />
-                                    Sign Out
-                                </Button>
-                                <ModeToggle />
-                            </nav>
-                        </SheetHeader>
-                    </SheetContent>
-                </Sheet>
-            </nav>
+                                    <ul role="list" className="space-y-4">
+                                        {dynamicNavigation.map((item) => (
+                                            <li key={item.name}>
+                                                <a
+                                                    href={item.href}
+                                                    className={classNames(
+                                                        item.current
+                                                            ? 'bg-transparent text-primary font-bold dark:bg-white/5 dark:text-white'
+                                                            : 'text-secondary-foreground hover:bg-red-100 hover:text-primary dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-white',
+                                                        'group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold'
+                                                    )}
+                                                >
+                                                    <item.icon
+                                                        aria-hidden="true"
+                                                        className={classNames(
+                                                            item.current
+                                                                ? 'text-primary dark:text-white'
+                                                                : 'text-secondary-foreground group-hover:text-primary dark:text-primary-foreground dark:group-hover:text-white',
+                                                            'size-6 shrink-0'
+                                                        )}
+                                                    />
+                                                    {item.name}
+                                                </a>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </nav>
+                                <div className="pb-5">
+                                    <ModeToggle />
+                                </div>
+                            </SheetHeader>
+                        </SheetContent>
+                    </Sheet>
+                </nav>
+            </div>
         </>
     );
 }
