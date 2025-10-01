@@ -87,7 +87,7 @@ export function SignupForm({ className, ...props }) {
                                 }}
                             >
                                 <Image
-                                    src="/google/signin-assets/Web (mobile + desktop)/svg/neutral/web_neutral_rd_na.svg"
+                                    src="/google/web_neutral_rd_na.svg"
                                     width={24}
                                     height={24}
                                     alt="Google Logo"
