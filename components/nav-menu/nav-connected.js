@@ -53,7 +53,7 @@ import { SearchBar } from '@/components/nav-menu/search-bar';
 import { NotificationDropdown } from '@/components/notifications/notification-dropdown';
 import { useRouter, usePathname } from 'next/navigation';
 import { logoutUser } from '@/lib/actions/client-actions';
-import { useUser } from '@/components/context/UserProfileContext';
+import { useUser } from '@/context/UserProfileContext';
 import { useState } from 'react';
 import { useParams } from 'next/navigation';
 import { useRequireAuth } from '@/hooks/useRequireAuth';
@@ -85,9 +85,95 @@ import {
     PlusIcon,
     ShieldCheckIcon,
     UserIcon,
+    BellIcon,
 } from '@heroicons/react/16/solid';
 import { InboxIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid';
 import { Combobox } from '@/components/tailwind/combobox';
+
+function TailwindNavBar() {
+    const { user } = useUser();
+    return (
+        <Navbar>
+            <Dropdown>
+                <DropdownButton as={NavbarItem}>
+                    <TWAvatar src="/axiom_purple_X.png" />
+                    <NavbarLabel>Axiom</NavbarLabel>
+                    <ChevronDownIcon />
+                </DropdownButton>
+                <DropdownMenu className="min-w-64" anchor="bottom start">
+                    <DropdownItem href="/teams/1/settings">
+                        <Cog8ToothIcon />
+                        <DropdownLabel>Settings</DropdownLabel>
+                    </DropdownItem>
+                    <DropdownDivider />
+                    <DropdownItem href="/teams/1">
+                        <TWAvatar slot="icon" src="/tailwind-logo.svg" />
+                        <DropdownLabel>Tailwind Labs</DropdownLabel>
+                    </DropdownItem>
+                    <DropdownItem href="/teams/2">
+                        <TWAvatar
+                            slot="icon"
+                            initials="WC"
+                            className="bg-purple-500 text-white"
+                        />
+                        <DropdownLabel>Workcation</DropdownLabel>
+                    </DropdownItem>
+                    <DropdownDivider />
+                    <DropdownItem href="/teams/create">
+                        <PlusIcon />
+                        <DropdownLabel>New team&hellip;</DropdownLabel>
+                    </DropdownItem>
+                </DropdownMenu>
+            </Dropdown>
+            <NavbarDivider className="max-lg:hidden" />
+            <NavbarSection className="max-lg:hidden">
+                <NavbarItem href="/" current>
+                    Home
+                </NavbarItem>
+                <NavbarItem href="/events">Events</NavbarItem>
+                <NavbarItem href="/orders">Orders</NavbarItem>
+            </NavbarSection>
+            <NavbarSpacer />
+            <NavbarSection>
+                <NavbarItem href="/search" aria-label="Search">
+                    <MagnifyingGlassIcon />
+                </NavbarItem>
+                <NavbarItem href="/inbox" aria-label="Inbox">
+                    <BellIcon />
+                </NavbarItem>
+                <Dropdown>
+                    <DropdownButton as={NavbarItem}>
+                        <TWAvatar src="/profile-photo.jpg" square />
+                    </DropdownButton>
+                    <DropdownMenu className="min-w-64" anchor="bottom end">
+                        <DropdownItem href="/my-profile">
+                            <UserIcon />
+                            <DropdownLabel>My profile</DropdownLabel>
+                        </DropdownItem>
+                        <DropdownItem href="/settings">
+                            <Cog8ToothIcon />
+                            <DropdownLabel>Settings</DropdownLabel>
+                        </DropdownItem>
+                        <DropdownDivider />
+                        <DropdownItem href="/privacy-policy">
+                            <ShieldCheckIcon />
+                            <DropdownLabel>Privacy policy</DropdownLabel>
+                        </DropdownItem>
+                        <DropdownItem href="/share-feedback">
+                            <LightBulbIcon />
+                            <DropdownLabel>Share feedback</DropdownLabel>
+                        </DropdownItem>
+                        <DropdownDivider />
+                        <DropdownItem href="/logout">
+                            <ArrowRightStartOnRectangleIcon />
+                            <DropdownLabel>Sign out</DropdownLabel>
+                        </DropdownItem>
+                    </DropdownMenu>
+                </Dropdown>
+            </NavbarSection>
+        </Navbar>
+    );
+}
 
 const mobileMenuItems = [
     {
@@ -422,9 +508,10 @@ export function NavigationConnected() {
             </div>
 
             {/* Mobile menu */}
-            <div className="md:hidden flex w-full items-center justify-around">
+            <div className="md:hidden flex w-full items-center mx-2 justify-around">
+                <TailwindNavBar />
                 {/* HABMBURGER MENU */}
-                <nav className="md:hidden">
+                {/* <nav className="md:hidden">
                     <Sheet
                         open={open}
                         onOpenChange={setOpen}
@@ -516,7 +603,7 @@ export function NavigationConnected() {
                             </SheetHeader>
                         </SheetContent>
                     </Sheet>
-                </nav>
+                </nav> */}
             </div>
         </>
     );

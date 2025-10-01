@@ -15,7 +15,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { SkeletonCard } from '@/components/skeletons/skeletonCard';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
-import { usePostType } from '@/components/context/post-type-provider';
+import { usePostType } from '@/context/post-type-provider';
 
 const PAGE_SIZE = 10;
 

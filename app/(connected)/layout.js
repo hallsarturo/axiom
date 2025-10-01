@@ -2,12 +2,12 @@
 
 import { Geist, Geist_Mono } from 'next/font/google';
 import '@/app/globals.css';
-import { useUser } from '@/components/context/UserProfileContext';
+import { useUser } from '@/context/UserProfileContext';
 import { useEffect } from 'react';
 import { webSocketService } from '@/lib/utils/websockets';
 import { NavigationConnected } from '@/components/nav-menu/nav-connected';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
-import { PostTypeProvider } from '@/components/context/post-type-provider';
+import { PostTypeProvider } from '@/context/post-type-provider';
 import { AppSidebar } from '@/components/nav-menu/app-sidebar';
 import { useNotificationsStore } from '@/lib/state/notificationsStore';
 

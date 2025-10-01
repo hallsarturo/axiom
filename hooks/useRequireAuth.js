@@ -1,5 +1,5 @@
 import { toast } from 'sonner';
-import { useUser } from '@/components/context/UserProfileContext';
+import { useUser } from '@/context/UserProfileContext';
 
 export function useRequireAuth() {
     const { user } = useUser();

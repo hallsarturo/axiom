@@ -30,7 +30,7 @@ import { toast } from 'sonner';
 import { Textarea } from '@/components/ui/textarea';
 import { CategoriesBadger } from '@/components/dashboard/categories-badger';
 import { ImageDroper } from '@/components/file-handling/image-droper';
-import { useUser } from '@/components/context/UserProfileContext';
+import { useUser } from '@/context/UserProfileContext';
 import { useEffect, useState, Suspense } from 'react';
 import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';

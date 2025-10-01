@@ -26,7 +26,7 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { SelectPostType } from '@/components/feed/select-post-type';
-import { useUser } from '@/components/context/UserProfileContext';
+import { useUser } from '@/context/UserProfileContext';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 

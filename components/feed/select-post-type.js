@@ -7,7 +7,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import { usePostType } from '@/components/context/post-type-provider';
+import { usePostType } from '@/context/post-type-provider';
 
 export function SelectPostType({ defaultValue, className }) {
     const { postType, setPostType } = usePostType();
@@ -20,7 +20,9 @@ export function SelectPostType({ defaultValue, className }) {
                 {/* <SelectItem value="all">All</SelectItem> */}
                 <SelectItem value="papers">Papers</SelectItem>
                 <SelectItem value="userPosts">Posts</SelectItem>
-                <SelectItem value="news" disabled>News</SelectItem>
+                <SelectItem value="news" disabled>
+                    News
+                </SelectItem>
             </SelectContent>
         </Select>
     );

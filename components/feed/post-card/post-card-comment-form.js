@@ -17,7 +17,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { userPostCommentSchema } from '@/lib/schemas/posts';
 import { useCommentsStore } from '@/lib/state/commentsStore';
-import { useUser } from '@/components/context/UserProfileContext';
+import { useUser } from '@/context/UserProfileContext';
 import { useState } from 'react';
 import { useRequireAuth } from '@/hooks/useRequireAuth';
 import { mutate } from 'swr';

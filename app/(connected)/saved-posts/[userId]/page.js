@@ -16,7 +16,7 @@ import {
 import { Card } from '@/components/ui/card';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useUser } from '@/components/context/UserProfileContext';
+import { useUser } from '@/context/UserProfileContext';
 
 export default function BookmarkedPosts() {
     const { user } = useUser();

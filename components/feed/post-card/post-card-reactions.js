@@ -11,7 +11,7 @@ import { FaRegAngry } from 'react-icons/fa';
 import { FaFaceAngry } from 'react-icons/fa6';
 import { useRequireAuth } from '@/hooks/useRequireAuth';
 import { useReactionsStore } from '@/lib/state/reactionsStore';
-import { useUser } from '@/components/context/UserProfileContext';
+import { useUser } from '@/context/UserProfileContext';
 import { useEffect, useState } from 'react';
 import useSWR from 'swr';
 

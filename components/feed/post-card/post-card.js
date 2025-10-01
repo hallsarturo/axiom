@@ -13,7 +13,7 @@ import { PostCardHeader } from '@/components/feed/post-card/post-card-header';
 import { PostCardContent } from '@/components/feed/post-card/post-card-content';
 import { PostCardFooter } from '@/components/feed/post-card/post-card-footer';
 import { useCommentsStore } from '@/lib/state/commentsStore';
-import { useUser } from '@/components/context/UserProfileContext';
+import { useUser } from '@/context/UserProfileContext';
 import { useEffect, useState } from 'react';
 import useSWR from 'swr';
 import { putReaction, deleteUserPost } from '@/lib/actions/client-actions';

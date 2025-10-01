@@ -34,7 +34,7 @@ import { useDropzone } from 'react-dropzone';
 import { useForm } from 'react-hook-form';
 import { userPostSchema } from '@/lib/schemas/posts';
 import { publishPost } from '@/lib/actions/client-actions';
-import { useUser } from '@/components/context/UserProfileContext';
+import { useUser } from '@/context/UserProfileContext';
 import { useState } from 'react';
 import { useRequireAuth } from '@/hooks/useRequireAuth';
 import { normalizeImageUrl } from '@/lib/utils/image';
