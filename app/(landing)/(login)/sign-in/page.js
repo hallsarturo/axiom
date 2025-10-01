@@ -3,7 +3,7 @@ import { LoginForm } from '@/components/loggin/login-form';
 
 export default function SignInPage() {
     return (
-        <div className="bg-muted flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
+        <div className="bg-muted flex min-h-screen pt-10 sm:mt-0 flex-col items-center justify-center gap-6 p-6 md:p-10">
             <div className="flex justify-center w-full max-w-sm flex-col gap-6">
                 <div className="flex justify-center w-full">
                     <Image
