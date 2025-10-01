@@ -26,10 +26,12 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { loginFormSchema } from '@/lib/schemas/auth';
 import { AuthDebugger } from '@/lib/state/auth-debugger';
+import { Loader2 } from 'lucide-react';
 
 export function LoginForm({ className, ...props }) {
     const router = useRouter();
     const [message, setMessage] = useState('');
+    const [loading, setLoading] = useState(false);
     const form = useForm({
         resolver: zodResolver(loginFormSchema),
         defaultValues: {
@@ -39,12 +41,13 @@ export function LoginForm({ className, ...props }) {
     });
 
     async function onSubmit(values) {
+        setLoading(true);
         try {
             const res = await fetch(
                 `${process.env.NEXT_PUBLIC_API_URL}/api/login`,
                 {
                     method: 'POST',
-                    credentials: 'include', // Critical for cookies
+                    credentials: 'include',
                     headers: {
                         'Content-Type': 'application/json',
                     },
@@ -56,12 +59,8 @@ export function LoginForm({ className, ...props }) {
 
             if (!res.ok) {
                 setMessage(`Login failed: ${data.message || 'Unknown error'}`);
+                setLoading(false);
                 return;
-            }
-
-            // For development environment only
-            if (process.env.NODE_ENV === 'development' && data.token) {
-                localStorage.setItem('token', data.token);
             }
 
             // Verify authentication before redirecting

@@ -27,6 +27,11 @@ import Image from 'next/image';
 import { createUser } from '@/lib/actions/client-actions';
 import { useRouter } from 'next/navigation';
 import { signupFormSchema } from '@/lib/schemas/auth';
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from '@/components/ui/tooltip';
 
 export function SignupForm({ className, ...props }) {
     const router = useRouter();
@@ -69,15 +74,25 @@ export function SignupForm({ className, ...props }) {
                 <CardContent>
                     <div className="grid gap-6">
                         <div className="flex flex-col gap-4">
-                            <Button variant="outline" className="w-full">
-                                <Image
-                                    src="/orcid/ORCID-iD_icon_vector.svg"
-                                    width={24}
-                                    height={24}
-                                    alt="ORCID logo"
-                                ></Image>
-                                Sign with ORCID
-                            </Button>
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <Button
+                                        variant="outline"
+                                        className="w-full"
+                                    >
+                                        <Image
+                                            src="/orcid/ORCID-iD_icon_vector.svg"
+                                            width={24}
+                                            height={24}
+                                            alt="ORCID logo"
+                                        ></Image>
+                                        Sign with ORCID
+                                    </Button>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    <p>Not avaliable yet</p>
+                                </TooltipContent>
+                            </Tooltip>
                             <Button
                                 variant="outline"
                                 className="w-full mb-6"
