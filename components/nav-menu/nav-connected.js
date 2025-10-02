@@ -46,6 +46,9 @@ import {
     CubeTransparentIcon,
     ClipboardDocumentListIcon,
     EnvelopeIcon,
+    ArchiveBoxIcon,
+    UserGroupIcon,
+    UsersIcon,
 } from '@heroicons/react/24/outline';
 import { Badge } from '@/components/ui/badge';
 import { ModeToggle } from '@/components/ui/themes/mode-toggle';
@@ -59,7 +62,7 @@ import { useParams } from 'next/navigation';
 import { useRequireAuth } from '@/hooks/useRequireAuth';
 import { normalizeImageUrl } from '@/lib/utils/image';
 import { genInitials } from '@/lib/utils/strings';
-
+import { SelectPostType } from '@/components/feed/select-post-type';
 import { Avatar as TWAvatar } from '@/components/tailwind/avatar';
 import {
     Dropdown,
@@ -89,9 +92,26 @@ import {
 } from '@heroicons/react/16/solid';
 import { InboxIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid';
 import { Combobox } from '@/components/tailwind/combobox';
+import { Field, Label } from '@/components/tailwind/fieldset';
+import { Select } from '@/components/tailwind/select';
 
 function TailwindNavBar() {
     const { user } = useUser();
+    const pathname = usePathname();
+
+    const handleLogout = async () => {
+        const result = await logoutUser();
+        if (result.success) {
+            // Clear localStorage token (for development)
+            if (typeof window !== 'undefined') {
+                localStorage.removeItem('token');
+            }
+
+            // Force page reload to clear any cached state
+            window.location.href = '/sign-in';
+        }
+    };
+
     return (
         <Navbar>
             <Dropdown>
@@ -101,28 +121,64 @@ function TailwindNavBar() {
                     <ChevronDownIcon />
                 </DropdownButton>
                 <DropdownMenu className="min-w-64" anchor="bottom start">
-                    <DropdownItem href="/teams/1/settings">
-                        <Cog8ToothIcon />
-                        <DropdownLabel>Settings</DropdownLabel>
+                    <DropdownItem href="/feed">
+                        <RssIcon />
+                        <DropdownLabel>Feed</DropdownLabel>
                     </DropdownItem>
-                    <DropdownDivider />
-                    <DropdownItem href="/teams/1">
-                        <TWAvatar slot="icon" src="/tailwind-logo.svg" />
-                        <DropdownLabel>Tailwind Labs</DropdownLabel>
+                    <DropdownItem href={user ? `/my-posts/${user.id}` : '/#'}>
+                        <ArchiveBoxIcon />
+                        <DropdownLabel>My Posts</DropdownLabel>
                     </DropdownItem>
-                    <DropdownItem href="/teams/2">
-                        <TWAvatar
-                            slot="icon"
-                            initials="WC"
-                            className="bg-purple-500 text-white"
-                        />
-                        <DropdownLabel>Workcation</DropdownLabel>
+                    <DropdownItem
+                        href={user ? `/saved-posts/${user.id}` : '/#'}
+                    >
+                        <BookmarkIcon />
+                        <DropdownLabel>Saved Posts</DropdownLabel>
                     </DropdownItem>
-                    <DropdownDivider />
-                    <DropdownItem href="/teams/create">
-                        <PlusIcon />
-                        <DropdownLabel>New team&hellip;</DropdownLabel>
+                    <DropdownItem href={user ? `/followers/${user.id}` : '#'}>
+                        <UserGroupIcon />
+                        <DropdownLabel>Followers</DropdownLabel>
                     </DropdownItem>
+                    <DropdownItem href={user ? `/following/${user.id}` : '#'}>
+                        <UsersIcon />
+                        <DropdownLabel>Following</DropdownLabel>
+                    </DropdownItem>
+                    {pathname === '/feed' ? (
+                        <>
+                            <DropdownDivider />
+                            <DropdownItem>
+                                <DropdownLabel>Feed Options</DropdownLabel>
+                            </DropdownItem>
+                            <DropdownItem>
+                                <DropdownLabel className="text-xs">
+                                    not avaliable in mobile.
+                                </DropdownLabel>
+                            </DropdownItem>
+                            {/* <DropdownItem>
+                                <>
+                                    <Field
+                                        onClick={(e) => e.stopPropagation()}
+                                        onMouseDown={(e) => e.stopPropagation()}
+                                    >
+                                        <Select name="status">
+                                            <option value="active">
+                                                Active
+                                            </option>
+                                            <option value="paused">
+                                                Paused
+                                            </option>
+                                            <option value="delayed">
+                                                Delayed
+                                            </option>
+                                            <option value="canceled">
+                                                Canceled
+                                            </option>
+                                        </Select>
+                                    </Field>
+                                </>
+                            </DropdownItem> */}
+                        </>
+                    ) : null}
                 </DropdownMenu>
             </Dropdown>
             <NavbarDivider className="max-lg:hidden" />
@@ -143,28 +199,38 @@ function TailwindNavBar() {
                 </NavbarItem>
                 <Dropdown>
                     <DropdownButton as={NavbarItem}>
-                        <TWAvatar src="/profile-photo.jpg" square />
+                        <TWAvatar
+                            src={
+                                user
+                                    ? normalizeImageUrl(user.userProfilePic) ||
+                                      normalizeImageUrl(user.photoUrl)
+                                    : '/user_silhouette_2.png'
+                            }
+                            square
+                        />
                     </DropdownButton>
                     <DropdownMenu className="min-w-64" anchor="bottom end">
-                        <DropdownItem href="/my-profile">
+                        <DropdownItem
+                            href={user ? `/profile/${user.id}` : '/profile'}
+                        >
                             <UserIcon />
                             <DropdownLabel>My profile</DropdownLabel>
                         </DropdownItem>
-                        <DropdownItem href="/settings">
+                        <DropdownItem href="/dashboard">
                             <Cog8ToothIcon />
                             <DropdownLabel>Settings</DropdownLabel>
                         </DropdownItem>
                         <DropdownDivider />
-                        <DropdownItem href="/privacy-policy">
+                        {/* <DropdownItem href="/privacy-policy">
                             <ShieldCheckIcon />
                             <DropdownLabel>Privacy policy</DropdownLabel>
                         </DropdownItem>
                         <DropdownItem href="/share-feedback">
                             <LightBulbIcon />
                             <DropdownLabel>Share feedback</DropdownLabel>
-                        </DropdownItem>
-                        <DropdownDivider />
-                        <DropdownItem href="/logout">
+                        </DropdownItem> */}
+                        {/* <DropdownDivider /> */}
+                        <DropdownItem onClick={handleLogout}>
                             <ArrowRightStartOnRectangleIcon />
                             <DropdownLabel>Sign out</DropdownLabel>
                         </DropdownItem>

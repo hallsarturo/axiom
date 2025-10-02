@@ -53,8 +53,8 @@ export default function ConnectedLayout({ children }) {
                 <div className="flex min-h-screen w-full">
                     <AppSidebar />
                     <div className="flex flex-col flex-1 w-full">
-                        <div className="flex items-center my-2">
-                            <SidebarTrigger className="text-primary dark:text-foreground" />
+                        <div className="flex items-center my-0 md:my-2">
+                            <SidebarTrigger className="hidden md:inline text-primary dark:text-foreground" />
                             <div className="flex justify-center w-full">
                                 <NavigationConnected />
                             </div>
