@@ -117,7 +117,7 @@ function NotificationItem({ notification }) {
     );
 }
 
-export function NotificationDropdown({ userId }) {
+export function NotificationDropdown({ userId, size = 18, color = 'primary' }) {
     const { notifications, unseenCount, fetchNotifications, markAsSeen } =
         useNotificationsStore();
 
@@ -152,7 +152,7 @@ export function NotificationDropdown({ userId }) {
                             {unseenCount}
                         </Badge>
                     )}
-                    <Bell size="22" />
+                    <Bell size={size} className={typeof color === 'string' ? color : ''}  />
                 </div>
             </PopoverTrigger>
 

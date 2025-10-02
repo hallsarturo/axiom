@@ -191,12 +191,13 @@ function TailwindNavBar() {
             </NavbarSection>
             <NavbarSpacer />
             <NavbarSection>
-                <NavbarItem href="/search" aria-label="Search">
-                    <MagnifyingGlassIcon />
-                </NavbarItem>
-                <NavbarItem href="/inbox" aria-label="Inbox">
-                    <BellIcon />
-                </NavbarItem>
+                <SearchBar size="20" color="text-neutral-600" />
+                <NotificationDropdown
+                    userId={user?.id}
+                    size="18"
+                    color="text-neutral-600"
+                />
+
                 <Dropdown>
                     <DropdownButton as={NavbarItem}>
                         <TWAvatar

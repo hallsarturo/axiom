@@ -21,7 +21,7 @@ import { Separator } from '@/components/ui/separator';
 import { getSearchResults } from '@/lib/actions/client-actions';
 import { useState, useEffect, Fragment } from 'react';
 
-export function SearchBar() {
+export function SearchBar({ size = 18, color = 'primary' }) {
     const [open, setOpen] = useState(false);
     const [value, setValue] = useState('');
     const [query, setQuery] = useState('');
@@ -52,7 +52,10 @@ export function SearchBar() {
                     className="text-primary dark:text-foreground"
                     size="icon"
                 >
-                    <Search />
+                    <Search
+                        size={size}
+                        className={typeof color === 'string' ? color : ''}
+                    />
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="w-[300px] p-0">
