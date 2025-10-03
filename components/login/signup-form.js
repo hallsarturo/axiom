@@ -86,7 +86,7 @@ export function SignupForm({ className, ...props }) {
                                             height={24}
                                             alt="ORCID logo"
                                         ></Image>
-                                        Sign with ORCID
+                                        Sign up with ORCID
                                     </Button>
                                 </TooltipTrigger>
                                 <TooltipContent>
@@ -107,7 +107,7 @@ export function SignupForm({ className, ...props }) {
                                     height={24}
                                     alt="Google Logo"
                                 ></Image>
-                                Sign in with Google
+                                Sign up with Google
                             </Button>
                         </div>
                     </div>

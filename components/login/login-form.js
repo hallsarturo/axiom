@@ -95,7 +95,7 @@ export function LoginForm({ className, ...props }) {
                 <CardHeader className="text-center">
                     <CardTitle className="text-xl">Sign in</CardTitle>
                     <CardDescription>
-                        <AuthDebugger />
+                        {/* <AuthDebugger /> */}
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
