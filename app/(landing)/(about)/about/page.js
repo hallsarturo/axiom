@@ -150,9 +150,9 @@ const stats = [
 ];
 const values = [
     {
-        name: 'Be world-class.',
+        name: 'Papers at the center.',
         description:
-            'Lorem ipsum, dolor sit amet consectetur adipisicing elit aute id magna.',
+            'Strong, solid reality-aware knowledge is based on axioms, which at the same time are connected to other strong axioms.',
         icon: RocketLaunchIcon,
     },
     {
@@ -318,13 +318,12 @@ export default function About() {
                 {/* Feature section */}
                 <div className="mx-auto mt-32 max-w-7xl px-6 pb-8 sm:my-40 lg:px-8">
                     <div className="mx-auto max-w-2xl lg:mx-0">
-                        <h2 className="text-4xl font-semibold tracking-tight text-pretty text-gray-900 sm:text-5xl dark:text-white">
+                        <h2 className="text-4xl font-semibold tracking-tight text-pretty text-primary sm:text-5xl dark:text-primary-foreground">
                             Our values
                         </h2>
-                        <p className="mt-6 text-lg/8 text-gray-700 dark:text-gray-300">
-                            Lorem ipsum, dolor sit amet consectetur adipisicing
-                            elit. Maiores impedit perferendis suscipit eaque,
-                            iste dolor cupiditate blanditiis.
+                        <p className="mt-6 text-lg/8 text-secondary-foreground dark:text-secondary">
+                            We have to stand against disinformation, political
+                            bias, and dangerous ideologies.
                         </p>
                     </div>
                     <dl className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-8 text-base/7 text-gray-600 sm:grid-cols-2 lg:mx-0 lg:max-w-none lg:grid-cols-3 lg:gap-x-16 dark:text-gray-400">
