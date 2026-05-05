@@ -403,6 +403,14 @@ export function NavigationConnected() {
                                             width={60}
                                             height={40}
                                             alt="Axiom logo"
+                                             className="h-8 w-auto dark:hidden"
+                                        />
+                                        <Image
+                                            src="/axiom_white.png"
+                                            width={60}
+                                            height={40}
+                                            alt="Axiom logo"
+                                             className="h-8 w-auto not-dark:hidden"
                                         />
                                     </Link>
                                 </NavigationMenuItem>
