@@ -7,7 +7,7 @@ const PostTypeContext = createContext();
 export function PostTypeProvider({ children }) {
     const [postType, setPostType] = useState(() => {
         if (typeof window !== 'undefined') {
-            return localStorage.getItem('postType') || 'papers';
+            return localStorage.getItem('postType') || 'posts';
         }
         return 'papers';
     }); // userPosts, news
